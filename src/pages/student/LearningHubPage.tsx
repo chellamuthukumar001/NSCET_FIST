@@ -252,10 +252,8 @@ export const LearningHubPage: React.FC = () => {
         </div>
 
         <div className="text-[11px] text-gray-500 font-medium hidden md:block">
-          {hubMode === 'syllabus' ? (
+          {hubMode === 'syllabus' && (
             <span>Unit 1-5 Lectures mapped to Anna University Regulation 2021</span>
-          ) : (
-            <span>Search YouTube Data API & OpenCourseWare without leaving CampusIQ</span>
           )}
         </div>
       </div>
