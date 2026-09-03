@@ -53,7 +53,6 @@ export const AppHeader: React.FC = () => {
   const languages = [
     { code: 'en', label: 'English', native: 'English' },
     { code: 'ta', label: 'Tamil', native: 'தமிழ்' },
-    { code: 'hi', label: 'Hindi', native: 'हिन्दी' },
   ];
 
   const getDashboardRoot = () => {
@@ -152,7 +151,7 @@ export const AppHeader: React.FC = () => {
                   <button
                     key={l.code}
                     onClick={() => {
-                      setSelectedLanguage(l.code as 'en' | 'ta' | 'hi');
+                      setSelectedLanguage(l.code as 'en' | 'ta');
                       setLangOpen(false);
                     }}
                     className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-white/10 cursor-pointer ${

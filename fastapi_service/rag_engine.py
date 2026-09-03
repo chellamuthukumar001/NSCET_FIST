@@ -44,8 +44,6 @@ class HybridRAGEngine:
     def detect_language(self, query: str) -> str:
         if re.search(r'[\u0B80-\u0BFF]', query):
             return "ta"
-        if re.search(r'[\u0900-\u097F]', query):
-            return "hi"
         return "en"
 
     def retrieve_and_answer(self, query: str, user_role: str = "STUDENT") -> Dict[str, Any]:

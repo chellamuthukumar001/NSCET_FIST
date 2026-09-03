@@ -9,8 +9,8 @@ interface CopilotContextType {
   messages: ChatMessage[];
   isStreaming: boolean;
   isOpen: boolean;
-  selectedLanguage: 'en' | 'ta' | 'hi';
-  setSelectedLanguage: (lang: 'en' | 'ta' | 'hi') => void;
+  selectedLanguage: 'en' | 'ta';
+  setSelectedLanguage: (lang: 'en' | 'ta') => void;
   openCopilot: (initialQuery?: string) => void;
   closeCopilot: () => void;
   toggleCopilot: () => void;
@@ -26,7 +26,7 @@ export const CopilotProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const { role } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState<'en' | 'ta' | 'hi'>('en');
+  const [selectedLanguage, setSelectedLanguage] = useState<'en' | 'ta'>('en');
 
   const [messages, setMessages] = useState<ChatMessage[]>([
     {

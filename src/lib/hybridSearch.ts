@@ -6,7 +6,7 @@ export interface RagResult {
   answer: string;
   citations: SourceCitation[];
   confidence: ConfidenceScore;
-  detectedLanguage: 'en' | 'ta' | 'hi';
+  detectedLanguage: 'en' | 'ta';
   followUpQuestions: string[];
   retrievedDocs?: Array<{
     title: string;
@@ -28,23 +28,22 @@ interface SearchDocument {
   videoTimestampSeconds?: number;
 }
 
-// Build indexable unified corpus from official docs, transcripts, and approved feedback
 function buildUnifiedCorpus(): SearchDocument[] {
   const corpus: SearchDocument[] = [];
 
-  // 1. Official Institutional Documents
+  // 1. Institutional Knowledge Documents
   for (const doc of MOCK_KNOWLEDGE_DOCUMENTS) {
     corpus.push({
       id: doc.id,
       title: doc.title,
-      text: doc.content,
+      text: `${doc.title}. ${doc.content}`,
       sourceType: doc.knowledgeType,
-      reference: doc.category,
+      reference: doc.sourceUrl || doc.category,
       allowedRoles: ['STUDENT', 'FACULTY', 'HOD', 'ADMIN', 'SUPER_ADMIN', 'APPLICANT'],
     });
   }
 
-  // 2. YouTube Lecture Transcripts with Timestamps
+  // 2. Spoken Video Transcripts
   for (const video of MOCK_VIDEOS) {
     if (video.transcript) {
       for (const chunk of video.transcript) {
@@ -86,22 +85,24 @@ function buildUnifiedCorpus(): SearchDocument[] {
   return corpus;
 }
 
-// Simple language detector
-function detectLanguage(query: string): 'en' | 'ta' | 'hi' {
+// Simple language detector (English & Tamil)
+function detectLanguage(query: string): 'en' | 'ta' {
   // Tamil unicode range 0B80 - 0BFF
   if (/[\u0B80-\u0BFF]/.test(query)) return 'ta';
-  // Devanagari (Hindi) unicode range 0900 - 097F
-  if (/[\u0900-\u097F]/.test(query)) return 'hi';
   return 'en';
 }
 
 export function hybridRetrieveAndAnswer(query: string, userRole: Role): RagResult {
   const lang = detectLanguage(query);
-  const rawTerms = query.toLowerCase().replace(/[^a-zA-Z0-9\u0B80-\u0BFF\u0900-\u097F\s]/g, ' ').split(/\s+/).filter(t => t.length > 2);
+  const rawTerms = query
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9\u0B80-\u0BFF\s]/g, ' ')
+    .split(/\s+/)
+    .filter((t) => t.length > 2);
   const corpus = buildUnifiedCorpus();
 
   // Role-based pre-filtering
-  const accessibleCorpus = corpus.filter(doc => doc.allowedRoles.includes(userRole));
+  const accessibleCorpus = corpus.filter((doc) => doc.allowedRoles.includes(userRole));
 
   // Score each document with hybrid keyword + semantic overlap
   const scoredDocs: { doc: SearchDocument; score: number }[] = [];
@@ -148,11 +149,11 @@ export function hybridRetrieveAndAnswer(query: string, userRole: Role): RagResul
 
   // Anti-hallucination check: Insufficient evidence
   if (topMatches.length === 0 || topMatches[0].score < 2.0) {
-    let answerText = 'I could not find enough verified college information to answer this reliably. Please consult your department coordinator or the NSCET administrative office.';
+    let answerText =
+      'I could not find enough verified college information to answer this reliably. Please consult your department coordinator or the NSCET administrative office.';
     if (lang === 'ta') {
-      answerText = 'இதை நம்பகத்தன்மையுடன் பதிலளிக்க போதிய சரிபார்க்கப்பட்ட கல்லூரி ஆவணங்கள் கிடைக்கவில்லை. உங்கள் துறை ஒருங்கிணைப்பாளரை தொடர்பு கொள்ளவும்.';
-    } else if (lang === 'hi') {
-      answerText = 'इस प्रश्न का विश्वसनीय उत्तर देने के लिए पर्याप्त सत्यापित कॉलेज दस्तावेज़ नहीं मिले। कृपया अपने विभाग से संपर्क करें।';
+      answerText =
+        'இதை நம்பகத்தன்மையுடன் பதிலளிக்க போதிய சரிபார்க்கப்பட்ட கல்லூரி ஆவணங்கள் கிடைக்கவில்லை. உங்கள் துறை ஒருங்கிணைப்பாளரை தொடர்பு கொள்ளவும்.';
     }
 
     return {
@@ -163,67 +164,58 @@ export function hybridRetrieveAndAnswer(query: string, userRole: Role): RagResul
       followUpQuestions: [
         'How do I contact my HOD?',
         'Show me DBMS Unit 3 lectures',
-        'What is the attendance requirement?'
-      ]
+        'What is the attendance requirement?',
+      ],
     };
   }
 
-  const citations: SourceCitation[] = topMatches.map(m => ({
+  // Synthesize answer with citations
+  const citations: SourceCitation[] = topMatches.map((m) => ({
     id: m.doc.id,
     title: m.doc.title,
-    sourceType: m.doc.sourceType,
     reference: m.doc.reference,
-    snippet: m.doc.text.slice(0, 180) + '...',
+    snippet: m.doc.text.substring(0, 140) + '...',
+    sourceType: m.doc.sourceType,
     timestamp: m.doc.timestamp,
     videoId: m.doc.videoId,
-    videoTimestampSeconds: m.doc.videoTimestampSeconds,
-    relevanceScore: Math.min(0.98, m.score / 15)
+    relevanceScore: Math.min(1.0, Number((m.score / 15).toFixed(2))),
   }));
 
-  // Confidence estimation
-  const confidence: ConfidenceScore = topMatches[0].score > 6.0 ? 'HIGH' : 'MODERATE';
+  const confidence: ConfidenceScore =
+    topMatches[0].score > 6.0 ? 'HIGH' : 'MODERATE';
 
-  // Generate grounded answer strictly based on retrieved sources
-  let answer = '';
-  const primary = topMatches[0].doc;
-
-  if (primary.sourceType === 'OFFICIAL' && primary.title.includes('Attendance')) {
-    if (lang === 'ta') {
-      answer = 'அண்ணா பல்கலைக்கழக ஒழுங்குமுறை 2021 மற்றும் NSCET விதிகளின்படி, இறுதி பருவத் தேர்வுகளுக்குத் தகுதிபெற ஒவ்வொரு மாணவரும் குறைந்தபட்சம் **75% வருகைப் பதிவைப்** பெற வேண்டும். மருத்துவ காரணங்களுக்காக 65% முதல் 74% வரை உள்ளவர்களுக்கு HOD பரிந்துரையுடன் விலக்கு அனுமதிக்கப்படலாம். 65%-க்கு கீழ் உள்ளவர்கள் அடுத்த பருவத்தில் மீண்டும் படிக்க வேண்டும்.';
-    } else {
-      answer = 'According to **Anna University Regulation 2021 & NSCET Institutional Guidelines**, every student must secure a minimum of **75% aggregate attendance** across all registered courses in each semester to write the End Semester Examinations. Candidates securing between 65% and 74% with verified medical hospitalization or zonal sports representation can apply for condonation (fee Rs. 1,000). Students with less than 65% attendance cannot appear for examinations and must repeat the semester.';
-    }
-  } else if (primary.sourceType === 'OFFICIAL' && primary.title.includes('Bonafide')) {
-    answer = 'To obtain a Bonafide Certificate at NSCET: You can submit an online request directly via the CampusIQ student portal under Administrative Services or fill form AD-04. The request is verified digitally by your Faculty Advisor and HOD within 24 hours. Digital copies with QR codes are generated within 24 hours, while signed physical copies are available at Counter 2 within 2 working days free of charge.';
-  } else if (primary.sourceType === 'LEARNING' || primary.title.includes('Database') || primary.title.includes('DBMS')) {
-    if (lang === 'ta') {
-      answer = 'CSE துறைத் தலைவர் Dr. S. கார்த்திக் அவர்களின் விரிவுரையின்படி, **CS3351 Database Management Systems அலகு 3 (Normalization)** பற்றிய விவரங்கள்: 1NF அனைத்து பண்புகளையும் அணுவாக்குகிறது, 2NF பகுதி சார்புகளை நீக்குகிறது, 3NF தற்காலிக சார்புகளை நீக்குகிறது. BCNF விதியின்படி ஒவ்வொரு சார்பு X -> Y க்கும் X ஒரு Superkey ஆக இருக்க வேண்டும்.';
-    } else {
-      answer = 'Based on the official lecture by **Dr. S. Karthik (HOD CSE)** on **CS3351 Database Management Systems (Unit 3: Relational Normalization)**: Normalization systematically resolves update, insertion, and deletion anomalies. 1NF mandates atomic attribute values, 2NF eliminates partial functional dependencies, and 3NF ensures that for every dependency X -> Y, X is a superkey or Y is a prime attribute. BCNF strictly requires that every determinant X must be a superkey.';
-    }
-  } else if (primary.sourceType === 'STUDENT_VOICE' || primary.title.includes('Feedback')) {
-    answer = 'Based on approved student feedback analyzed by CampusIQ: Students frequently noted issues regarding system performance in Computer Lab 2 (lagging during Android Studio/Docker). Institutional action has already been taken: all 30 workstations in CSE Lab 2 were upgraded with 16GB DDR4 RAM and NVMe SSDs.';
+  let answerText = '';
+  if (lang === 'ta') {
+    answerText = `**NSCET சரிபார்க்கப்பட்ட தகவல்:**\n\n${topMatches[0].doc.text}\n\n*மேற்கோள்: ${topMatches[0].doc.reference}*`;
   } else {
-    answer = `Based on verified institutional resources: ${primary.text}`;
+    answerText = `**Verified Institutional Record:**\n\n${topMatches[0].doc.text}\n\n*Source: ${topMatches[0].doc.reference}*`;
   }
 
-  const followUpQuestions = [
-    'Can you show me the related video lecture with timestamp?',
-    'What are other students saying about this department?',
-    'How do I submit anonymous feedback about this topic?'
-  ];
+  const followUpQuestions: string[] = [];
+  if (query.toLowerCase().includes('attendance')) {
+    followUpQuestions.push('What are the medical leave condonation rules?');
+    followUpQuestions.push('Can I check my current CIA internal marks?');
+  } else if (query.toLowerCase().includes('dbms') || query.toLowerCase().includes('lecture')) {
+    followUpQuestions.push('Take an AI Practice Quiz on DBMS Unit 3');
+    followUpQuestions.push('Show me CPU Scheduling lectures in Operating Systems');
+  } else {
+    followUpQuestions.push('Who is my CSE Department HOD?');
+    followUpQuestions.push('What are the campus library operating hours?');
+  }
+
+  const retrievedDocs = topMatches.map((m) => ({
+    title: m.doc.title,
+    text: m.doc.text,
+    reference: m.doc.reference,
+    timestamp: m.doc.timestamp,
+  }));
 
   return {
-    answer,
+    answer: answerText,
     citations,
     confidence,
     detectedLanguage: lang,
     followUpQuestions,
-    retrievedDocs: topMatches.map((m) => ({
-      title: m.doc.title,
-      text: m.doc.text,
-      reference: m.doc.reference,
-      timestamp: m.doc.timestamp,
-    })),
+    retrievedDocs,
   };
 }

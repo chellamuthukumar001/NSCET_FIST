@@ -232,7 +232,7 @@ export const CopilotDrawer: React.FC = () => {
               
               {/* Language Selector */}
               <div className="flex bg-black/40 rounded-lg p-0.5 border border-white/10">
-                {(['en', 'ta', 'hi'] as const).map((l) => (
+                {(['en', 'ta'] as const).map((l) => (
                   <button
                     key={l}
                     onClick={() => setSelectedLanguage(l)}
@@ -242,7 +242,7 @@ export const CopilotDrawer: React.FC = () => {
                         : 'text-gray-400 hover:text-white'
                     }`}
                   >
-                    {l === 'en' ? 'EN' : l === 'ta' ? 'தமிழ்' : 'HI'}
+                    {l === 'en' ? 'EN' : 'தமிழ்'}
                   </button>
                 ))}
               </div>
@@ -482,8 +482,6 @@ export const CopilotDrawer: React.FC = () => {
                     ? 'Enter algorithm problem or code to trace & optimize...'
                     : selectedLanguage === 'ta'
                     ? 'பாடத்திட்டம் அல்லது வளாக விவரங்களை கேளுங்கள்...'
-                    : selectedLanguage === 'hi'
-                    ? 'अपने पाठ्यक्रम या कॉलेज के बारे में पूछें...'
                     : 'Ask anything about lectures, exam syllabi, or campus...'
                 }
                 disabled={isStreaming}

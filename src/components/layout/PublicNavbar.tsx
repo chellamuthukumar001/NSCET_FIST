@@ -42,7 +42,6 @@ export const PublicNavbar: React.FC = () => {
   const languages = [
     { code: 'en', label: 'English', native: 'English' },
     { code: 'ta', label: 'Tamil', native: 'தமிழ்' },
-    { code: 'hi', label: 'Hindi', native: 'हिन्दी' },
   ];
 
   const roles: { role: Role; label: string; name: string; dept: string }[] = [
@@ -145,7 +144,7 @@ export const PublicNavbar: React.FC = () => {
                     <button
                       key={l.code}
                       onClick={() => {
-                        setSelectedLanguage(l.code as 'en' | 'ta' | 'hi');
+                        setSelectedLanguage(l.code as 'en' | 'ta');
                         setLangOpen(false);
                       }}
                       className={`w-full text-left px-3 py-1.5 text-xs flex items-center justify-between hover:bg-white/10 cursor-pointer ${
@@ -257,7 +256,7 @@ export const PublicNavbar: React.FC = () => {
             {languages.map((l) => (
               <button
                 key={l.code}
-                onClick={() => setSelectedLanguage(l.code as 'en' | 'ta' | 'hi')}
+                onClick={() => setSelectedLanguage(l.code as 'en' | 'ta')}
                 className={`flex-1 py-1.5 rounded-lg text-xs font-semibold ${
                   selectedLanguage === l.code
                     ? 'bg-[#C49A55] text-white font-bold shadow'

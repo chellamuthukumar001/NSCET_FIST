@@ -1,5 +1,5 @@
 // CAMPUSIQ Voice Assistant Interface (Web Speech API)
-// Supports Multilingual STT and TTS (English, Tamil, Hindi)
+// Supports Multilingual STT and TTS (English, Tamil)
 
 export interface VoiceRecognitionHandlers {
   onResult: (transcript: string) => void;
@@ -24,7 +24,7 @@ export class CampusVoiceService {
     return !!this.recognition;
   }
 
-  public startListening(lang: 'en' | 'ta' | 'hi', handlers: VoiceRecognitionHandlers) {
+  public startListening(lang: 'en' | 'ta', handlers: VoiceRecognitionHandlers) {
     if (!this.recognition) {
       handlers.onError('Speech recognition is not supported in this browser.');
       return;
@@ -37,7 +37,6 @@ export class CampusVoiceService {
     const langCodes: Record<string, string> = {
       en: 'en-IN',
       ta: 'ta-IN',
-      hi: 'hi-IN'
     };
 
     this.recognition.lang = langCodes[lang] || 'en-IN';
@@ -87,7 +86,7 @@ export class CampusVoiceService {
     }
   }
 
-  public speak(text: string, lang: 'en' | 'ta' | 'hi') {
+  public speak(text: string, lang: 'en' | 'ta') {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel(); // Stop any active speech
 
@@ -98,7 +97,6 @@ export class CampusVoiceService {
     const langCodes: Record<string, string> = {
       en: 'en-IN',
       ta: 'ta-IN',
-      hi: 'hi-IN'
     };
     utterance.lang = langCodes[lang] || 'en-IN';
     utterance.rate = 1.0;

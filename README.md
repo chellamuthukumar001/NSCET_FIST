@@ -76,7 +76,7 @@
   - 🏛️ **Campus & Labs**: Verified answers on NSCET computer lab configurations, transport routes, and campus circulars.
 - **Interactive Message Controls**:
   - 👍 / 👎 Instant feedback sentiment ratings.
-  - 🔊 Web Speech synthesis supporting English, Tamil (தமிழ்), and Hindi (हिन्दी).
+  - 🔊 Web Speech synthesis supporting English and Tamil (தமிழ்).
   - 📋 1-Click clean Markdown code copying.
   - ✨ **"Quiz Me" Shortcut**: Prompts Copilot to instantly generate a 3-question drill on whatever concept was just explained.
 - **Export Chat**: Download the entire conversation as a Markdown (`.md`) study revision document with 1 click.

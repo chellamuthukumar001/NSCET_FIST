@@ -4,7 +4,7 @@
 export interface GroqGenerationOptions {
   query: string;
   role: string;
-  language: 'en' | 'ta' | 'hi';
+  language: 'en' | 'ta';
   contextDocs?: Array<{
     title: string;
     text: string;
@@ -34,8 +34,6 @@ export async function generateGroqAnswer(options: GroqGenerationOptions): Promis
   const languagePrompt =
     language === 'ta'
       ? 'Respond fluently and respectfully in Tamil script (தமிழ்).'
-      : language === 'hi'
-      ? 'Respond fluently and respectfully in Hindi (हिन्दी).'
       : 'Respond in English.';
 
   const systemPrompt = `You are CampusIQ, the official AI Learning & Student Experience Copilot for Nadar Saraswathi College of Engineering & Technology (NSCET), located in Vadapudupatti, Theni District, Tamil Nadu.

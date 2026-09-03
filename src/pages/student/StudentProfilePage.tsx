@@ -47,7 +47,7 @@ export const StudentProfilePage: React.FC = () => {
   const [phone, setPhone] = useState('+91 98421 87654');
   const [studentType, setStudentType] = useState<'Day Scholar' | 'Hostel'>('Day Scholar');
   const [busRoute, setBusRoute] = useState('Route 4: Cumbum - Theni - NSCET');
-  const [preferredLang, setPreferredLang] = useState<'en' | 'ta' | 'hi'>('en');
+  const [preferredLang, setPreferredLang] = useState<'en' | 'ta'>('en');
   const [dailyGoal, setDailyGoal] = useState(45);
   const [notifyFeedback, setNotifyFeedback] = useState(true);
   const [notifyLectures, setNotifyLectures] = useState(true);
@@ -662,7 +662,6 @@ export const StudentProfilePage: React.FC = () => {
               >
                 <option value="en">English</option>
                 <option value="ta">தமிழ் (Tamil)</option>
-                <option value="hi">हिन्दी (Hindi)</option>
               </select>
             </div>
 

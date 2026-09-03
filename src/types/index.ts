@@ -201,7 +201,7 @@ export interface ChatMessage {
   sender: 'user' | 'assistant' | 'system';
   content: string;
   timestamp: string;
-  language?: 'en' | 'ta' | 'hi';
+  language?: 'en' | 'ta';
   citations?: SourceCitation[];
   confidence?: ConfidenceScore;
   followUpQuestions?: string[];

@@ -114,7 +114,7 @@ export const StudentAssistantPage: React.FC = () => {
         <div className="flex items-center gap-2">
           {/* Language Toggle */}
           <div className="flex bg-black/40 rounded-xl p-0.5 border border-white/10 text-xs">
-            {(['en', 'ta', 'hi'] as const).map((l) => (
+            {(['en', 'ta'] as const).map((l) => (
               <button
                 key={l}
                 onClick={() => setSelectedLanguage(l)}
@@ -124,7 +124,7 @@ export const StudentAssistantPage: React.FC = () => {
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
-                {l === 'en' ? 'English' : l === 'ta' ? 'தமிழ்' : 'हिन्दी'}
+                {l === 'en' ? 'English' : 'தமிழ்'}
               </button>
             ))}
           </div>
@@ -332,8 +332,6 @@ export const StudentAssistantPage: React.FC = () => {
                 ? 'Enter algorithm problem or code to trace & optimize...'
                 : selectedLanguage === 'ta'
                 ? 'கல்லூரி தகவல்களை அல்லது விரிவுரைகளை கேளுங்கள்...'
-                : selectedLanguage === 'hi'
-                ? 'अपने कॉलेज या व्याख्यान के बारे में पूछें...'
                 : 'Ask anything about syllabus, attendance regulations, YouTube lectures, or lab status...'
             }
             disabled={isStreaming}

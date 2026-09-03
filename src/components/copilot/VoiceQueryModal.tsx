@@ -6,8 +6,8 @@ interface VoiceQueryModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmitQuery: (transcript: string) => void;
-  selectedLanguage: 'en' | 'ta' | 'hi';
-  onSelectLanguage: (lang: 'en' | 'ta' | 'hi') => void;
+  selectedLanguage: 'en' | 'ta';
+  onSelectLanguage: (lang: 'en' | 'ta') => void;
 }
 
 export const VoiceQueryModal: React.FC<VoiceQueryModalProps> = ({
@@ -38,8 +38,6 @@ export const VoiceQueryModal: React.FC<VoiceQueryModalProps> = ({
     setStatus(
       selectedLanguage === 'ta'
         ? 'பேசுங்கள்... (Listening in Tamil)'
-        : selectedLanguage === 'hi'
-        ? 'बोलिए... (Listening in Hindi)'
         : 'Listening for your college question...'
     );
 
@@ -98,7 +96,7 @@ export const VoiceQueryModal: React.FC<VoiceQueryModalProps> = ({
 
         {/* Language Switcher */}
         <div className="flex justify-center gap-2 mb-6">
-          {(['en', 'ta', 'hi'] as const).map((lang) => (
+          {(['en', 'ta'] as const).map((lang) => (
             <button
               key={lang}
               onClick={() => onSelectLanguage(lang)}
@@ -108,7 +106,7 @@ export const VoiceQueryModal: React.FC<VoiceQueryModalProps> = ({
                   : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10'
               }`}
             >
-              {lang === 'en' ? 'English' : lang === 'ta' ? 'தமிழ்' : 'हिन्दी'}
+              {lang === 'en' ? 'English' : 'தமிழ்'}
             </button>
           ))}
         </div>
@@ -156,8 +154,6 @@ export const VoiceQueryModal: React.FC<VoiceQueryModalProps> = ({
             <span className="text-gray-500 text-xs">
               {selectedLanguage === 'ta'
                 ? 'எடுத்துக்காட்டு: "எனக்கு DBMS Unit 3 lectures வேண்டும்"'
-                : selectedLanguage === 'hi'
-                ? 'उदाहरण: "मुझे DBMS यूनिट 3 के लेक्चर दिखाएं"'
                 : 'Example: "Show me DBMS Unit 3 lectures or attendance rules"'}
             </span>
           )}
