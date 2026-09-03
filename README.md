@@ -269,6 +269,62 @@ VITE_GROQ_API_KEY=your_groq_api_key_here
 VITE_GROQ_MODEL=qwen/qwen3.8-27b
 ```
 
+Create a `.env` file in the `backend/` directory:
+
+```env
+PORT=5000
+NODE_ENV=development
+
+# Optional: YouTube Data API v3 Key for Live Search & Watch
+# If omitted, the platform automatically uses the verified Open Educational Courseware Engine (NPTEL, MIT OCW, FreeCodeCamp)
+YOUTUBE_API_KEY=your_youtube_data_api_v3_key_here
+```
+
+---
+
+## 🌐 "Search & Watch" Educational Video Feature & YouTube API Setup
+
+The **Search & Watch** feature at [**http://localhost:5173/student/videos**](http://localhost:5173/student/videos) allows students to search for engineering topics (e.g., *DBMS*, *Normalization*, *CPU Scheduling*, *Dynamic Programming*, *RSA Cryptography*) and watch verified educational lectures directly within the CampusIQ platform using the official YouTube IFrame Player without being redirected to youtube.com.
+
+### How to Get a Free YouTube Data API v3 Key
+
+1. **Open Google Cloud Console**: Go to [https://console.cloud.google.com/](https://console.cloud.google.com/) and sign in with your Google account.
+2. **Create or Select a Project**: Click the project dropdown at the top and select **"New Project"** (e.g., `CampusIQ-NSCET`).
+3. **Enable YouTube Data API v3**:
+   - Navigate to **APIs & Services > Library**.
+   - Search for `YouTube Data API v3` and click **Enable**.
+4. **Create Credentials**:
+   - Go to **APIs & Services > Credentials**.
+   - Click **Create Credentials > API Key**.
+   - Copy your generated API key.
+5. **Add Key Restrictions (Recommended for Production)**:
+   - Under **API restrictions**, choose **"Restrict key"** and check **YouTube Data API v3**.
+   - Under **Application restrictions**, select **IP addresses** (add your backend server IP).
+6. **Add Key to Backend**:
+   - Open `backend/.env` and set:
+     ```env
+     YOUTUBE_API_KEY=AIzaSyYourGeneratedKeyHere
+     ```
+
+### ⏱️ Understanding YouTube API Quota Limits & Architecture
+
+| Parameter | Value | Institutional Details |
+| :--- | :--- | :--- |
+| **Default Daily Quota** | **10,000 units / day** | Reset daily at midnight Pacific Time (PST/PDT). |
+| **Search Cost (`search.list`)** | **100 units / request** | Without caching, 10,000 units only allows **100 raw searches per day**! |
+| **Video Playback Cost** | **0 units (Free)** | Handled via official YouTube IFrame Embed Player; consumes 0 Data API quota. |
+| **In-Memory Cache TTL** | **6 Hours** | Popular queries (*"DBMS"*, *"CPU scheduling"*) return instantly from cache at **0 quota cost**. |
+| **Sliding Window Rate Limiter** | **20 req / minute per IP** | Enforces HTTP 429 to prevent individual users from rapidly draining quota. |
+| **Multi-Provider Adapter** | **Composite Fallback** | If quota is exceeded (HTTP 403) or no key is provided, the platform automatically serves verified open-source courseware (NPTEL, MIT OCW, FreeCodeCamp). |
+
+### Setting Quota Caps & Budget Alerts in Google Cloud
+
+To ensure zero surprise billing:
+1. Go to **Google Cloud Console > APIs & Services > YouTube Data API v3 > Quotas**.
+2. Click **Queries per day** and click the pencil icon ✏️ to cap daily requests at `10,000` (or lower).
+3. Go to **Billing > Budgets & Alerts** to receive automatic email warnings at 50%, 80%, and 100% threshold consumption.
+
+
 ---
 
 ## 📂 Project Directory Structure

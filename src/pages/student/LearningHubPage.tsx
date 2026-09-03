@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { MOCK_VIDEOS, MOCK_DEPARTMENTS } from '../../lib/mockDatabase';
 import { VideoCard } from '../../components/video/VideoCard';
 import { ExamRevisionModal } from '../../components/video/ExamRevisionModal';
+import { SearchAndWatchSection } from '../../components/video/SearchAndWatchSection';
 import { Video } from '../../types';
 import {
   Search,
@@ -23,10 +24,12 @@ import {
   ArrowRight,
   ExternalLink,
   ChevronRight,
-  Check
+  Check,
+  Globe
 } from 'lucide-react';
 
 export const LearningHubPage: React.FC = () => {
+  const [hubMode, setHubMode] = useState<'syllabus' | 'search_and_watch'>('syllabus');
   const [videos, setVideos] = useState<Video[]>(MOCK_VIDEOS);
   const [search, setSearch] = useState('');
   const [selectedSubject, setSelectedSubject] = useState<string>('ALL');
@@ -215,9 +218,56 @@ export const LearningHubPage: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. Spotlight "Continue Watching" Card */}
-      {inProgressVideo && !onlyBookmarked && (
-        <div className="rounded-3xl bg-white border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow">
+      {/* 2. Institutional Hub Mode Switcher Tabs */}
+      <div className="flex flex-wrap items-center justify-between gap-4 p-2 rounded-2xl bg-white border border-gray-200 shadow-sm">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => setHubMode('syllabus')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 cursor-pointer transition-all ${
+              hubMode === 'syllabus'
+                ? 'bg-[#173B2F] text-white shadow-md'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            <GraduationCap className="w-4 h-4" />
+            <span>Curriculum Syllabus Vault (16 Faculty Lectures)</span>
+          </button>
+
+          <button
+            onClick={() => setHubMode('search_and_watch')}
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 cursor-pointer transition-all ${
+              hubMode === 'search_and_watch'
+                ? 'bg-gradient-to-r from-[#C49A55] to-[#D97736] text-white shadow-md'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            <Globe className="w-4 h-4" />
+            <span>Search & Watch Online (YouTube Education API)</span>
+            <span className={`px-1.5 py-0.5 rounded text-[9px] uppercase tracking-wider font-extrabold ${
+              hubMode === 'search_and_watch' ? 'bg-white/20 text-white' : 'bg-[#C49A55]/20 text-[#C49A55]'
+            }`}>
+              Live ✨
+            </span>
+          </button>
+        </div>
+
+        <div className="text-[11px] text-gray-500 font-medium hidden md:block">
+          {hubMode === 'syllabus' ? (
+            <span>Unit 1-5 Lectures mapped to Anna University Regulation 2021</span>
+          ) : (
+            <span>Search YouTube Data API & OpenCourseWare without leaving CampusIQ</span>
+          )}
+        </div>
+      </div>
+
+      {/* Search & Watch Online Mode */}
+      {hubMode === 'search_and_watch' ? (
+        <SearchAndWatchSection initialQuery="DBMS" />
+      ) : (
+        <>
+          {/* 3. Spotlight "Continue Watching" Card */}
+          {inProgressVideo && !onlyBookmarked && (
+            <div className="rounded-3xl bg-white border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -724,6 +774,8 @@ export const LearningHubPage: React.FC = () => {
             );
           })}
         </div>
+      )}
+      </>
       )}
 
       {/* 7. AI Exam Revision Modal */}
