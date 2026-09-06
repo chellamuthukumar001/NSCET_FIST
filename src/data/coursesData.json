@@ -1,0 +1,971 @@
+[
+  {
+    "id": "course_cs3351",
+    "code": "CS3351",
+    "title": "Database Management Systems & SQL Architecture",
+    "description": "Anna University Regulation 2021 core course covering relational models, ER schema architecture, functional dependencies, 1NF to BCNF normalization, and ACID transaction concurrency.",
+    "department": "Computer Science & Engineering",
+    "departmentId": "dept_cse",
+    "instructor": "Dr. S. Karthik",
+    "instructorTitle": "HOD & Professor / CSE, NSCET",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&w=800&q=80",
+    "semester": 5,
+    "credits": 3,
+    "difficultyLevel": "Intermediate",
+    "totalDurationHours": 14.5,
+    "enrolledCount": 142,
+    "prerequisites": [
+      "Programming in C (GE3151)",
+      "Data Structures (CS3301)"
+    ],
+    "learningOutcomes": [
+      "Design normalized relational database schemas adhering to Anna University Regulation 2021.",
+      "Decompose relation schemas to BCNF and 3NF ensuring lossless join and dependency preservation.",
+      "Construct ACID-compliant transactional workflows using 2-Phase Locking."
+    ],
+    "modules": [
+      {
+        "id": "mod_dbms_1",
+        "courseId": "course_cs3351",
+        "title": "Module 1: Relational Data Model & ER Schema Architecture",
+        "orderIndex": 1,
+        "description": "Foundational architecture of database systems, relational semantics, ER diagramming, and integrity constraints.",
+        "estimatedMinutes": 50,
+        "introduction": {
+          "id": "ci_dbms_1_intro",
+          "moduleId": "mod_dbms_1",
+          "title": "Module 1 Introduction: Objectives & Relational Foundations",
+          "sectionType": "introduction",
+          "type": "text",
+          "urlOrPath": "Welcome to CS3351 Database Management Systems (Module 1). In this module you master:\\n1. ANSI/SPARC 3-Schema Architecture\\n2. ER Modeling (Entity sets, attributes, weak entities)\\n3. Relational Integrity Rules (Primary Key, Foreign Key)\\n\\n**Estimated Study Time**: 50 Minutes\\n**Passing Score**: >=70% on Knowledge Check.",
+          "orderIndex": 1,
+          "durationSeconds": 300,
+          "summary": "Overview of ANSI/SPARC schema levels and ER diagramming."
+        },
+        "coreContent": [
+          {
+            "id": "ci_dbms_1_core_1",
+            "moduleId": "mod_dbms_1",
+            "title": "Lecture 1: Introduction to DBMS Architecture & Data Models",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "3EJlovevfcA",
+            "orderIndex": 1,
+            "durationSeconds": 840,
+            "summary": "Architecture of DBMS engines, data abstraction, and comparison with traditional file systems."
+          },
+          {
+            "id": "ci_dbms_1_core_2",
+            "moduleId": "mod_dbms_1",
+            "title": "Study Notes: ER-to-Relational Mapping Guidelines (Regulation 2021)",
+            "sectionType": "core_content",
+            "type": "doc",
+            "urlOrPath": "https://raw.githubusercontent.com/chellamuthukumar001/NSCET_FIST/main/docs/cs3351_unit1_er_mapping.pdf",
+            "orderIndex": 2,
+            "documentPages": 6,
+            "durationSeconds": 600,
+            "summary": "Step-by-step procedure for converting ER diagrams into normalized tables."
+          }
+        ],
+        "knowledgeCheck": {
+          "id": "quiz_dbms_1",
+          "moduleId": "mod_dbms_1",
+          "title": "Module 1 Knowledge Check: Relational Semantics & ER Models",
+          "passingScore": 70,
+          "timeLimitMinutes": 10,
+          "isFinalAssessment": false,
+          "questions": [
+            {
+              "id": "q_dbms_1_1",
+              "quizId": "quiz_dbms_1",
+              "question": "How is a weak entity set uniquely identified in a relational schema?",
+              "questionType": "mcq",
+              "options": [
+                "By its partial discriminator alone",
+                "By combining the owner entity primary key with its partial discriminator",
+                "Weak entities cannot be converted into tables",
+                "By assigning an arbitrary integer"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Weak entities lack their own key and must borrow the primary key of their identifying parent.",
+              "orderIndex": 1
+            },
+            {
+              "id": "q_dbms_1_2",
+              "quizId": "quiz_dbms_1",
+              "question": "Which relational integrity rule asserts that no primary key attribute may contain a NULL value?",
+              "questionType": "mcq",
+              "options": [
+                "Referential Integrity",
+                "Entity Integrity",
+                "Domain Constraint",
+                "Cardinality"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Entity Integrity dictates that primary key values must be unique and non-null.",
+              "orderIndex": 2
+            },
+            {
+              "id": "q_dbms_1_3",
+              "quizId": "quiz_dbms_1",
+              "question": "True or False: A Foreign Key in a child table can refer to a non-candidate key attribute in the parent table.",
+              "questionType": "true_false",
+              "options": [
+                "True",
+                "False"
+              ],
+              "correctAnswer": 1,
+              "explanation": "False. Foreign keys must refer to a primary key or candidate key of the referenced table.",
+              "orderIndex": 3
+            },
+            {
+              "id": "q_dbms_1_4",
+              "quizId": "quiz_dbms_1",
+              "question": "In Relational Algebra, which operator filters horizontal rows satisfying a predicate?",
+              "questionType": "mcq",
+              "options": [
+                "Projection (pi)",
+                "Selection (sigma)",
+                "Cartesian Product",
+                "Join"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Selection (sigma) filters rows; Projection (pi) selects columns.",
+              "orderIndex": 4
+            },
+            {
+              "id": "q_dbms_1_5",
+              "quizId": "quiz_dbms_1",
+              "question": "How is a Many-to-Many (M:N) relationship represented in a relational schema?",
+              "questionType": "mcq",
+              "options": [
+                "Add a foreign key in table A",
+                "Add a foreign key in table B",
+                "Create a separate junction table with foreign keys referencing both tables",
+                "Merge tables into a single table"
+              ],
+              "correctAnswer": 2,
+              "explanation": "An M:N relationship requires an associative junction table with both primary keys as foreign keys.",
+              "orderIndex": 5
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "course_cs3451",
+    "code": "CS3451",
+    "title": "Operating Systems & Kernel Architecture",
+    "description": "Process synchronization, CPU scheduling algorithms (FCFS, SJF, Round Robin), virtual memory, demand paging, and deadlock handling.",
+    "department": "Computer Science & Engineering",
+    "departmentId": "dept_cse",
+    "instructor": "Dr. M. Deepa",
+    "instructorTitle": "Assistant Professor / CSE, NSCET",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
+    "semester": 4,
+    "credits": 3,
+    "difficultyLevel": "Intermediate",
+    "totalDurationHours": 12.0,
+    "enrolledCount": 118,
+    "prerequisites": [
+      "Computer Architecture (CS3352)"
+    ],
+    "learningOutcomes": [
+      "Calculate turnaround and waiting times for CPU scheduling",
+      "Implement semaphores",
+      "Analyze page replacement"
+    ],
+    "modules": [
+      {
+        "id": "mod_os_1",
+        "courseId": "course_cs3451",
+        "title": "Module 1: Kernel Privilege & CPU Scheduling Algorithms",
+        "orderIndex": 1,
+        "description": "Dual-mode hardware execution, POSIX system calls, and comparative CPU scheduling metrics.",
+        "estimatedMinutes": 45,
+        "introduction": {
+          "id": "ci_os_1_intro",
+          "moduleId": "mod_os_1",
+          "title": "Module 1 Introduction: Kernel Modes & Process Scheduling",
+          "sectionType": "introduction",
+          "type": "text",
+          "urlOrPath": "Welcome to CS3451 Operating Systems. In this module you will examine:\\n1. Dual-mode execution (User vs Kernel Mode)\\n2. Scheduling Criteria: Throughput, Turnaround Time, Waiting Time\\n3. Algorithms: FCFS, SJF, Priority, Round Robin.",
+          "orderIndex": 1,
+          "durationSeconds": 240,
+          "summary": "Introduction to CPU scheduling and kernel privilege."
+        },
+        "coreContent": [
+          {
+            "id": "ci_os_1_core_1",
+            "moduleId": "mod_os_1",
+            "title": "Lecture 1: Process Scheduling Algorithms (Preemption vs Non-Preemption)",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "zFnrUVqtiOY",
+            "orderIndex": 1,
+            "durationSeconds": 920,
+            "summary": "Process state transitions, dispatchers, and preemptive versus non-preemptive scheduling."
+          },
+          {
+            "id": "ci_os_1_core_2",
+            "moduleId": "mod_os_1",
+            "title": "Lecture 2: First-Come First-Served & Shortest Job First with Solved Numerical",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "MZdVAVMgNpA",
+            "orderIndex": 2,
+            "durationSeconds": 780,
+            "summary": "Gantt chart calculation of average waiting time and turnaround time."
+          }
+        ],
+        "knowledgeCheck": {
+          "id": "quiz_os_1",
+          "moduleId": "mod_os_1",
+          "title": "Module 1 Knowledge Check: OS Scheduling & Privileged Modes",
+          "passingScore": 70,
+          "timeLimitMinutes": 10,
+          "isFinalAssessment": false,
+          "questions": [
+            {
+              "id": "q_os_1_1",
+              "quizId": "quiz_os_1",
+              "question": "Which CPU register bit indicates whether the processor is executing in User Mode or Kernel Mode?",
+              "questionType": "mcq",
+              "options": [
+                "Mode Bit",
+                "Program Counter",
+                "Stack Pointer",
+                "Flags Register"
+              ],
+              "correctAnswer": 0,
+              "explanation": "The hardware Mode Bit determines privilege: 0 for kernel mode, 1 for user mode.",
+              "orderIndex": 1
+            },
+            {
+              "id": "q_os_1_2",
+              "quizId": "quiz_os_1",
+              "question": "Which scheduling algorithm provides the minimum average waiting time for a given set of processes?",
+              "questionType": "mcq",
+              "options": [
+                "FCFS",
+                "Shortest Job First (SJF)",
+                "Round Robin",
+                "Priority Scheduling"
+              ],
+              "correctAnswer": 1,
+              "explanation": "SJF is provably optimal regarding minimum average waiting time.",
+              "orderIndex": 2
+            },
+            {
+              "id": "q_os_1_3",
+              "quizId": "quiz_os_1",
+              "question": "True or False: In Round Robin scheduling, setting the time quantum too large causes it to degenerate into FCFS.",
+              "questionType": "true_false",
+              "options": [
+                "True",
+                "False"
+              ],
+              "correctAnswer": 0,
+              "explanation": "True. If the quantum exceeds the longest burst time, processes run to completion in order of arrival.",
+              "orderIndex": 3
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "course_cs3301",
+    "code": "CS3301",
+    "title": "Data Structures & Algorithms (C / C++)",
+    "description": "Linear and non-linear data structures: Linked lists, Stacks, Queues, Binary Search Trees, AVL Trees, Heaps, and Graph traversal algorithms (BFS, DFS).",
+    "department": "Computer Science & Engineering",
+    "departmentId": "dept_cse",
+    "instructor": "Dr. K. Meenakshi",
+    "instructorTitle": "Professor / CSE, NSCET",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
+    "semester": 3,
+    "credits": 4,
+    "difficultyLevel": "Beginner",
+    "totalDurationHours": 16.0,
+    "enrolledCount": 160,
+    "prerequisites": [
+      "Python (GE3151)"
+    ],
+    "learningOutcomes": [
+      "Implement linked lists and balanced search trees",
+      "Analyze algorithm time complexity using Big-O notation",
+      "Solve graph traversal problems"
+    ],
+    "modules": [
+      {
+        "id": "mod_dsa_1",
+        "courseId": "course_cs3301",
+        "title": "Module 1: Asymptotic Complexity & Balanced Binary Search Trees",
+        "orderIndex": 1,
+        "description": "Time complexity proofs, BST search/insert, AVL rotations (LL, RR, LR, RL), and Red-Black tree properties.",
+        "estimatedMinutes": 55,
+        "introduction": {
+          "id": "ci_dsa_1_intro",
+          "moduleId": "mod_dsa_1",
+          "title": "Module 1 Introduction: Trees & Big-O Notation",
+          "sectionType": "introduction",
+          "type": "text",
+          "urlOrPath": "Welcome to CS3301 Data Structures. In this module you will explore:\\n1. Big-O, Big-Omega, Big-Theta time complexity\\n2. Binary Search Tree properties\\n3. Self-balancing AVL rotations (LL, RR, LR, RL).",
+          "orderIndex": 1,
+          "durationSeconds": 240,
+          "summary": "Tree traversal and balance factors."
+        },
+        "coreContent": [
+          {
+            "id": "ci_dsa_1_core_1",
+            "moduleId": "mod_dsa_1",
+            "title": "Lecture 1: Binary Search Tree Insertion and Deletion Algorithms",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "pYO-FAg-TpQ",
+            "orderIndex": 1,
+            "durationSeconds": 890,
+            "summary": "Complete implementation of BST operations with recursive time complexity analysis."
+          }
+        ],
+        "knowledgeCheck": {
+          "id": "quiz_dsa_1",
+          "moduleId": "mod_dsa_1",
+          "title": "Module 1 Knowledge Check: Trees & Time Complexity",
+          "passingScore": 70,
+          "timeLimitMinutes": 10,
+          "isFinalAssessment": false,
+          "questions": [
+            {
+              "id": "q_dsa_1_1",
+              "quizId": "quiz_dsa_1",
+              "question": "What is the worst-case search time complexity for an unbalanced Binary Search Tree of N nodes?",
+              "questionType": "mcq",
+              "options": [
+                "O(1)",
+                "O(log N)",
+                "O(N)",
+                "O(N log N)"
+              ],
+              "correctAnswer": 2,
+              "explanation": "In a degenerate (skewed) BST, searching degrades to linear traversal O(N).",
+              "orderIndex": 1
+            },
+            {
+              "id": "q_dsa_1_2",
+              "quizId": "quiz_dsa_1",
+              "question": "What are the allowed balance factors for every node in an AVL tree?",
+              "questionType": "mcq",
+              "options": [
+                "0 only",
+                "-1, 0, +1",
+                "-2, -1, 0, 1, 2",
+                "Any positive integer"
+              ],
+              "correctAnswer": 1,
+              "explanation": "AVL trees require the height difference between left and right subtrees to be in {-1, 0, +1}.",
+              "orderIndex": 2
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "course_ai3401",
+    "code": "AI3401",
+    "title": "Deep Learning & Neural Network Foundations",
+    "description": "Multi-layer perceptrons, backpropagation calculus, Convolutional Neural Networks (CNNs), activation functions, and PyTorch implementations.",
+    "department": "Artificial Intelligence & Data Science",
+    "departmentId": "dept_aids",
+    "instructor": "Dr. P. Vasanth",
+    "instructorTitle": "Associate Professor / AI&DS, NSCET",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80",
+    "semester": 6,
+    "credits": 4,
+    "difficultyLevel": "Advanced",
+    "totalDurationHours": 16.0,
+    "enrolledCount": 96,
+    "prerequisites": [
+      "Linear Algebra (MA3354)",
+      "Machine Learning (CS3491)"
+    ],
+    "learningOutcomes": [
+      "Derive backpropagation gradient updates",
+      "Build CNN vision pipelines",
+      "Optimize deep networks with Adam"
+    ],
+    "modules": [
+      {
+        "id": "mod_dl_1",
+        "courseId": "course_ai3401",
+        "title": "Module 1: Multi-Layer Perceptrons & Backpropagation Calculus",
+        "orderIndex": 1,
+        "description": "Chain rule gradients, loss functions (Cross-Entropy, MSE), and activation functions (ReLU, Sigmoid).",
+        "estimatedMinutes": 60,
+        "introduction": {
+          "id": "ci_dl_1_intro",
+          "moduleId": "mod_dl_1",
+          "title": "Module 1 Introduction: Neural Network Optimization",
+          "sectionType": "introduction",
+          "type": "text",
+          "urlOrPath": "Welcome to AI3401 Deep Learning. In this module, you will derive the mathematical backpropagation equations that drive neural network weight updates.",
+          "orderIndex": 1,
+          "durationSeconds": 300,
+          "summary": "Neural network architecture and gradient descent."
+        },
+        "coreContent": [
+          {
+            "id": "ci_dl_1_core_1",
+            "moduleId": "mod_dl_1",
+            "title": "Lecture 1: Gradient Descent & Loss Landscapes in Deep Learning",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "aircAruvnKk",
+            "orderIndex": 1,
+            "durationSeconds": 1140,
+            "summary": "Geometric interpretation of multi-dimensional loss surfaces and gradient descent."
+          }
+        ],
+        "knowledgeCheck": {
+          "id": "quiz_dl_1",
+          "moduleId": "mod_dl_1",
+          "title": "Module 1 Knowledge Check: Backpropagation & Activations",
+          "passingScore": 70,
+          "timeLimitMinutes": 10,
+          "isFinalAssessment": false,
+          "questions": [
+            {
+              "id": "q_dl_1_1",
+              "quizId": "quiz_dl_1",
+              "question": "Why does the ReLU activation function mitigate vanishing gradients compared to Sigmoid?",
+              "questionType": "mcq",
+              "options": [
+                "Its derivative is 1 for all positive inputs, preventing gradient saturation",
+                "It squashes all numbers between 0 and 1",
+                "It requires no floating-point arithmetic",
+                "It eliminates all negative weights"
+              ],
+              "correctAnswer": 0,
+              "explanation": "Because d/dx(ReLU) = 1 for x > 0, gradients do not shrink exponentially through deep layers.",
+              "orderIndex": 1
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "course_cs3591",
+    "code": "CS3591",
+    "title": "Computer Networks & Protocol Engineering",
+    "description": "ISO/OSI model, TCP/IP protocol suite, subnetting (CIDR), routing algorithms (Link State, Distance Vector), and transport layer flow control.",
+    "department": "Computer Science & Engineering",
+    "departmentId": "dept_cse",
+    "instructor": "Er. N. Rajesh",
+    "instructorTitle": "Assistant Professor / CSE, NSCET",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=800&q=80",
+    "semester": 5,
+    "credits": 3,
+    "difficultyLevel": "Intermediate",
+    "totalDurationHours": 13.0,
+    "enrolledCount": 130,
+    "prerequisites": [
+      "Digital Principles (CS3251)"
+    ],
+    "learningOutcomes": [
+      "Calculate IPv4 subnet masks and host ranges",
+      "Analyze TCP 3-way handshake and congestion control",
+      "Configure routing protocols"
+    ],
+    "modules": [
+      {
+        "id": "mod_cn_1",
+        "courseId": "course_cs3591",
+        "title": "Module 1: Layered Architectures & IPv4 CIDR Subnetting",
+        "orderIndex": 1,
+        "description": "OSI vs TCP/IP protocols, IPv4 address structure, classless inter-domain routing (CIDR), and packet encapsulation.",
+        "estimatedMinutes": 50,
+        "introduction": {
+          "id": "ci_cn_1_intro",
+          "moduleId": "mod_cn_1",
+          "title": "Module 1 Introduction: Layered Models & IP Subnetting",
+          "sectionType": "introduction",
+          "type": "text",
+          "urlOrPath": "Welcome to CS3591 Computer Networks. In this module you will master:\\n1. The 7 layers of OSI and 4 layers of TCP/IP\\n2. IPv4 Header format and fragmentation\\n3. CIDR Subnetting calculations.",
+          "orderIndex": 1,
+          "durationSeconds": 240,
+          "summary": "Protocol hierarchies and IPv4 addressing."
+        },
+        "coreContent": [
+          {
+            "id": "ci_cn_1_core_1",
+            "moduleId": "mod_cn_1",
+            "title": "Lecture 1: Computer Networks Architecture & OSI 7 Layer Breakdown",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "2h3eWaPx8SA",
+            "orderIndex": 1,
+            "durationSeconds": 940,
+            "summary": "Detailed inspection of Physical, Data Link, Network, Transport, and Application layers."
+          }
+        ],
+        "knowledgeCheck": {
+          "id": "quiz_cn_1",
+          "moduleId": "mod_cn_1",
+          "title": "Module 1 Knowledge Check: OSI Layers & Subnetting",
+          "passingScore": 70,
+          "timeLimitMinutes": 10,
+          "isFinalAssessment": false,
+          "questions": [
+            {
+              "id": "q_cn_1_1",
+              "quizId": "quiz_cn_1",
+              "question": "Which layer of the OSI model is responsible for hop-to-hop framing and physical MAC addressing?",
+              "questionType": "mcq",
+              "options": [
+                "Physical Layer",
+                "Data Link Layer",
+                "Network Layer",
+                "Transport Layer"
+              ],
+              "correctAnswer": 1,
+              "explanation": "The Data Link layer handles framing, MAC hardware addressing, and local error detection.",
+              "orderIndex": 1
+            },
+            {
+              "id": "q_cn_1_2",
+              "quizId": "quiz_cn_1",
+              "question": "How many usable host addresses are available in an IPv4 subnet with a /26 prefix?",
+              "questionType": "mcq",
+              "options": [
+                "64",
+                "62",
+                "30",
+                "126"
+              ],
+              "correctAnswer": 1,
+              "explanation": "32 - 26 = 6 host bits. 2^6 = 64 total addresses. Subtracting network and broadcast addresses yields 62 usable hosts.",
+              "orderIndex": 2
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "course_cs3491",
+    "code": "CS3491",
+    "title": "Artificial Intelligence & Machine Learning Techniques",
+    "description": "Heuristic search (A*, Minimax), decision trees, Support Vector Machines (SVM), k-means clustering, and model evaluation metrics.",
+    "department": "Computer Science & Engineering",
+    "departmentId": "dept_cse",
+    "instructor": "Dr. T. Suresh",
+    "instructorTitle": "Associate Professor / CSE, NSCET",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=800&q=80",
+    "semester": 4,
+    "credits": 3,
+    "difficultyLevel": "Intermediate",
+    "totalDurationHours": 14.0,
+    "enrolledCount": 110,
+    "prerequisites": [
+      "Discrete Mathematics (MA3354)"
+    ],
+    "learningOutcomes": [
+      "Formulate problems as state space graphs",
+      "Train linear and non-linear classifiers",
+      "Evaluate precision and recall"
+    ],
+    "modules": [
+      {
+        "id": "mod_aiml_1",
+        "courseId": "course_cs3491",
+        "title": "Module 1: Informed Search Strategies & A* Search",
+        "orderIndex": 1,
+        "description": "Admissible heuristics, consistency conditions, evaluation function f(n) = g(n) + h(n), and optimality proofs.",
+        "estimatedMinutes": 50,
+        "introduction": {
+          "id": "ci_aiml_1_intro",
+          "moduleId": "mod_aiml_1",
+          "title": "Module 1 Introduction: State Space Search & Heuristics",
+          "sectionType": "introduction",
+          "type": "text",
+          "urlOrPath": "Welcome to CS3491 AI & ML. In this module, you will analyze how agents navigate complex problem spaces using heuristic evaluation functions.",
+          "orderIndex": 1,
+          "durationSeconds": 240,
+          "summary": "State space representation and search strategies."
+        },
+        "coreContent": [
+          {
+            "id": "ci_aiml_1_core_1",
+            "moduleId": "mod_aiml_1",
+            "title": "Lecture 1: A* Search Algorithm & Heuristic Admissibility",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "TxjIlNYRZ5M",
+            "orderIndex": 1,
+            "durationSeconds": 850,
+            "summary": "Proof of optimality for A* with admissible and consistent heuristics."
+          }
+        ],
+        "knowledgeCheck": {
+          "id": "quiz_aiml_1",
+          "moduleId": "mod_aiml_1",
+          "title": "Module 1 Knowledge Check: Search Algorithms",
+          "passingScore": 70,
+          "timeLimitMinutes": 10,
+          "isFinalAssessment": false,
+          "questions": [
+            {
+              "id": "q_aiml_1_1",
+              "quizId": "quiz_aiml_1",
+              "question": "What condition must a heuristic h(n) satisfy to be called 'admissible' in A* search?",
+              "questionType": "mcq",
+              "options": [
+                "It never overestimates the true cost to reach the goal",
+                "It is always equal to the depth of the node",
+                "It is strictly greater than the actual cost",
+                "It must always evaluate to zero"
+              ],
+              "correctAnswer": 0,
+              "explanation": "An admissible heuristic never overestimates the cost from the current state to the goal.",
+              "orderIndex": 1
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "course_cs3551",
+    "code": "CS3551",
+    "title": "Cryptography & Cyber Security Engineering",
+    "description": "Symmetric cryptography (AES), asymmetric algorithms (RSA, ECC), cryptographic hash functions (SHA-256), and network security defense.",
+    "department": "Computer Science & Engineering",
+    "departmentId": "dept_cse",
+    "instructor": "Dr. R. Balaji",
+    "instructorTitle": "Professor / CSE, NSCET",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80",
+    "semester": 5,
+    "credits": 3,
+    "difficultyLevel": "Advanced",
+    "totalDurationHours": 15.0,
+    "enrolledCount": 105,
+    "prerequisites": [
+      "Discrete Mathematics (MA3354)"
+    ],
+    "learningOutcomes": [
+      "Encrypt and decrypt with RSA and AES",
+      "Verify digital signatures and certificates",
+      "Implement TLS handshake"
+    ],
+    "modules": [
+      {
+        "id": "mod_crypto_1",
+        "courseId": "course_cs3551",
+        "title": "Module 1: Number Theoretic Foundations & RSA Algorithm",
+        "orderIndex": 1,
+        "description": "Modular arithmetic, Euler's Totient function phi(n), key generation, encryption c = m^e mod n, and decryption.",
+        "estimatedMinutes": 55,
+        "introduction": {
+          "id": "ci_crypto_1_intro",
+          "moduleId": "mod_crypto_1",
+          "title": "Module 1 Introduction: Public-Key Cryptography",
+          "sectionType": "introduction",
+          "type": "text",
+          "urlOrPath": "Welcome to CS3551 Cryptography. In this module you will explore public-key cryptosystems, prime factorization difficulty, and RSA mathematical proofs.",
+          "orderIndex": 1,
+          "durationSeconds": 240,
+          "summary": "Modular mathematics and public key encryption."
+        },
+        "coreContent": [
+          {
+            "id": "ci_crypto_1_core_1",
+            "moduleId": "mod_crypto_1",
+            "title": "Lecture 1: RSA Algorithm Solved Example with Modular Exponentiation",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "VCIVXPoiLpU",
+            "orderIndex": 1,
+            "durationSeconds": 920,
+            "summary": "Key generation walkthrough: selecting primes p and q, computing e and d, and running encryption."
+          }
+        ],
+        "knowledgeCheck": {
+          "id": "quiz_crypto_1",
+          "moduleId": "mod_crypto_1",
+          "title": "Module 1 Knowledge Check: RSA & Modular Arithmetic",
+          "passingScore": 70,
+          "timeLimitMinutes": 10,
+          "isFinalAssessment": false,
+          "questions": [
+            {
+              "id": "q_crypto_1_1",
+              "quizId": "quiz_crypto_1",
+              "question": "In RSA, given prime numbers p = 3 and q = 11, what is the value of Euler's totient phi(n)?",
+              "questionType": "mcq",
+              "options": [
+                "33",
+                "20",
+                "22",
+                "30"
+              ],
+              "correctAnswer": 1,
+              "explanation": "phi(n) = (p - 1) * (q - 1) = (3 - 1) * (11 - 1) = 2 * 10 = 20.",
+              "orderIndex": 1
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "course_cs3691",
+    "code": "CS3691",
+    "title": "Embedded Systems & IoT Architectures",
+    "description": "ARM Cortex-M microcontroller architecture, GPIO/ADC interfacing, IoT protocols (MQTT, CoAP), and low-power sensor networks.",
+    "department": "Electronics & Communication Engineering",
+    "departmentId": "dept_ece",
+    "instructor": "Er. S. Prakash",
+    "instructorTitle": "Assistant Professor / ECE, NSCET",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
+    "semester": 6,
+    "credits": 3,
+    "difficultyLevel": "Intermediate",
+    "totalDurationHours": 13.5,
+    "enrolledCount": 88,
+    "prerequisites": [
+      "Microprocessors and Microcontrollers (EC3451)"
+    ],
+    "learningOutcomes": [
+      "Program ARM Cortex-M interrupts",
+      "Publish telemetry data via MQTT",
+      "Design smart sensor endpoints"
+    ],
+    "modules": [
+      {
+        "id": "mod_iot_1",
+        "courseId": "course_cs3691",
+        "title": "Module 1: Microcontroller Bus Architecture & MQTT Protocol",
+        "orderIndex": 1,
+        "description": "Publisher/Subscriber telemetry pattern, Quality of Service (QoS) levels, and low-power sensory nodes.",
+        "estimatedMinutes": 45,
+        "introduction": {
+          "id": "ci_iot_1_intro",
+          "moduleId": "mod_iot_1",
+          "title": "Module 1 Introduction: IoT Protocols & Hardware Interfaces",
+          "sectionType": "introduction",
+          "type": "text",
+          "urlOrPath": "Welcome to CS3691 Embedded Systems & IoT. In this module, you will explore low-overhead communication protocols like MQTT and real-time microcontroller peripherals.",
+          "orderIndex": 1,
+          "durationSeconds": 240,
+          "summary": "Publisher/subscriber telemetry and embedded hardware."
+        },
+        "coreContent": [
+          {
+            "id": "ci_iot_1_core_1",
+            "moduleId": "mod_iot_1",
+            "title": "Lecture 1: MQTT Protocol Architecture & QoS Levels Explained",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "GS6yIngO4eg",
+            "orderIndex": 1,
+            "durationSeconds": 870,
+            "summary": "MQTT brokers, topics, and message delivery guarantees (QoS 0, 1, 2)."
+          }
+        ],
+        "knowledgeCheck": {
+          "id": "quiz_iot_1",
+          "moduleId": "mod_iot_1",
+          "title": "Module 1 Knowledge Check: IoT Protocols",
+          "passingScore": 70,
+          "timeLimitMinutes": 10,
+          "isFinalAssessment": false,
+          "questions": [
+            {
+              "id": "q_iot_1_1",
+              "quizId": "quiz_iot_1",
+              "question": "Which MQTT Quality of Service (QoS) level guarantees that a message is delivered exactly once?",
+              "questionType": "mcq",
+              "options": [
+                "QoS 0",
+                "QoS 1",
+                "QoS 2",
+                "QoS 3"
+              ],
+              "correctAnswer": 2,
+              "explanation": "QoS 2 is the highest level of service in MQTT, guaranteeing exactly-once delivery via a four-step handshake.",
+              "orderIndex": 1
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "course_ge3151",
+    "code": "GE3151",
+    "title": "Problem Solving and Python Programming",
+    "description": "First-year engineering foundational course on algorithmic thinking, control flow, functions, lists, dictionaries, tuples, and file processing.",
+    "department": "Computer Science & Engineering",
+    "departmentId": "dept_cse",
+    "instructor": "Er. A. Revathi",
+    "instructorTitle": "Assistant Professor / CSE, NSCET",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=800&q=80",
+    "semester": 1,
+    "credits": 3,
+    "difficultyLevel": "Beginner",
+    "totalDurationHours": 12.0,
+    "enrolledCount": 185,
+    "prerequisites": [],
+    "learningOutcomes": [
+      "Write modular Python scripts with functions",
+      "Manipulate nested data structures",
+      "Implement sorting and searching"
+    ],
+    "modules": [
+      {
+        "id": "mod_py_1",
+        "courseId": "course_ge3151",
+        "title": "Module 1: Computational Thinking & Python Control Flow",
+        "orderIndex": 1,
+        "description": "Variables, types, conditionals (if-elif-else), while/for loops, and list comprehensions.",
+        "estimatedMinutes": 45,
+        "introduction": {
+          "id": "ci_py_1_intro",
+          "moduleId": "mod_py_1",
+          "title": "Module 1 Introduction: Python Syntax & Flow",
+          "sectionType": "introduction",
+          "type": "text",
+          "urlOrPath": "Welcome to GE3151 Python Programming. This module introduces the core grammar of Python: variables, branching conditionals, and loops.",
+          "orderIndex": 1,
+          "durationSeconds": 240,
+          "summary": "Core syntax, dynamic typing, and iterations."
+        },
+        "coreContent": [
+          {
+            "id": "ci_py_1_core_1",
+            "moduleId": "mod_py_1",
+            "title": "Lecture 1: Python Data Types, Conditionals, and Iteration Masterclass",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "WYo1SpUh9FI",
+            "orderIndex": 1,
+            "durationSeconds": 860,
+            "summary": "Foundational Python syntax, expressions, and loop execution control."
+          }
+        ],
+        "knowledgeCheck": {
+          "id": "quiz_py_1",
+          "moduleId": "mod_py_1",
+          "title": "Module 1 Knowledge Check: Python Fundamentals",
+          "passingScore": 70,
+          "timeLimitMinutes": 10,
+          "isFinalAssessment": false,
+          "questions": [
+            {
+              "id": "q_py_1_1",
+              "quizId": "quiz_py_1",
+              "question": "Which of the following built-in Python data types is immutable?",
+              "questionType": "mcq",
+              "options": [
+                "List",
+                "Dictionary",
+                "Tuple",
+                "Set"
+              ],
+              "correctAnswer": 2,
+              "explanation": "Tuples are immutable sequences in Python; once created, their elements cannot be changed.",
+              "orderIndex": 1
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "course_cs3452",
+    "code": "CS3452",
+    "title": "Theory of Computation & Compiler Design",
+    "description": "Chomsky grammar hierarchy, Deterministic Finite Automata (DFA), Context-Free Grammars (CFG), LL(1) parsing tables, and syntax-directed translation.",
+    "department": "Computer Science & Engineering",
+    "departmentId": "dept_cse",
+    "instructor": "Dr. S. Karthik",
+    "instructorTitle": "HOD & Professor / CSE, NSCET",
+    "thumbnailUrl": "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=800&q=80",
+    "semester": 4,
+    "credits": 4,
+    "difficultyLevel": "Advanced",
+    "totalDurationHours": 16.0,
+    "enrolledCount": 98,
+    "prerequisites": [
+      "Discrete Mathematics (MA3354)"
+    ],
+    "learningOutcomes": [
+      "Construct DFAs and NFAs for regular languages",
+      "Build predictive LL(1) and LR parsing tables",
+      "Generate three-address intermediate code"
+    ],
+    "modules": [
+      {
+        "id": "mod_toc_1",
+        "courseId": "course_cs3452",
+        "title": "Module 1: Finite Automata & Predictive LL(1) Parsing",
+        "orderIndex": 1,
+        "description": "NFA to DFA subset construction, FIRST and FOLLOW set computations, and predictive parsing table validation.",
+        "estimatedMinutes": 55,
+        "introduction": {
+          "id": "ci_toc_1_intro",
+          "moduleId": "mod_toc_1",
+          "title": "Module 1 Introduction: Automata & Compilers",
+          "sectionType": "introduction",
+          "type": "text",
+          "urlOrPath": "Welcome to CS3452 Theory of Computation & Compiler Design. In this module you will connect theoretical regular languages with practical lexer/parser construction.",
+          "orderIndex": 1,
+          "durationSeconds": 240,
+          "summary": "Regular languages, automata, and compiler frontends."
+        },
+        "coreContent": [
+          {
+            "id": "ci_toc_1_core_1",
+            "moduleId": "mod_toc_1",
+            "title": "Lecture 1: Deterministic Finite Automata (DFA) Construction and Minimization",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "TxjIlNYRZ5M",
+            "orderIndex": 1,
+            "durationSeconds": 910,
+            "summary": "State transitions, language acceptance, and DFA minimization using equivalence partitioning."
+          }
+        ],
+        "knowledgeCheck": {
+          "id": "quiz_toc_1",
+          "moduleId": "mod_toc_1",
+          "title": "Module 1 Knowledge Check: Automata & Grammars",
+          "passingScore": 70,
+          "timeLimitMinutes": 10,
+          "isFinalAssessment": false,
+          "questions": [
+            {
+              "id": "q_toc_1_1",
+              "quizId": "quiz_toc_1",
+              "question": "Can every Non-Deterministic Finite Automaton (NFA) be converted into an equivalent Deterministic Finite Automaton (DFA)?",
+              "questionType": "mcq",
+              "options": [
+                "Yes, using the Subset Construction (Powerset) algorithm",
+                "No, NFAs are strictly more expressive than DFAs",
+                "Only if the NFA has fewer than 10 states",
+                "Only if the alphabet has exactly 2 symbols"
+              ],
+              "correctAnswer": 0,
+              "explanation": "By the Powerset Construction algorithm, every NFA with N states has an equivalent DFA with at most 2^N states.",
+              "orderIndex": 1
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

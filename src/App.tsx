@@ -36,6 +36,10 @@ import { StudentAssistantPage } from './pages/student/StudentAssistantPage';
 import { StudentQuizPage } from './pages/student/StudentQuizPage';
 import { StudentNotificationsPage } from './pages/student/StudentNotificationsPage';
 import { StudentProfilePage } from './pages/student/StudentProfilePage';
+import { CourseCatalogPage } from './pages/student/CourseCatalogPage';
+import { CourseDetailPage } from './pages/student/CourseDetailPage';
+import { ModulePlayerPage } from './pages/student/ModulePlayerPage';
+import { CertificateVerificationPage } from './pages/student/CertificateVerificationPage';
 
 // Faculty Pages
 import { FacultyDashboard } from './pages/faculty/FacultyDashboard';
@@ -135,6 +139,12 @@ export function App() {
               <Route element={<AuthenticatedLayout />}>
                 {/* Student Routes */}
                 <Route path="/student" element={<StudentDashboard />} />
+                <Route path="/student/courses" element={<CourseCatalogPage />} />
+                <Route path="/student/courses/:courseId" element={<CourseDetailPage />} />
+                <Route path="/student/courses/:courseId/modules/:moduleId" element={<ModulePlayerPage />} />
+                <Route path="/student/certificates" element={<CertificateVerificationPage />} />
+                <Route path="/verify-certificate/:verificationId" element={<CertificateVerificationPage />} />
+                <Route path="/verify-certificate" element={<CertificateVerificationPage />} />
                 <Route path="/student/videos" element={<LearningHubPage />} />
                 <Route path="/student/videos/:videoId" element={<VideoDetailPage />} />
                 <Route path="/student/subjects" element={<SubjectsPage />} />

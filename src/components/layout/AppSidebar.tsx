@@ -33,8 +33,10 @@ export const AppSidebar: React.FC = () => {
       case 'STUDENT':
         return [
           { label: 'Dashboard', path: '/student', icon: LayoutDashboard },
-          { label: 'YouTube Learning', path: '/student/videos', icon: Video },
+          { label: '10 Course Modules', path: '/student/courses', icon: GraduationCap },
+          { label: 'YouTube Search & Watch', path: '/student/videos', icon: Video },
           { label: 'Subjects & Units', path: '/student/subjects', icon: BookOpen },
+          { label: 'Certificates', path: '/student/certificates', icon: Award },
           { label: 'Bookmarks', path: '/student/bookmarks', icon: Bookmark },
           { label: 'Watch History', path: '/student/history', icon: History },
           { label: 'Learning Progress', path: '/student/progress', icon: TrendingUp },
