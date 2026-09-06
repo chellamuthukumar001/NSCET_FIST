@@ -291,11 +291,16 @@ export const CourseDetailPage: React.FC = () => {
 
                   {/* Stage 2: Core Content */}
                   <div className="space-y-3">
-                    <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#173B2F]">
-                      <span className="w-5 h-5 rounded-full bg-[#173B2F] text-white flex items-center justify-center text-[10px]">
-                        2
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#173B2F]">
+                        <span className="w-5 h-5 rounded-full bg-[#173B2F] text-white flex items-center justify-center text-[10px]">
+                          2
+                        </span>
+                        <span>Core Content ({mod.coreContent.length} Modules & Lectures)</span>
+                      </div>
+                      <span className="text-[11px] font-bold text-[#C49A55] bg-[#C49A55]/10 px-2.5 py-0.5 rounded-full self-start sm:self-auto">
+                        {mod.coreContent.filter(c => c.type === 'video').length} Video Lectures • {mod.coreContent.filter(c => c.type === 'doc').length} Study Guide
                       </span>
-                      <span>Core Content Lessons ({mod.coreContent.length} Items)</span>
                     </div>
 
                     <div className="space-y-2.5">

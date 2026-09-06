@@ -15,7 +15,10 @@ import {
   Sparkles,
   ExternalLink,
   ShieldCheck,
-  RotateCcw
+  RotateCcw,
+  Video,
+  Clock,
+  Layers
 } from 'lucide-react';
 import {
   ModularCourse,
@@ -38,7 +41,6 @@ export const ModulePlayerPage: React.FC = () => {
   // Active item state: 'introduction' | 'core_content' | 'knowledge_check'
   const [activeSection, setActiveSection] = useState<'introduction' | 'core_content' | 'knowledge_check'>('introduction');
   const [activeContentItemId, setActiveContentItemId] = useState<string>('');
-  const [watchProgress, setWatchProgress] = useState(0);
 
   useEffect(() => {
     if (courseId) {
@@ -52,7 +54,6 @@ export const ModulePlayerPage: React.FC = () => {
       const data = await curriculumApiService.getCourseDetail(cId);
       setCourseData(data);
 
-      // Determine initial active section from query params
       const stage = searchParams.get('stage');
       const item = searchParams.get('item');
 
@@ -61,6 +62,8 @@ export const ModulePlayerPage: React.FC = () => {
       } else if (item) {
         setActiveSection('core_content');
         setActiveContentItemId(item);
+      } else if (stage === 'intro') {
+        setActiveSection('introduction');
       } else {
         setActiveSection('introduction');
       }
@@ -85,7 +88,13 @@ export const ModulePlayerPage: React.FC = () => {
     return <div className="p-8 text-center text-gray-500">Module not found.</div>;
   }
 
-  const activeContentItem = currentModule.coreContent.find((c) => c.id === activeContentItemId) || currentModule.coreContent[0];
+  const coreVideos = currentModule.coreContent.filter((c) => c.type === 'video');
+  const coreDocs = currentModule.coreContent.filter((c) => c.type === 'doc');
+
+  const activeContentItem =
+    currentModule.coreContent.find((c) => c.id === activeContentItemId) ||
+    currentModule.coreContent[0];
+
   const isIntroComplete = progress[currentModule.introduction.id]?.status === 'completed';
   const isQuizPassed = Boolean(quizPassed[currentModule.knowledgeCheck.id]);
 
@@ -115,11 +124,27 @@ export const ModulePlayerPage: React.FC = () => {
       }
     } else if (activeSection === 'core_content') {
       if (activeContentItem) handleMarkComplete(activeContentItem.id);
-      const currentIndex = currentModule.coreContent.findIndex((c) => c.id === activeContentItemId);
+      const currentIndex = currentModule.coreContent.findIndex((c) => c.id === activeContentItem.id);
       if (currentIndex !== -1 && currentIndex + 1 < currentModule.coreContent.length) {
         setActiveContentItemId(currentModule.coreContent[currentIndex + 1].id);
       } else {
         setActiveSection('knowledge_check');
+      }
+    }
+  };
+
+  const handlePreviousItem = () => {
+    if (activeSection === 'knowledge_check') {
+      setActiveSection('core_content');
+      if (currentModule.coreContent.length > 0) {
+        setActiveContentItemId(currentModule.coreContent[currentModule.coreContent.length - 1].id);
+      }
+    } else if (activeSection === 'core_content') {
+      const currentIndex = currentModule.coreContent.findIndex((c) => c.id === activeContentItem.id);
+      if (currentIndex > 0) {
+        setActiveContentItemId(currentModule.coreContent[currentIndex - 1].id);
+      } else {
+        setActiveSection('introduction');
       }
     }
   };
@@ -141,7 +166,7 @@ export const ModulePlayerPage: React.FC = () => {
             <span className="text-[10px] font-bold text-[#C49A55] uppercase tracking-wider block">
               {course.code} • Unit {currentModule.orderIndex}
             </span>
-            <h1 className="text-xs sm:text-sm font-bold text-white truncate max-w-[240px] sm:max-w-md">
+            <h1 className="text-xs sm:text-sm font-bold text-white truncate max-w-[200px] sm:max-w-md">
               {currentModule.title}
             </h1>
           </div>
@@ -176,7 +201,7 @@ export const ModulePlayerPage: React.FC = () => {
                 : 'text-gray-400 hover:text-white'
             }`}
           >
-            <span>2. Core Lessons ({currentModule.coreContent.length})</span>
+            <span>2. Core Content ({currentModule.coreContent.length} Lessons)</span>
           </button>
 
           <span className="text-gray-600">➔</span>
@@ -210,12 +235,18 @@ export const ModulePlayerPage: React.FC = () => {
           {/* 1. INTRODUCTION VIEW */}
           {activeSection === 'introduction' && (
             <div className="bg-white rounded-3xl border border-gray-200 p-6 sm:p-8 shadow-sm space-y-6 max-w-4xl mx-auto">
-              <div className="flex items-center gap-2">
-                <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#173B2F]/10 text-[#173B2F]">
-                  Stage 1 • Overview & Orientation
-                </span>
-                <span className="text-xs text-gray-500 font-semibold">
-                  Estimated Study Time: ~{currentModule.estimatedMinutes} Minutes
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#173B2F]/10 text-[#173B2F]">
+                    Stage 1 • Overview & Orientation
+                  </span>
+                  <span className="text-xs text-gray-500 font-semibold">
+                    ~{currentModule.estimatedMinutes} Minutes
+                  </span>
+                </div>
+                <span className="text-xs font-bold text-[#C49A55] flex items-center gap-1">
+                  <Video className="w-3.5 h-3.5" />
+                  {coreVideos.length} Video Lectures Waiting
                 </span>
               </div>
 
@@ -262,18 +293,82 @@ export const ModulePlayerPage: React.FC = () => {
                   onClick={handleAdvanceToNext}
                   className="px-6 py-2.5 rounded-xl bg-[#173B2F] hover:bg-[#122F25] text-white text-xs font-black flex items-center gap-2 shadow-md transition-all cursor-pointer"
                 >
-                  <span>Begin First Core Lesson</span>
+                  <span>Begin Core Video Lectures ({coreVideos.length})</span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
           )}
 
-          {/* 2. CORE CONTENT VIEW (Video / Document) */}
+          {/* 2. CORE CONTENT VIEW (Multiple Videos + Documents) */}
           {activeSection === 'core_content' && activeContentItem && (
             <div className="space-y-6 max-w-4xl mx-auto">
+              {/* VIDEO PLAYLIST STRIP: Browse Different Videos in this Course */}
+              {coreVideos.length > 0 && (
+                <div className="bg-white rounded-2xl border border-gray-200 p-4 shadow-sm space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Video className="w-4 h-4 text-rose-600" />
+                      <h3 className="text-xs font-black uppercase tracking-wider text-gray-900">
+                        Course Video Lectures ({coreVideos.length} Available)
+                      </h3>
+                    </div>
+                    <span className="text-[11px] text-gray-500 font-semibold">
+                      Click any video to watch
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+                    {coreVideos.map((vid, idx) => {
+                      const isSelected = activeContentItem.id === vid.id;
+                      const isDone = progress[vid.id]?.status === 'completed';
+
+                      return (
+                        <button
+                          key={vid.id}
+                          onClick={() => setActiveContentItemId(vid.id)}
+                          className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between space-y-1.5 ${
+                            isSelected
+                              ? 'bg-[#173B2F] text-white border-[#173B2F] shadow-md ring-2 ring-[#C49A55]'
+                              : isDone
+                              ? 'bg-emerald-50/50 border-emerald-200 text-gray-800 hover:bg-emerald-50'
+                              : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-white hover:border-gray-300'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between w-full">
+                            <span className={`text-[10px] font-black uppercase tracking-wider ${isSelected ? 'text-[#C49A55]' : 'text-gray-400'}`}>
+                              Part {idx + 1}
+                            </span>
+                            {isDone ? (
+                              <CheckCircle2 className={`w-3.5 h-3.5 ${isSelected ? 'text-emerald-400' : 'text-emerald-600'}`} />
+                            ) : (
+                              <Play className={`w-3 h-3 ${isSelected ? 'text-white' : 'text-rose-500'}`} />
+                            )}
+                          </div>
+
+                          <p className={`text-[11px] font-bold line-clamp-2 leading-tight ${isSelected ? 'text-white' : 'text-gray-900'}`}>
+                            {vid.title.replace(/^Lecture \d+:\s*/, '')}
+                          </p>
+
+                          <div className="flex items-center justify-between pt-1 text-[9px]">
+                            <span className={isSelected ? 'text-gray-300' : 'text-gray-500'}>
+                              {vid.durationSeconds ? `${Math.round(vid.durationSeconds / 60)} min` : '15 min'}
+                            </span>
+                            {isSelected && (
+                              <span className="font-extrabold text-[#C49A55] uppercase">
+                                Playing
+                              </span>
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* ACTIVE ITEM VIEW: Video Player or Document */}
               {activeContentItem.type === 'video' ? (
-                /* Video Player Stage */
                 <div className="bg-black rounded-3xl overflow-hidden shadow-2xl border border-gray-800">
                   <div className="relative aspect-video w-full bg-black">
                     <iframe
@@ -286,7 +381,6 @@ export const ModulePlayerPage: React.FC = () => {
                   </div>
                 </div>
               ) : (
-                /* Document Viewer Stage */
                 <div className="bg-white rounded-3xl border border-gray-200 p-8 shadow-sm space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -327,32 +421,51 @@ export const ModulePlayerPage: React.FC = () => {
 
               {/* Lesson Summary & Controls */}
               <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
+                <div className="max-w-md">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+                      Lesson {currentModule.coreContent.findIndex((c) => c.id === activeContentItem.id) + 1} of {currentModule.coreContent.length}
+                    </span>
+                    {activeContentItem.durationSeconds && (
+                      <span className="text-xs text-gray-500 flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-gray-400" />
+                        {Math.round(activeContentItem.durationSeconds / 60)} Minutes
+                      </span>
+                    )}
+                  </div>
                   <h3 className="text-base font-bold text-gray-900">{activeContentItem.title}</h3>
-                  <p className="text-xs text-gray-500 mt-0.5">
-                    {activeContentItem.summary || 'Complete this lesson to unlock the next item.'}
+                  <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">
+                    {activeContentItem.summary || 'Complete this video lesson to advance through the course module.'}
                   </p>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                  <button
+                    onClick={handlePreviousItem}
+                    className="p-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-bold transition-all cursor-pointer"
+                    title="Previous Lesson"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+
                   <button
                     onClick={() => handleMarkComplete(activeContentItem.id)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                       progress[activeContentItem.id]?.status === 'completed'
                         ? 'bg-emerald-100 text-emerald-800'
                         : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                     }`}
                   >
                     {progress[activeContentItem.id]?.status === 'completed'
-                      ? '✓ Lesson Completed'
-                      : 'Mark Lesson Completed'}
+                      ? '✓ Video Completed'
+                      : 'Mark Video Completed'}
                   </button>
 
                   <button
                     onClick={handleAdvanceToNext}
-                    className="px-5 py-2 rounded-xl bg-[#173B2F] hover:bg-[#122F25] text-white text-xs font-black flex items-center gap-1.5 transition-all shadow cursor-pointer"
+                    className="px-5 py-2.5 rounded-xl bg-[#173B2F] hover:bg-[#122F25] text-white text-xs font-black flex items-center gap-1.5 transition-all shadow cursor-pointer whitespace-nowrap"
                   >
-                    <span>Next Lesson</span>
+                    <span>Next Video / Quiz</span>
                     <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
@@ -417,7 +530,7 @@ export const ModulePlayerPage: React.FC = () => {
             {/* Step 2: Core Content Items */}
             <div className="space-y-1.5 pl-2 border-l-2 border-gray-200">
               <p className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400 pl-2">
-                2. Core Lessons
+                2. Core Content ({currentModule.coreContent.length})
               </p>
               {currentModule.coreContent.map((item, idx) => {
                 const isSelected = activeSection === 'core_content' && activeContentItemId === item.id;

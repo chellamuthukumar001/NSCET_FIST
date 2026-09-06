@@ -3,7 +3,7 @@
     "id": "course_cs3351",
     "code": "CS3351",
     "title": "Database Management Systems & SQL Architecture",
-    "description": "Anna University Regulation 2021 core course covering relational models, ER schema architecture, functional dependencies, 1NF to BCNF normalization, and ACID transaction concurrency.",
+    "description": "Anna University Regulation 2021 core course covering relational models, ER schema architecture, functional dependencies, 1NF to BCNF normalization, SQL queries, and ACID transaction concurrency.",
     "department": "Computer Science & Engineering",
     "departmentId": "dept_cse",
     "instructor": "Dr. S. Karthik",
@@ -12,7 +12,7 @@
     "semester": 5,
     "credits": 3,
     "difficultyLevel": "Intermediate",
-    "totalDurationHours": 14.5,
+    "totalDurationHours": 18.5,
     "enrolledCount": 142,
     "prerequisites": [
       "Programming in C (GE3151)",
@@ -20,59 +20,115 @@
     ],
     "learningOutcomes": [
       "Design normalized relational database schemas adhering to Anna University Regulation 2021.",
+      "Formulate complex SQL queries utilizing multi-table joins, aggregations, and subqueries.",
       "Decompose relation schemas to BCNF and 3NF ensuring lossless join and dependency preservation.",
-      "Construct ACID-compliant transactional workflows using 2-Phase Locking."
+      "Construct ACID-compliant transactional workflows using 2-Phase Locking protocols."
     ],
     "modules": [
       {
         "id": "mod_dbms_1",
         "courseId": "course_cs3351",
-        "title": "Module 1: Relational Data Model & ER Schema Architecture",
+        "title": "Module 1: Relational Architecture, SQL & Normalization",
         "orderIndex": 1,
-        "description": "Foundational architecture of database systems, relational semantics, ER diagramming, and integrity constraints.",
-        "estimatedMinutes": 50,
+        "description": "Comprehensive journey from ANSI/SPARC 3-tier database architecture, ER modeling, SQL querying, normalization (1NF to BCNF), and ACID transaction control.",
+        "estimatedMinutes": 180,
         "introduction": {
           "id": "ci_dbms_1_intro",
           "moduleId": "mod_dbms_1",
           "title": "Module 1 Introduction: Objectives & Relational Foundations",
           "sectionType": "introduction",
           "type": "text",
-          "urlOrPath": "Welcome to CS3351 Database Management Systems (Module 1). In this module you master:\\n1. ANSI/SPARC 3-Schema Architecture\\n2. ER Modeling (Entity sets, attributes, weak entities)\\n3. Relational Integrity Rules (Primary Key, Foreign Key)\\n\\n**Estimated Study Time**: 50 Minutes\\n**Passing Score**: >=70% on Knowledge Check.",
+          "urlOrPath": "Welcome to CS3351 Database Management Systems (Module 1).\\n\\nIn this module, you will master the foundational pillars of relational database engineering:\\n1. ANSI/SPARC 3-Schema Abstraction (Physical, Conceptual, External)\\n2. Entity-Relationship (ER) Schema Modeling and Weak Entities\\n3. Relational Algebra (Selection, Projection, Joins, Cartesian Products)\\n4. SQL Query Optimization and Aggregations\\n5. Functional Dependency Theory and Decomposition into 1NF, 2NF, 3NF, and BCNF\\n6. Concurrency Control with Two-Phase Locking (2PL) and Serializability\\n\\n**Module Structure**:\\n- Introduction (This orientation)\\n- Core Content: 6 Video Lectures + Anna University Lab Guide\\n- Knowledge Check: Auto-graded assessment (Pass mark >= 70% to unlock certificate).",
           "orderIndex": 1,
           "durationSeconds": 300,
-          "summary": "Overview of ANSI/SPARC schema levels and ER diagramming."
+          "summary": "Overview of ANSI/SPARC schema levels, relational semantics, and module syllabus."
         },
         "coreContent": [
           {
-            "id": "ci_dbms_1_core_1",
+            "id": "ci_dbms_v1",
             "moduleId": "mod_dbms_1",
-            "title": "Lecture 1: Introduction to DBMS Architecture & Data Models",
+            "title": "Lecture 1: Introduction to DBMS Architecture & 3-Tier Data Abstraction",
             "sectionType": "core_content",
             "type": "video",
             "urlOrPath": "3EJlovevfcA",
             "orderIndex": 1,
             "durationSeconds": 840,
-            "summary": "Architecture of DBMS engines, data abstraction, and comparison with traditional file systems."
+            "summary": "Detailed exploration of DBMS vs file processing systems, physical/logical data independence, and data models."
           },
           {
-            "id": "ci_dbms_1_core_2",
+            "id": "ci_dbms_v2",
             "moduleId": "mod_dbms_1",
-            "title": "Study Notes: ER-to-Relational Mapping Guidelines (Regulation 2021)",
+            "title": "Lecture 2: Relational Data Model, Primary/Foreign Keys & Relational Algebra",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "4YilEjkNPrQ",
+            "orderIndex": 2,
+            "durationSeconds": 960,
+            "summary": "Relational constraints, domain rules, candidate keys, foreign key referential integrity, and selection/projection operators."
+          },
+          {
+            "id": "ci_dbms_v3",
+            "moduleId": "mod_dbms_1",
+            "title": "Lecture 3: ER Modeling to Relational Table Mapping Guidelines",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "wBl8Pvw0IHY",
+            "orderIndex": 3,
+            "durationSeconds": 1020,
+            "summary": "Step-by-step algorithms to convert strong entities, weak entities, 1:1, 1:N, and M:N relationships into normalized SQL tables."
+          },
+          {
+            "id": "ci_dbms_v4",
+            "moduleId": "mod_dbms_1",
+            "title": "Lecture 4: SQL Queries Masterclass - Inner/Outer Joins & Nested Subqueries",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "HXV3zeRR3h4",
+            "orderIndex": 4,
+            "durationSeconds": 1180,
+            "summary": "Hands-on SQL execution: SELECT, WHERE, GROUP BY, HAVING, INNER JOIN, LEFT JOIN, and correlated subqueries."
+          },
+          {
+            "id": "ci_dbms_v5",
+            "moduleId": "mod_dbms_1",
+            "title": "Lecture 5: Normalization - 1NF, 2NF, 3NF & Boyce-Codd Normal Form (BCNF)",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "B9zB1o84Hmg",
+            "orderIndex": 5,
+            "durationSeconds": 1250,
+            "summary": "Anomalies in unnormalized tables, closure of functional dependencies, minimal cover, and decomposition into 3NF and BCNF."
+          },
+          {
+            "id": "ci_dbms_v6",
+            "moduleId": "mod_dbms_1",
+            "title": "Lecture 6: Transaction Processing, ACID Properties & Concurrency (2PL)",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "ooxWfW8l6r8",
+            "orderIndex": 6,
+            "durationSeconds": 1100,
+            "summary": "Transaction state transitions, conflict serializability, strict two-phase locking, and deadlock detection graphs."
+          },
+          {
+            "id": "ci_dbms_doc1",
+            "moduleId": "mod_dbms_1",
+            "title": "Study Notes: Anna University Regulation 2021 DBMS Question Bank & Schemas",
             "sectionType": "core_content",
             "type": "doc",
             "urlOrPath": "https://raw.githubusercontent.com/chellamuthukumar001/NSCET_FIST/main/docs/cs3351_unit1_er_mapping.pdf",
-            "orderIndex": 2,
-            "documentPages": 6,
-            "durationSeconds": 600,
-            "summary": "Step-by-step procedure for converting ER diagrams into normalized tables."
+            "orderIndex": 7,
+            "documentPages": 12,
+            "durationSeconds": 900,
+            "summary": "Curated revision questions, ER design exercises, and solved normalization problems."
           }
         ],
         "knowledgeCheck": {
           "id": "quiz_dbms_1",
           "moduleId": "mod_dbms_1",
-          "title": "Module 1 Knowledge Check: Relational Semantics & ER Models",
+          "title": "Module 1 Knowledge Check: Relational Architecture, SQL & Normalization",
           "passingScore": 70,
-          "timeLimitMinutes": 10,
+          "timeLimitMinutes": 15,
           "isFinalAssessment": false,
           "questions": [
             {
@@ -108,14 +164,16 @@
             {
               "id": "q_dbms_1_3",
               "quizId": "quiz_dbms_1",
-              "question": "True or False: A Foreign Key in a child table can refer to a non-candidate key attribute in the parent table.",
-              "questionType": "true_false",
+              "question": "A relation R(A, B, C) with FD: A -> B, B -> C is in 2NF. What prevents it from being in 3NF?",
+              "questionType": "mcq",
               "options": [
-                "True",
-                "False"
+                "Partial dependency",
+                "Transitive dependency (A -> B -> C)",
+                "Multi-valued dependency",
+                "Join dependency"
               ],
               "correctAnswer": 1,
-              "explanation": "False. Foreign keys must refer to a primary key or candidate key of the referenced table.",
+              "explanation": "In 3NF, no non-prime attribute may be transitively dependent on any candidate key.",
               "orderIndex": 3
             },
             {
@@ -127,25 +185,25 @@
                 "Projection (pi)",
                 "Selection (sigma)",
                 "Cartesian Product",
-                "Join"
+                "Natural Join"
               ],
               "correctAnswer": 1,
-              "explanation": "Selection (sigma) filters rows; Projection (pi) selects columns.",
+              "explanation": "Selection (sigma) filters rows; Projection (pi) selects vertical columns.",
               "orderIndex": 4
             },
             {
               "id": "q_dbms_1_5",
               "quizId": "quiz_dbms_1",
-              "question": "How is a Many-to-Many (M:N) relationship represented in a relational schema?",
+              "question": "Under the Two-Phase Locking (2PL) protocol, what is guaranteed about the resulting schedule?",
               "questionType": "mcq",
               "options": [
-                "Add a foreign key in table A",
-                "Add a foreign key in table B",
-                "Create a separate junction table with foreign keys referencing both tables",
-                "Merge tables into a single table"
+                "It is strictly deadlock-free",
+                "It is guaranteed to be conflict serializable",
+                "It requires no lock manager",
+                "It eliminates all aborts"
               ],
-              "correctAnswer": 2,
-              "explanation": "An M:N relationship requires an associative junction table with both primary keys as foreign keys.",
+              "correctAnswer": 1,
+              "explanation": "The 2PL theorem proves that any schedule complying with 2-phase locking is conflict serializable.",
               "orderIndex": 5
             }
           ]
@@ -166,57 +224,114 @@
     "semester": 4,
     "credits": 3,
     "difficultyLevel": "Intermediate",
-    "totalDurationHours": 12.0,
+    "totalDurationHours": 17.0,
     "enrolledCount": 118,
     "prerequisites": [
       "Computer Architecture (CS3352)"
     ],
     "learningOutcomes": [
-      "Calculate turnaround and waiting times for CPU scheduling",
-      "Implement semaphores",
-      "Analyze page replacement"
+      "Calculate turnaround and waiting times for preemptive and non-preemptive CPU scheduling.",
+      "Implement semaphores and mutex locks to solve classical race conditions.",
+      "Apply Banker's algorithm for deadlock avoidance in multi-resource systems.",
+      "Analyze demand paging and virtual memory page replacement algorithms."
     ],
     "modules": [
       {
         "id": "mod_os_1",
         "courseId": "course_cs3451",
-        "title": "Module 1: Kernel Privilege & CPU Scheduling Algorithms",
+        "title": "Module 1: Kernel Privilege, Scheduling, Synchronization & Memory",
         "orderIndex": 1,
-        "description": "Dual-mode hardware execution, POSIX system calls, and comparative CPU scheduling metrics.",
-        "estimatedMinutes": 45,
+        "description": "Comprehensive OS kernel architecture covering dual-mode CPU privilege, scheduling algorithms, semaphores, deadlocks, and virtual memory paging.",
+        "estimatedMinutes": 175,
         "introduction": {
           "id": "ci_os_1_intro",
           "moduleId": "mod_os_1",
-          "title": "Module 1 Introduction: Kernel Modes & Process Scheduling",
+          "title": "Module 1 Introduction: Operating System Kernel Core",
           "sectionType": "introduction",
           "type": "text",
-          "urlOrPath": "Welcome to CS3451 Operating Systems. In this module you will examine:\\n1. Dual-mode execution (User vs Kernel Mode)\\n2. Scheduling Criteria: Throughput, Turnaround Time, Waiting Time\\n3. Algorithms: FCFS, SJF, Priority, Round Robin.",
+          "urlOrPath": "Welcome to CS3451 Operating Systems.\\n\\nIn this module, you will examine the core subsystems of a modern operating system kernel:\\n1. Hardware dual-mode execution (User Mode vs Kernel Mode via Trap instructions)\\n2. CPU Scheduling: FCFS, SJF, SRTF, Priority, and Round Robin\\n3. Process Synchronization: Critical section problem, Peterson's algorithm, Semaphores, and Mutexes\\n4. Classical Concurrency Problems: Producer-Consumer and Dining Philosophers\\n5. Deadlock Handling: Conditions, Resource Allocation Graphs, and Banker's Algorithm\\n6. Memory Management: Paging, TLB, Inverted Page Tables, and Page Replacement (FIFO, LRU, Optimal)\\n\\n**Estimated Study Time**: ~175 Minutes\\n**Passing Score**: >=70% on Knowledge Check.",
           "orderIndex": 1,
           "durationSeconds": 240,
-          "summary": "Introduction to CPU scheduling and kernel privilege."
+          "summary": "Introduction to CPU scheduling, concurrency, and virtual memory."
         },
         "coreContent": [
           {
-            "id": "ci_os_1_core_1",
+            "id": "ci_os_v1",
             "moduleId": "mod_os_1",
-            "title": "Lecture 1: Process Scheduling Algorithms (Preemption vs Non-Preemption)",
+            "title": "Lecture 1: OS Dual-Mode Hardware Privilege & System Calls",
             "sectionType": "core_content",
             "type": "video",
             "urlOrPath": "zFnrUVqtiOY",
             "orderIndex": 1,
             "durationSeconds": 920,
-            "summary": "Process state transitions, dispatchers, and preemptive versus non-preemptive scheduling."
+            "summary": "CPU mode bit switches, hardware interrupt vectors, and POSIX system call execution flow."
           },
           {
-            "id": "ci_os_1_core_2",
+            "id": "ci_os_v2",
             "moduleId": "mod_os_1",
-            "title": "Lecture 2: First-Come First-Served & Shortest Job First with Solved Numerical",
+            "title": "Lecture 2: Process Scheduling Algorithms - FCFS, SJF & Round Robin with Gantt Charts",
             "sectionType": "core_content",
             "type": "video",
             "urlOrPath": "MZdVAVMgNpA",
             "orderIndex": 2,
-            "durationSeconds": 780,
-            "summary": "Gantt chart calculation of average waiting time and turnaround time."
+            "durationSeconds": 980,
+            "summary": "Step-by-step Gantt chart calculation of average waiting time, turnaround time, and response time."
+          },
+          {
+            "id": "ci_os_v3",
+            "moduleId": "mod_os_1",
+            "title": "Lecture 3: Process Synchronization - Semaphores, Mutex & Critical Sections",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "9nflk9P_e_U",
+            "orderIndex": 3,
+            "durationSeconds": 1050,
+            "summary": "Race conditions, mutual exclusion, progress, bounded waiting, and counting vs binary semaphores."
+          },
+          {
+            "id": "ci_os_v4",
+            "moduleId": "mod_os_1",
+            "title": "Lecture 4: Classical IPC Problems - Producer-Consumer & Dining Philosophers",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "3q90l4Uu_rk",
+            "orderIndex": 4,
+            "durationSeconds": 890,
+            "summary": "Multi-threaded implementation using wait() and signal() semaphore primitives without deadlock."
+          },
+          {
+            "id": "ci_os_v5",
+            "moduleId": "mod_os_1",
+            "title": "Lecture 5: Deadlock Characterization, Prevention & Banker's Algorithm",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "1b_aT_bO-uI",
+            "orderIndex": 5,
+            "durationSeconds": 1120,
+            "summary": "Four Coffman conditions, safety algorithm, resource-request algorithm, and safe state evaluation."
+          },
+          {
+            "id": "ci_os_v6",
+            "moduleId": "mod_os_1",
+            "title": "Lecture 6: Virtual Memory, Demand Paging & Page Replacement (FIFO, LRU)",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "oepHjQYwS28",
+            "orderIndex": 6,
+            "durationSeconds": 1150,
+            "summary": "Page tables, Translation Lookaside Buffer (TLB) hit ratios, and page fault handling routines."
+          },
+          {
+            "id": "ci_os_doc1",
+            "moduleId": "mod_os_1",
+            "title": "Lab Manual: POSIX Threads & OS Scheduling Simulation Guide",
+            "sectionType": "core_content",
+            "type": "doc",
+            "urlOrPath": "https://raw.githubusercontent.com/chellamuthukumar001/NSCET_FIST/main/docs/cs3451_os_lab_manual.pdf",
+            "orderIndex": 7,
+            "documentPages": 10,
+            "durationSeconds": 800,
+            "summary": "C code templates for pthread_create, semaphore initialization, and CPU scheduling simulation."
           }
         ],
         "knowledgeCheck": {
@@ -224,7 +339,7 @@
           "moduleId": "mod_os_1",
           "title": "Module 1 Knowledge Check: OS Scheduling & Privileged Modes",
           "passingScore": 70,
-          "timeLimitMinutes": 10,
+          "timeLimitMinutes": 15,
           "isFinalAssessment": false,
           "questions": [
             {
@@ -260,15 +375,45 @@
             {
               "id": "q_os_1_3",
               "quizId": "quiz_os_1",
-              "question": "True or False: In Round Robin scheduling, setting the time quantum too large causes it to degenerate into FCFS.",
+              "question": "Which algorithm is used by the operating system for deadlock avoidance?",
+              "questionType": "mcq",
+              "options": [
+                "Dijkstra's Shortest Path",
+                "Banker's Algorithm",
+                "Round Robin",
+                "Kruskal's Algorithm"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Banker's Algorithm tests for safety by simulating resource allocation for maximum possible claims.",
+              "orderIndex": 3
+            },
+            {
+              "id": "q_os_1_4",
+              "quizId": "quiz_os_1",
+              "question": "What is the phenomenon where adding more page frames results in more page faults in FIFO replacement?",
+              "questionType": "mcq",
+              "options": [
+                "Thrashing",
+                "Belady's Anomaly",
+                "Segmentation Fault",
+                "Starvation"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Belady's Anomaly demonstrates that FIFO page replacement can exhibit higher page fault rates with increased memory frames.",
+              "orderIndex": 4
+            },
+            {
+              "id": "q_os_1_5",
+              "quizId": "quiz_os_1",
+              "question": "True or False: A counting semaphore can take negative integer values in standard Dijkstra definitions.",
               "questionType": "true_false",
               "options": [
                 "True",
                 "False"
               ],
-              "correctAnswer": 0,
-              "explanation": "True. If the quantum exceeds the longest burst time, processes run to completion in order of arrival.",
-              "orderIndex": 3
+              "correctAnswer": 1,
+              "explanation": "False. In standard classical definitions, the semaphore value cannot be negative; processes simply block when the value reaches 0.",
+              "orderIndex": 5
             }
           ]
         }
@@ -288,46 +433,114 @@
     "semester": 3,
     "credits": 4,
     "difficultyLevel": "Beginner",
-    "totalDurationHours": 16.0,
+    "totalDurationHours": 19.0,
     "enrolledCount": 160,
     "prerequisites": [
       "Python (GE3151)"
     ],
     "learningOutcomes": [
-      "Implement linked lists and balanced search trees",
-      "Analyze algorithm time complexity using Big-O notation",
-      "Solve graph traversal problems"
+      "Implement singly, doubly, and circular linked lists with pointer arithmetic in C.",
+      "Analyze algorithm time complexity using asymptotic Big-O, Omega, and Theta notations.",
+      "Construct self-balancing AVL trees and evaluate rotation balance factors.",
+      "Solve network path optimization problems using Dijkstra and Minimum Spanning Trees."
     ],
     "modules": [
       {
         "id": "mod_dsa_1",
         "courseId": "course_cs3301",
-        "title": "Module 1: Asymptotic Complexity & Balanced Binary Search Trees",
+        "title": "Module 1: Asymptotic Complexity, Trees & Graph Algorithms",
         "orderIndex": 1,
-        "description": "Time complexity proofs, BST search/insert, AVL rotations (LL, RR, LR, RL), and Red-Black tree properties.",
-        "estimatedMinutes": 55,
+        "description": "Comprehensive journey from Big-O time complexity, linked structures, balanced search trees (AVL), and shortest path graph algorithms.",
+        "estimatedMinutes": 185,
         "introduction": {
           "id": "ci_dsa_1_intro",
           "moduleId": "mod_dsa_1",
-          "title": "Module 1 Introduction: Trees & Big-O Notation",
+          "title": "Module 1 Introduction: Asymptotic Complexity & Tree Structures",
           "sectionType": "introduction",
           "type": "text",
-          "urlOrPath": "Welcome to CS3301 Data Structures. In this module you will explore:\\n1. Big-O, Big-Omega, Big-Theta time complexity\\n2. Binary Search Tree properties\\n3. Self-balancing AVL rotations (LL, RR, LR, RL).",
+          "urlOrPath": "Welcome to CS3301 Data Structures & Algorithms.\\n\\nIn this module, you master core data representations and algorithms:\\n1. Asymptotic Complexity: Big-O, Big-Omega, Big-Theta bounds\\n2. Linked Lists: Dynamic memory allocation and pointer manipulations\\n3. Stacks & Queues: LIFO / FIFO properties and expression parsing\\n4. Binary Search Trees (BST): Insert, search, delete, and inorder traversal\\n5. AVL Trees: Four rotation cases (LL, RR, LR, RL) for height balance\\n6. Graph Traversals and Shortest Paths: BFS, DFS, and Dijkstra's algorithm.\\n\\n**Estimated Study Time**: ~185 Minutes\\n**Passing Score**: >=70% on Knowledge Check.",
           "orderIndex": 1,
           "durationSeconds": 240,
-          "summary": "Tree traversal and balance factors."
+          "summary": "Tree traversal, asymptotic complexity, and graph representation."
         },
         "coreContent": [
           {
-            "id": "ci_dsa_1_core_1",
+            "id": "ci_dsa_v1",
             "moduleId": "mod_dsa_1",
-            "title": "Lecture 1: Binary Search Tree Insertion and Deletion Algorithms",
+            "title": "Lecture 1: Asymptotic Notation (Big-O, Omega, Theta) & Algorithm Analysis",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "D6xkbGLQesk",
+            "orderIndex": 1,
+            "durationSeconds": 920,
+            "summary": "Mathematical definition of upper, lower, and tight complexity bounds with solved recurrence relations."
+          },
+          {
+            "id": "ci_dsa_v2",
+            "moduleId": "mod_dsa_1",
+            "title": "Lecture 2: Singly, Doubly & Circular Linked Lists Implementation in C",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "R9PTBwOzceo",
+            "orderIndex": 2,
+            "durationSeconds": 980,
+            "summary": "Pointer manipulation, memory allocation with malloc(), insertion at head/tail, and node deletion."
+          },
+          {
+            "id": "ci_dsa_v3",
+            "moduleId": "mod_dsa_1",
+            "title": "Lecture 3: Stacks & Queues - Infix to Postfix Conversion & Applications",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "wjI1W44Axmc",
+            "orderIndex": 3,
+            "durationSeconds": 1020,
+            "summary": "Operator precedence stacks, postfix evaluation algorithm, circular queue wrap-around, and queue BFS."
+          },
+          {
+            "id": "ci_dsa_v4",
+            "moduleId": "mod_dsa_1",
+            "title": "Lecture 4: Binary Search Trees (BST) Insertion, Deletion & Traversal",
             "sectionType": "core_content",
             "type": "video",
             "urlOrPath": "pYO-FAg-TpQ",
-            "orderIndex": 1,
-            "durationSeconds": 890,
-            "summary": "Complete implementation of BST operations with recursive time complexity analysis."
+            "orderIndex": 4,
+            "durationSeconds": 1150,
+            "summary": "Recursive BST insert, finding inorder predecessor/successor, and three cases of node deletion."
+          },
+          {
+            "id": "ci_dsa_v5",
+            "moduleId": "mod_dsa_1",
+            "title": "Lecture 5: AVL Trees - LL, RR, LR, RL Rotations with Solved Numericals",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "vRwi_UCVrjA",
+            "orderIndex": 5,
+            "durationSeconds": 1200,
+            "summary": "Balance factors (-1, 0, +1), single rotations, double rotations, and rebalancing proofs."
+          },
+          {
+            "id": "ci_dsa_v6",
+            "moduleId": "mod_dsa_1",
+            "title": "Lecture 6: Graph Algorithms - Dijkstra's Shortest Path & Prim's / Kruskal's MST",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "bZkzH5x0Ykk",
+            "orderIndex": 6,
+            "durationSeconds": 1280,
+            "summary": "Greedy approach to single-source shortest path, priority queue min-heaps, and disjoint-set union (DSU)."
+          },
+          {
+            "id": "ci_dsa_doc1",
+            "moduleId": "mod_dsa_1",
+            "title": "Study Notes: Data Structures & Algorithms Comprehensive Problem Set",
+            "sectionType": "core_content",
+            "type": "doc",
+            "urlOrPath": "https://raw.githubusercontent.com/chellamuthukumar001/NSCET_FIST/main/docs/cs3301_dsa_notes.pdf",
+            "orderIndex": 7,
+            "documentPages": 14,
+            "durationSeconds": 900,
+            "summary": "LeetCode/HackerRank style technical interview algorithms with C++ templates."
           }
         ],
         "knowledgeCheck": {
@@ -335,7 +548,7 @@
           "moduleId": "mod_dsa_1",
           "title": "Module 1 Knowledge Check: Trees & Time Complexity",
           "passingScore": 70,
-          "timeLimitMinutes": 10,
+          "timeLimitMinutes": 15,
           "isFinalAssessment": false,
           "questions": [
             {
@@ -367,6 +580,51 @@
               "correctAnswer": 1,
               "explanation": "AVL trees require the height difference between left and right subtrees to be in {-1, 0, +1}.",
               "orderIndex": 2
+            },
+            {
+              "id": "q_dsa_1_3",
+              "quizId": "quiz_dsa_1",
+              "question": "Which data structure is primarily used to implement Breadth-First Search (BFS) in a graph?",
+              "questionType": "mcq",
+              "options": [
+                "Stack",
+                "Queue",
+                "Priority Queue",
+                "Binary Search Tree"
+              ],
+              "correctAnswer": 1,
+              "explanation": "BFS explores level by level and requires a FIFO Queue.",
+              "orderIndex": 3
+            },
+            {
+              "id": "q_dsa_1_4",
+              "quizId": "quiz_dsa_1",
+              "question": "What is the average time complexity of Dijkstra's algorithm implemented with a Min-Heap?",
+              "questionType": "mcq",
+              "options": [
+                "O(V^2)",
+                "O((V + E) log V)",
+                "O(V log V)",
+                "O(E^2)"
+              ],
+              "correctAnswer": 1,
+              "explanation": "With an adjacency list and binary min-heap, Dijkstra executes in O((V + E) log V) time.",
+              "orderIndex": 4
+            },
+            {
+              "id": "q_dsa_1_5",
+              "quizId": "quiz_dsa_1",
+              "question": "Which tree traversal of a valid Binary Search Tree produces values in strictly sorted ascending order?",
+              "questionType": "mcq",
+              "options": [
+                "Preorder",
+                "Inorder",
+                "Postorder",
+                "Level-order"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Inorder traversal visits Left -> Root -> Right, yielding sorted order for any BST.",
+              "orderIndex": 5
             }
           ]
         }
@@ -377,7 +635,7 @@
     "id": "course_ai3401",
     "code": "AI3401",
     "title": "Deep Learning & Neural Network Foundations",
-    "description": "Multi-layer perceptrons, backpropagation calculus, Convolutional Neural Networks (CNNs), activation functions, and PyTorch implementations.",
+    "description": "Multi-layer perceptrons, backpropagation calculus, Convolutional Neural Networks (CNNs), activation functions, RNNs, and Transformers.",
     "department": "Artificial Intelligence & Data Science",
     "departmentId": "dept_aids",
     "instructor": "Dr. P. Vasanth",
@@ -386,47 +644,115 @@
     "semester": 6,
     "credits": 4,
     "difficultyLevel": "Advanced",
-    "totalDurationHours": 16.0,
+    "totalDurationHours": 20.0,
     "enrolledCount": 96,
     "prerequisites": [
       "Linear Algebra (MA3354)",
       "Machine Learning (CS3491)"
     ],
     "learningOutcomes": [
-      "Derive backpropagation gradient updates",
-      "Build CNN vision pipelines",
-      "Optimize deep networks with Adam"
+      "Derive backpropagation gradient equations across multi-layer perceptrons.",
+      "Analyze non-linear activation functions and gradient saturation dynamics.",
+      "Construct 2D Convolutional Neural Network architectures for image classification.",
+      "Formulate self-attention mechanisms and multi-head attention in Transformer models."
     ],
     "modules": [
       {
         "id": "mod_dl_1",
         "courseId": "course_ai3401",
-        "title": "Module 1: Multi-Layer Perceptrons & Backpropagation Calculus",
+        "title": "Module 1: Deep Neural Networks, Backprop, CNNs & Transformers",
         "orderIndex": 1,
-        "description": "Chain rule gradients, loss functions (Cross-Entropy, MSE), and activation functions (ReLU, Sigmoid).",
-        "estimatedMinutes": 60,
+        "description": "Foundational and modern deep learning: Perceptrons, gradient calculus, CNN feature extraction, LSTM sequences, and Transformer self-attention.",
+        "estimatedMinutes": 190,
         "introduction": {
           "id": "ci_dl_1_intro",
           "moduleId": "mod_dl_1",
           "title": "Module 1 Introduction: Neural Network Optimization",
           "sectionType": "introduction",
           "type": "text",
-          "urlOrPath": "Welcome to AI3401 Deep Learning. In this module, you will derive the mathematical backpropagation equations that drive neural network weight updates.",
+          "urlOrPath": "Welcome to AI3401 Deep Learning.\\n\\nIn this module, you will master the mathematical foundations that power modern Artificial Intelligence:\\n1. Biological neurons vs Artificial Perceptrons\\n2. Loss Landscapes, Stochastic Gradient Descent, and Backpropagation\\n3. Non-linear Activation Functions (Sigmoid, Tanh, ReLU, GELU)\\n4. Convolutional Neural Networks (CNNs): Filters, Strides, Pooling, and Feature Maps\\n5. Recurrent Neural Networks (RNN) and Long Short-Term Memory (LSTM)\\n6. Transformer Architecture: Scaled Dot-Product Self-Attention and Multi-Head Projections.\\n\\n**Estimated Study Time**: ~190 Minutes\\n**Passing Score**: >=70% on Knowledge Check.",
           "orderIndex": 1,
           "durationSeconds": 300,
-          "summary": "Neural network architecture and gradient descent."
+          "summary": "Deep learning mathematics, backpropagation, and vision/language models."
         },
         "coreContent": [
           {
-            "id": "ci_dl_1_core_1",
+            "id": "ci_dl_v1",
             "moduleId": "mod_dl_1",
-            "title": "Lecture 1: Gradient Descent & Loss Landscapes in Deep Learning",
+            "title": "Lecture 1: Biological vs Artificial Neurons & Multi-Layer Perceptrons",
             "sectionType": "core_content",
             "type": "video",
             "urlOrPath": "aircAruvnKk",
             "orderIndex": 1,
             "durationSeconds": 1140,
-            "summary": "Geometric interpretation of multi-dimensional loss surfaces and gradient descent."
+            "summary": "Perceptron decision boundaries, XOR non-linearity problem, and multi-layer feedforward representations."
+          },
+          {
+            "id": "ci_dl_v2",
+            "moduleId": "mod_dl_1",
+            "title": "Lecture 2: Backpropagation Calculus & Chain Rule Gradient Descent",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "IHZwWFHWa-w",
+            "orderIndex": 2,
+            "durationSeconds": 1210,
+            "summary": "Detailed partial derivative derivation for weight updates in forward and backward computational graphs."
+          },
+          {
+            "id": "ci_dl_v3",
+            "moduleId": "mod_dl_1",
+            "title": "Lecture 3: Activation Functions - Sigmoid, Tanh, ReLU, Leaky ReLU & Softmax",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "-7scQpJT7uo",
+            "orderIndex": 3,
+            "durationSeconds": 980,
+            "summary": "Vanishing and exploding gradient mitigation, zero-centered outputs, and computational efficiency."
+          },
+          {
+            "id": "ci_dl_v4",
+            "moduleId": "mod_dl_1",
+            "title": "Lecture 4: Convolutional Neural Networks (CNNs) for Computer Vision",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "YRhxdVk_sIs",
+            "orderIndex": 4,
+            "durationSeconds": 1190,
+            "summary": "Convolution operation, kernel weights, padding, max pooling, and spatial hierarchy learning."
+          },
+          {
+            "id": "ci_dl_v5",
+            "moduleId": "mod_dl_1",
+            "title": "Lecture 5: Recurrent Neural Networks (RNN) & LSTM for Sequential Data",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "UNmqTiXiRzg",
+            "orderIndex": 5,
+            "durationSeconds": 1130,
+            "summary": "Gated mechanisms: Forget gate, input gate, cell state updates, and vanishing gradient prevention in text."
+          },
+          {
+            "id": "ci_dl_v6",
+            "moduleId": "mod_dl_1",
+            "title": "Lecture 6: Transformer Architecture & Self-Attention Mechanism",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "SZorAJ4I-sA",
+            "orderIndex": 6,
+            "durationSeconds": 1340,
+            "summary": "Query, Key, Value matrix dot-products, softmax scaling, and parallelized self-attention."
+          },
+          {
+            "id": "ci_dl_doc1",
+            "moduleId": "mod_dl_1",
+            "title": "Study Notes: PyTorch Deep Learning Architecture & Model Training Manual",
+            "sectionType": "core_content",
+            "type": "doc",
+            "urlOrPath": "https://raw.githubusercontent.com/chellamuthukumar001/NSCET_FIST/main/docs/ai3401_dl_manual.pdf",
+            "orderIndex": 7,
+            "documentPages": 16,
+            "durationSeconds": 900,
+            "summary": "Hands-on PyTorch implementations of CNNs, optimizers (Adam, SGD), and loss functions."
           }
         ],
         "knowledgeCheck": {
@@ -434,7 +760,7 @@
           "moduleId": "mod_dl_1",
           "title": "Module 1 Knowledge Check: Backpropagation & Activations",
           "passingScore": 70,
-          "timeLimitMinutes": 10,
+          "timeLimitMinutes": 15,
           "isFinalAssessment": false,
           "questions": [
             {
@@ -451,6 +777,64 @@
               "correctAnswer": 0,
               "explanation": "Because d/dx(ReLU) = 1 for x > 0, gradients do not shrink exponentially through deep layers.",
               "orderIndex": 1
+            },
+            {
+              "id": "q_dl_1_2",
+              "quizId": "quiz_dl_1",
+              "question": "In a Convolutional Neural Network, what is the primary purpose of a Max Pooling layer?",
+              "questionType": "mcq",
+              "options": [
+                "To increase the number of parameters to learn",
+                "To reduce spatial dimensions while retaining dominant features",
+                "To ensure outputs sum to 1",
+                "To randomize weights"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Max pooling downsamples feature maps, reducing compute load and providing translation invariance.",
+              "orderIndex": 2
+            },
+            {
+              "id": "q_dl_1_3",
+              "quizId": "quiz_dl_1",
+              "question": "In the Transformer self-attention formula Attention(Q, K, V) = softmax(QK^T / sqrt(d_k))V, why divide by sqrt(d_k)?",
+              "questionType": "mcq",
+              "options": [
+                "To make the matrix invertible",
+                "To prevent dot products from growing excessively large and causing vanishing softmax gradients",
+                "To convert vectors into integers",
+                "To remove negative numbers"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Scaling by sqrt(d_k) keeps the variance at 1, avoiding saturated regions of softmax.",
+              "orderIndex": 3
+            },
+            {
+              "id": "q_dl_1_4",
+              "quizId": "quiz_dl_1",
+              "question": "Which gating mechanism in an LSTM is responsible for dropping irrelevant past information?",
+              "questionType": "mcq",
+              "options": [
+                "Output Gate",
+                "Forget Gate",
+                "Input Gate",
+                "Candidate Gate"
+              ],
+              "correctAnswer": 1,
+              "explanation": "The Forget Gate looks at h_{t-1} and x_t and outputs a number between 0 and 1 for each number in cell state.",
+              "orderIndex": 4
+            },
+            {
+              "id": "q_dl_1_5",
+              "quizId": "quiz_dl_1",
+              "question": "True or False: Dropout is applied during both training and inference time in identical manners.",
+              "questionType": "true_false",
+              "options": [
+                "True",
+                "False"
+              ],
+              "correctAnswer": 1,
+              "explanation": "False. Dropout randomly deactivates neurons during training only; during test/inference, all neurons are active and scaled.",
+              "orderIndex": 5
             }
           ]
         }
@@ -470,46 +854,114 @@
     "semester": 5,
     "credits": 3,
     "difficultyLevel": "Intermediate",
-    "totalDurationHours": 13.0,
+    "totalDurationHours": 18.0,
     "enrolledCount": 130,
     "prerequisites": [
       "Digital Principles (CS3251)"
     ],
     "learningOutcomes": [
-      "Calculate IPv4 subnet masks and host ranges",
-      "Analyze TCP 3-way handshake and congestion control",
-      "Configure routing protocols"
+      "Calculate IPv4 subnet masks, network IDs, and broadcast ranges using CIDR prefix notation.",
+      "Analyze TCP 3-way handshakes, sequence numbers, and congestion control states.",
+      "Distinguish between Link State (OSPF) and Distance Vector (RIP, BGP) routing protocols.",
+      "Inspect network packet flows with Wireshark and socket communication."
     ],
     "modules": [
       {
         "id": "mod_cn_1",
         "courseId": "course_cs3591",
-        "title": "Module 1: Layered Architectures & IPv4 CIDR Subnetting",
+        "title": "Module 1: Layered Architectures, Subnetting, Routing & TCP",
         "orderIndex": 1,
-        "description": "OSI vs TCP/IP protocols, IPv4 address structure, classless inter-domain routing (CIDR), and packet encapsulation.",
-        "estimatedMinutes": 50,
+        "description": "Comprehensive journey through OSI/TCP-IP stacks, IPv4 CIDR subnetting, Link-State routing, and TCP reliable transport.",
+        "estimatedMinutes": 180,
         "introduction": {
           "id": "ci_cn_1_intro",
           "moduleId": "mod_cn_1",
           "title": "Module 1 Introduction: Layered Models & IP Subnetting",
           "sectionType": "introduction",
           "type": "text",
-          "urlOrPath": "Welcome to CS3591 Computer Networks. In this module you will master:\\n1. The 7 layers of OSI and 4 layers of TCP/IP\\n2. IPv4 Header format and fragmentation\\n3. CIDR Subnetting calculations.",
+          "urlOrPath": "Welcome to CS3591 Computer Networks.\\n\\nIn this module, you will examine the architecture that connects global computer systems:\\n1. The 7 layers of OSI and 4 layers of TCP/IP\\n2. Data Link framing, MAC addressing, and CRC error check\\n3. IPv4 Header format, fragment offsets, and CIDR Subnetting\\n4. Routing Algorithms: Dijkstra Link-State (OSPF) vs Bellman-Ford Distance Vector (RIP)\\n5. Transport Layer: UDP vs TCP 3-Way Handshake, Flow Control (Sliding Window), and Congestion Control\\n6. Application Layer: DNS, HTTP/2, and TLS encryption.\\n\\n**Estimated Study Time**: ~180 Minutes\\n**Passing Score**: >=70% on Knowledge Check.",
           "orderIndex": 1,
           "durationSeconds": 240,
-          "summary": "Protocol hierarchies and IPv4 addressing."
+          "summary": "Protocol hierarchies, IPv4 addressing, and routing algorithms."
         },
         "coreContent": [
           {
-            "id": "ci_cn_1_core_1",
+            "id": "ci_cn_v1",
             "moduleId": "mod_cn_1",
-            "title": "Lecture 1: Computer Networks Architecture & OSI 7 Layer Breakdown",
+            "title": "Lecture 1: Computer Networks Architecture & OSI 7-Layer Breakdown",
             "sectionType": "core_content",
             "type": "video",
             "urlOrPath": "2h3eWaPx8SA",
             "orderIndex": 1,
             "durationSeconds": 940,
             "summary": "Detailed inspection of Physical, Data Link, Network, Transport, and Application layers."
+          },
+          {
+            "id": "ci_cn_v2",
+            "moduleId": "mod_cn_1",
+            "title": "Lecture 2: Data Link Layer - Framing, CRC Error Detection & Sliding Window",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "5W_kF81i_0w",
+            "orderIndex": 2,
+            "durationSeconds": 990,
+            "summary": "Cyclic Redundancy Check (CRC) polynomial division, Stop-and-Wait, and Go-Back-N protocols."
+          },
+          {
+            "id": "ci_cn_v3",
+            "moduleId": "mod_cn_1",
+            "title": "Lecture 3: IPv4 Addressing & CIDR Subnetting Solved Masterclass",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "s_Ntt6eTn94",
+            "orderIndex": 3,
+            "durationSeconds": 1150,
+            "summary": "Step-by-step CIDR slash notation calculations, subnet masks, usable hosts, and broadcast addresses."
+          },
+          {
+            "id": "ci_cn_v4",
+            "moduleId": "mod_cn_1",
+            "title": "Lecture 4: Routing Protocols - Link State (OSPF) vs Distance Vector (RIP, BGP)",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "y_hG48v7-v4",
+            "orderIndex": 4,
+            "durationSeconds": 1120,
+            "summary": "Count-to-infinity problem, split horizon, poison reverse, and autonomous system border gateways."
+          },
+          {
+            "id": "ci_cn_v5",
+            "moduleId": "mod_cn_1",
+            "title": "Lecture 5: Transport Layer - TCP 3-Way Handshake & Congestion Control",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "F27PLshV90g",
+            "orderIndex": 5,
+            "durationSeconds": 1210,
+            "summary": "SYN, SYN-ACK, ACK packet flags, slow start, congestion avoidance, fast retransmit, and recovery."
+          },
+          {
+            "id": "ci_cn_v6",
+            "moduleId": "mod_cn_1",
+            "title": "Lecture 6: Application Protocols - DNS Resolution, HTTP/2 & HTTPS Security",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "27r4Bzuj5fc",
+            "orderIndex": 6,
+            "durationSeconds": 1080,
+            "summary": "Iterative vs recursive DNS lookups, TCP multiplexing in HTTP/2, and TLS 1.3 key exchanges."
+          },
+          {
+            "id": "ci_cn_doc1",
+            "moduleId": "mod_cn_1",
+            "title": "Study Notes: Computer Networks Lab Guide & Packet Tracer Exercises",
+            "sectionType": "core_content",
+            "type": "doc",
+            "urlOrPath": "https://raw.githubusercontent.com/chellamuthukumar001/NSCET_FIST/main/docs/cs3591_networks_lab.pdf",
+            "orderIndex": 7,
+            "documentPages": 12,
+            "durationSeconds": 900,
+            "summary": "Cisco Packet Tracer network topology setup, IP configuration, and ping/traceroute verification."
           }
         ],
         "knowledgeCheck": {
@@ -517,7 +969,7 @@
           "moduleId": "mod_cn_1",
           "title": "Module 1 Knowledge Check: OSI Layers & Subnetting",
           "passingScore": 70,
-          "timeLimitMinutes": 10,
+          "timeLimitMinutes": 15,
           "isFinalAssessment": false,
           "questions": [
             {
@@ -549,6 +1001,49 @@
               "correctAnswer": 1,
               "explanation": "32 - 26 = 6 host bits. 2^6 = 64 total addresses. Subtracting network and broadcast addresses yields 62 usable hosts.",
               "orderIndex": 2
+            },
+            {
+              "id": "q_cn_1_3",
+              "quizId": "quiz_cn_1",
+              "question": "Which TCP header flag is set by the client to initiate connection termination?",
+              "questionType": "mcq",
+              "options": [
+                "SYN",
+                "ACK",
+                "FIN",
+                "RST"
+              ],
+              "correctAnswer": 2,
+              "explanation": "The FIN flag signals that the sender has finished sending data and wants to close the session.",
+              "orderIndex": 3
+            },
+            {
+              "id": "q_cn_1_4",
+              "quizId": "quiz_cn_1",
+              "question": "In Link State Routing (OSPF), what algorithm does each router run to calculate shortest paths?",
+              "questionType": "mcq",
+              "options": [
+                "Bellman-Ford",
+                "Dijkstra's Algorithm",
+                "Floyd-Warshall",
+                "Prim's Algorithm"
+              ],
+              "correctAnswer": 1,
+              "explanation": "OSPF routers build a complete topology graph and execute Dijkstra's algorithm.",
+              "orderIndex": 4
+            },
+            {
+              "id": "q_cn_1_5",
+              "quizId": "quiz_cn_1",
+              "question": "True or False: UDP provides flow control through a sliding window mechanism.",
+              "questionType": "true_false",
+              "options": [
+                "True",
+                "False"
+              ],
+              "correctAnswer": 1,
+              "explanation": "False. UDP is connectionless and does not provide flow control, sequence tracking, or congestion management.",
+              "orderIndex": 5
             }
           ]
         }
@@ -568,54 +1063,122 @@
     "semester": 4,
     "credits": 3,
     "difficultyLevel": "Intermediate",
-    "totalDurationHours": 14.0,
+    "totalDurationHours": 17.5,
     "enrolledCount": 110,
     "prerequisites": [
       "Discrete Mathematics (MA3354)"
     ],
     "learningOutcomes": [
-      "Formulate problems as state space graphs",
-      "Train linear and non-linear classifiers",
-      "Evaluate precision and recall"
+      "Formulate search problems using heuristic functions and state space representations.",
+      "Apply the A* search algorithm and verify heuristic admissibility.",
+      "Train supervised learning models including Logistic Regression, Decision Trees, and SVMs.",
+      "Evaluate classification performance using precision, recall, F1 score, and ROC curves."
     ],
     "modules": [
       {
         "id": "mod_aiml_1",
         "courseId": "course_cs3491",
-        "title": "Module 1: Informed Search Strategies & A* Search",
+        "title": "Module 1: Search, Supervised Classifiers & Clustering",
         "orderIndex": 1,
-        "description": "Admissible heuristics, consistency conditions, evaluation function f(n) = g(n) + h(n), and optimality proofs.",
-        "estimatedMinutes": 50,
+        "description": "Informed search strategies (A*, Alpha-Beta), supervised learning algorithms (SVM, Trees), and unsupervised clustering.",
+        "estimatedMinutes": 175,
         "introduction": {
           "id": "ci_aiml_1_intro",
           "moduleId": "mod_aiml_1",
           "title": "Module 1 Introduction: State Space Search & Heuristics",
           "sectionType": "introduction",
           "type": "text",
-          "urlOrPath": "Welcome to CS3491 AI & ML. In this module, you will analyze how agents navigate complex problem spaces using heuristic evaluation functions.",
+          "urlOrPath": "Welcome to CS3491 AI & Machine Learning.\\n\\nIn this module, you will analyze how autonomous agents make decisions and learn patterns from data:\\n1. State Space Problem Formulation (Initial state, Actions, Goal test, Path cost)\\n2. Informed Search: Heuristics, Greedy Best-First, and A* optimality\\n3. Adversarial Search: Minimax game trees with Alpha-Beta pruning\\n4. Supervised Learning: Linear and Logistic Regression, Decision Trees (ID3, Gini Impurity)\\n5. Support Vector Machines (SVM): Maximum margin hyperplanes and kernel transformations\\n6. Unsupervised Clustering: K-Means optimization and silhouette analysis.\\n\\n**Estimated Study Time**: ~175 Minutes\\n**Passing Score**: >=70% on Knowledge Check.",
           "orderIndex": 1,
           "durationSeconds": 240,
-          "summary": "State space representation and search strategies."
+          "summary": "State space representation, heuristic search, and machine learning models."
         },
         "coreContent": [
           {
-            "id": "ci_aiml_1_core_1",
+            "id": "ci_aiml_v1",
             "moduleId": "mod_aiml_1",
-            "title": "Lecture 1: A* Search Algorithm & Heuristic Admissibility",
+            "title": "Lecture 1: Problem Formulation & State Space Graph Search",
             "sectionType": "core_content",
             "type": "video",
             "urlOrPath": "TxjIlNYRZ5M",
             "orderIndex": 1,
             "durationSeconds": 850,
-            "summary": "Proof of optimality for A* with admissible and consistent heuristics."
+            "summary": "State space formulation, branching factors, uninformed versus informed search strategies."
+          },
+          {
+            "id": "ci_aiml_v2",
+            "moduleId": "mod_aiml_1",
+            "title": "Lecture 2: Informed Search - A* Algorithm & Heuristic Admissibility Proofs",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "tvAh0JZF2JE",
+            "orderIndex": 2,
+            "durationSeconds": 990,
+            "summary": "Evaluation function f(n) = g(n) + h(n), admissibility condition h(n) <= h*(n), and consistency."
+          },
+          {
+            "id": "ci_aiml_v3",
+            "moduleId": "mod_aiml_1",
+            "title": "Lecture 3: Adversarial Search & Minimax with Alpha-Beta Pruning",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "l-hh51ncgDI",
+            "orderIndex": 3,
+            "durationSeconds": 1050,
+            "summary": "Zero-sum two-player games, MAX and MIN ply evaluations, alpha cutoffs, and beta cutoffs."
+          },
+          {
+            "id": "ci_aiml_v4",
+            "moduleId": "mod_aiml_1",
+            "title": "Lecture 4: Supervised Learning - Linear & Logistic Regression, Decision Trees",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "Gv9_4yMHFhI",
+            "orderIndex": 4,
+            "durationSeconds": 1180,
+            "summary": "Gradient descent cost function minimization, Information Gain, Entropy, and Gini Index."
+          },
+          {
+            "id": "ci_aiml_v5",
+            "moduleId": "mod_aiml_1",
+            "title": "Lecture 5: Support Vector Machines (SVM) & Kernel Trick Explained",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "efR1C6CvhmE",
+            "orderIndex": 5,
+            "durationSeconds": 1140,
+            "summary": "Support vectors, hard margin vs soft margin slack variables, and RBF/polynomial kernels."
+          },
+          {
+            "id": "ci_aiml_v6",
+            "moduleId": "mod_aiml_1",
+            "title": "Lecture 6: Unsupervised Learning - K-Means Clustering & PCA Dimensions",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "4b5d3muPQmA",
+            "orderIndex": 6,
+            "durationSeconds": 1080,
+            "summary": "Centroid initialization, convergence criteria, inertia elbow curve, and dimensionality reduction."
+          },
+          {
+            "id": "ci_aiml_doc1",
+            "moduleId": "mod_aiml_1",
+            "title": "Study Notes: Scikit-Learn Machine Learning Python Pipeline Manual",
+            "sectionType": "core_content",
+            "type": "doc",
+            "urlOrPath": "https://raw.githubusercontent.com/chellamuthukumar001/NSCET_FIST/main/docs/cs3491_ml_handbook.pdf",
+            "orderIndex": 7,
+            "documentPages": 15,
+            "durationSeconds": 900,
+            "summary": "Complete Python code templates for model evaluation with cross-validation and hyperparameter tuning."
           }
         ],
         "knowledgeCheck": {
           "id": "quiz_aiml_1",
           "moduleId": "mod_aiml_1",
-          "title": "Module 1 Knowledge Check: Search Algorithms",
+          "title": "Module 1 Knowledge Check: Search Algorithms & Classifiers",
           "passingScore": 70,
-          "timeLimitMinutes": 10,
+          "timeLimitMinutes": 15,
           "isFinalAssessment": false,
           "questions": [
             {
@@ -632,6 +1195,64 @@
               "correctAnswer": 0,
               "explanation": "An admissible heuristic never overestimates the cost from the current state to the goal.",
               "orderIndex": 1
+            },
+            {
+              "id": "q_aiml_1_2",
+              "quizId": "quiz_aiml_1",
+              "question": "In Alpha-Beta pruning, when can the search branch below a MIN node be pruned?",
+              "questionType": "mcq",
+              "options": [
+                "When beta is less than or equal to alpha",
+                "When alpha is strictly zero",
+                "When beta is infinite",
+                "Pruning is never allowed on MIN nodes"
+              ],
+              "correctAnswer": 0,
+              "explanation": "If beta <= alpha, the MAX player already has a better alternative, so this branch cannot affect the root.",
+              "orderIndex": 2
+            },
+            {
+              "id": "q_aiml_1_3",
+              "quizId": "quiz_aiml_1",
+              "question": "In a Decision Tree, which metric measures the degree of impurity or disorder in a node?",
+              "questionType": "mcq",
+              "options": [
+                "Entropy",
+                "Euclidean Distance",
+                "Pearson Correlation",
+                "Eigenvalue"
+              ],
+              "correctAnswer": 0,
+              "explanation": "Entropy measures uncertainty and disorder; higher entropy represents greater impurity.",
+              "orderIndex": 3
+            },
+            {
+              "id": "q_aiml_1_4",
+              "quizId": "quiz_aiml_1",
+              "question": "What are the 'support vectors' in a Support Vector Machine classifier?",
+              "questionType": "mcq",
+              "options": [
+                "The training data points closest to the decision boundary",
+                "The misclassified points only",
+                "The centroid of all clusters",
+                "The coordinates of the origin"
+              ],
+              "correctAnswer": 0,
+              "explanation": "Support vectors are the critical edge data points that directly define the margin.",
+              "orderIndex": 4
+            },
+            {
+              "id": "q_aiml_1_5",
+              "quizId": "quiz_aiml_1",
+              "question": "True or False: K-Means clustering is guaranteed to find the global optimum every run.",
+              "questionType": "true_false",
+              "options": [
+                "True",
+                "False"
+              ],
+              "correctAnswer": 1,
+              "explanation": "False. K-Means is sensitive to initial centroid selection and may get trapped in local minima.",
+              "orderIndex": 5
             }
           ]
         }
@@ -651,46 +1272,114 @@
     "semester": 5,
     "credits": 3,
     "difficultyLevel": "Advanced",
-    "totalDurationHours": 15.0,
+    "totalDurationHours": 18.0,
     "enrolledCount": 105,
     "prerequisites": [
       "Discrete Mathematics (MA3354)"
     ],
     "learningOutcomes": [
-      "Encrypt and decrypt with RSA and AES",
-      "Verify digital signatures and certificates",
-      "Implement TLS handshake"
+      "Encrypt and decrypt messages using AES symmetric block cipher operations.",
+      "Execute RSA public-key math: prime generation, Euler's totient, and modular inverse.",
+      "Verify digital signatures and PKI X.509 cryptographic certificate chains.",
+      "Audit network traffic for authentication vulnerabilities using Wireshark."
     ],
     "modules": [
       {
         "id": "mod_crypto_1",
         "courseId": "course_cs3551",
-        "title": "Module 1: Number Theoretic Foundations & RSA Algorithm",
+        "title": "Module 1: Classical Ciphers, AES, RSA & Digital Signatures",
         "orderIndex": 1,
-        "description": "Modular arithmetic, Euler's Totient function phi(n), key generation, encryption c = m^e mod n, and decryption.",
-        "estimatedMinutes": 55,
+        "description": "From Shannon's security principles, AES block encryption, RSA modular mathematics, to SHA-256 hash authentication.",
+        "estimatedMinutes": 180,
         "introduction": {
           "id": "ci_crypto_1_intro",
           "moduleId": "mod_crypto_1",
-          "title": "Module 1 Introduction: Public-Key Cryptography",
+          "title": "Module 1 Introduction: Public-Key Cryptography Foundations",
           "sectionType": "introduction",
           "type": "text",
-          "urlOrPath": "Welcome to CS3551 Cryptography. In this module you will explore public-key cryptosystems, prime factorization difficulty, and RSA mathematical proofs.",
+          "urlOrPath": "Welcome to CS3551 Cryptography & Cyber Security.\\n\\nIn this module, you will analyze the mathematical principles that protect modern communications:\\n1. The CIA Triad (Confidentiality, Integrity, Availability) and Threat Models\\n2. Symmetric Encryption: Advanced Encryption Standard (AES) rounds and S-boxes\\n3. Asymmetric Cryptography: RSA algorithm, prime generation, and Euler's phi function\\n4. Key Exchange: Diffie-Hellman discrete logarithm problem and Man-in-the-Middle defense\\n5. Cryptographic Hash Functions: SHA-256 collision resistance and HMAC\\n6. Digital Signatures: RSA Signatures and X.509 Digital Certificates.\\n\\n**Estimated Study Time**: ~180 Minutes\\n**Passing Score**: >=70% on Knowledge Check.",
           "orderIndex": 1,
           "durationSeconds": 240,
-          "summary": "Modular mathematics and public key encryption."
+          "summary": "Modular mathematics, symmetric/asymmetric algorithms, and digital signatures."
         },
         "coreContent": [
           {
-            "id": "ci_crypto_1_core_1",
+            "id": "ci_crypto_v1",
             "moduleId": "mod_crypto_1",
-            "title": "Lecture 1: RSA Algorithm Solved Example with Modular Exponentiation",
+            "title": "Lecture 1: Classical Cryptography & Fundamental Security Principles",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "jhXCTbFnK8o",
+            "orderIndex": 1,
+            "durationSeconds": 890,
+            "summary": "Substitution ciphers, transposition ciphers, stream vs block ciphers, and cryptanalysis attacks."
+          },
+          {
+            "id": "ci_crypto_v2",
+            "moduleId": "mod_crypto_1",
+            "title": "Lecture 2: Symmetric Encryption - Advanced Encryption Standard (AES) Architecture",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "O4xNJsjtN6E",
+            "orderIndex": 2,
+            "durationSeconds": 1050,
+            "summary": "AES round transformations: SubBytes, ShiftRows, MixColumns, AddRoundKey, and key expansion."
+          },
+          {
+            "id": "ci_crypto_v3",
+            "moduleId": "mod_crypto_1",
+            "title": "Lecture 3: Asymmetric Cryptography - RSA Algorithm Solved Numerical Example",
             "sectionType": "core_content",
             "type": "video",
             "urlOrPath": "VCIVXPoiLpU",
-            "orderIndex": 1,
-            "durationSeconds": 920,
-            "summary": "Key generation walkthrough: selecting primes p and q, computing e and d, and running encryption."
+            "orderIndex": 3,
+            "durationSeconds": 1120,
+            "summary": "Choosing primes p and q, computing modulus n, Euler's totient phi(n), finding e and d via Extended Euclidean Algorithm."
+          },
+          {
+            "id": "ci_crypto_v4",
+            "moduleId": "mod_crypto_1",
+            "title": "Lecture 4: Diffie-Hellman Key Exchange & Elliptic Curve Cryptography (ECC)",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "NmM9HA2MQGI",
+            "orderIndex": 4,
+            "durationSeconds": 1020,
+            "summary": "Primitive roots, discrete log difficulty, shared secret computation, and elliptic curve point addition."
+          },
+          {
+            "id": "ci_crypto_v5",
+            "moduleId": "mod_crypto_1",
+            "title": "Lecture 5: Cryptographic Hash Functions - SHA-256 & Message Authentication",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "b4b8ktEV4Bg",
+            "orderIndex": 5,
+            "durationSeconds": 980,
+            "summary": "One-way property, preimage resistance, second preimage resistance, collision resistance, and HMAC."
+          },
+          {
+            "id": "ci_crypto_v6",
+            "moduleId": "mod_crypto_1",
+            "title": "Lecture 6: Digital Signatures, X.509 Certificates & Public Key Infrastructure",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "s22eJ1eVLTU",
+            "orderIndex": 6,
+            "durationSeconds": 1150,
+            "summary": "Signing with private key, verifying with public key, Certificate Authorities (CAs), and CRL/OCSP revocation."
+          },
+          {
+            "id": "ci_crypto_doc1",
+            "moduleId": "mod_crypto_1",
+            "title": "Study Notes: Applied Network Security & OpenSSL Lab Manual",
+            "sectionType": "core_content",
+            "type": "doc",
+            "urlOrPath": "https://raw.githubusercontent.com/chellamuthukumar001/NSCET_FIST/main/docs/cs3551_crypto_lab.pdf",
+            "orderIndex": 7,
+            "documentPages": 14,
+            "durationSeconds": 900,
+            "summary": "OpenSSL CLI commands for RSA key generation, AES file encryption, and CSR generation."
           }
         ],
         "knowledgeCheck": {
@@ -698,7 +1387,7 @@
           "moduleId": "mod_crypto_1",
           "title": "Module 1 Knowledge Check: RSA & Modular Arithmetic",
           "passingScore": 70,
-          "timeLimitMinutes": 10,
+          "timeLimitMinutes": 15,
           "isFinalAssessment": false,
           "questions": [
             {
@@ -715,6 +1404,64 @@
               "correctAnswer": 1,
               "explanation": "phi(n) = (p - 1) * (q - 1) = (3 - 1) * (11 - 1) = 2 * 10 = 20.",
               "orderIndex": 1
+            },
+            {
+              "id": "q_crypto_1_2",
+              "quizId": "quiz_crypto_1",
+              "question": "Which transformation in AES provides confusion through non-linear byte substitution?",
+              "questionType": "mcq",
+              "options": [
+                "SubBytes",
+                "ShiftRows",
+                "MixColumns",
+                "AddRoundKey"
+              ],
+              "correctAnswer": 0,
+              "explanation": "SubBytes uses an S-box constructed from multiplicative inverse in GF(2^8) to supply non-linearity.",
+              "orderIndex": 2
+            },
+            {
+              "id": "q_crypto_1_3",
+              "quizId": "quiz_crypto_1",
+              "question": "To sign a digital document, which cryptographic key does the sender use?",
+              "questionType": "mcq",
+              "options": [
+                "Sender's Private Key",
+                "Sender's Public Key",
+                "Recipient's Public Key",
+                "Certificate Authority Key"
+              ],
+              "correctAnswer": 0,
+              "explanation": "The sender signs using their private key; anyone can verify using the corresponding public key.",
+              "orderIndex": 3
+            },
+            {
+              "id": "q_crypto_1_4",
+              "quizId": "quiz_crypto_1",
+              "question": "What is the primary computational problem underlying the security of Diffie-Hellman Key Exchange?",
+              "questionType": "mcq",
+              "options": [
+                "Discrete Logarithm Problem",
+                "Traveling Salesperson Problem",
+                "Sorting integers",
+                "Matrix Multiplication"
+              ],
+              "correctAnswer": 0,
+              "explanation": "Computing g^ab mod p without knowing a or b requires solving the discrete logarithm problem.",
+              "orderIndex": 4
+            },
+            {
+              "id": "q_crypto_1_5",
+              "quizId": "quiz_crypto_1",
+              "question": "True or False: SHA-256 produces a variable-length digest depending on the size of the input file.",
+              "questionType": "true_false",
+              "options": [
+                "True",
+                "False"
+              ],
+              "correctAnswer": 1,
+              "explanation": "False. SHA-256 always produces a fixed 256-bit (32-byte) hash regardless of input size.",
+              "orderIndex": 5
             }
           ]
         }
@@ -725,7 +1472,7 @@
     "id": "course_cs3691",
     "code": "CS3691",
     "title": "Embedded Systems & IoT Architectures",
-    "description": "ARM Cortex-M microcontroller architecture, GPIO/ADC interfacing, IoT protocols (MQTT, CoAP), and low-power sensor networks.",
+    "description": "ARM Cortex-M microcontroller architecture, GPIO/ADC interfacing, IoT protocols (MQTT, CoAP), FreeRTOS, and low-power sensor networks.",
     "department": "Electronics & Communication Engineering",
     "departmentId": "dept_ece",
     "instructor": "Er. S. Prakash",
@@ -734,46 +1481,114 @@
     "semester": 6,
     "credits": 3,
     "difficultyLevel": "Intermediate",
-    "totalDurationHours": 13.5,
+    "totalDurationHours": 16.5,
     "enrolledCount": 88,
     "prerequisites": [
       "Microprocessors and Microcontrollers (EC3451)"
     ],
     "learningOutcomes": [
-      "Program ARM Cortex-M interrupts",
-      "Publish telemetry data via MQTT",
-      "Design smart sensor endpoints"
+      "Program ARM Cortex-M hardware peripherals and interrupt service routines.",
+      "Configure peripheral communication buses including I2C, SPI, and UART.",
+      "Publish and subscribe sensor telemetry data via MQTT with Quality of Service rules.",
+      "Develop multi-tasking real-time applications utilizing FreeRTOS."
     ],
     "modules": [
       {
         "id": "mod_iot_1",
         "courseId": "course_cs3691",
-        "title": "Module 1: Microcontroller Bus Architecture & MQTT Protocol",
+        "title": "Module 1: ARM Architecture, Peripherals, MQTT & FreeRTOS",
         "orderIndex": 1,
-        "description": "Publisher/Subscriber telemetry pattern, Quality of Service (QoS) levels, and low-power sensory nodes.",
-        "estimatedMinutes": 45,
+        "description": "Microcontroller hardware, I2C/SPI interfaces, IoT telemetry (MQTT), and real-time multi-tasking (FreeRTOS).",
+        "estimatedMinutes": 170,
         "introduction": {
           "id": "ci_iot_1_intro",
           "moduleId": "mod_iot_1",
           "title": "Module 1 Introduction: IoT Protocols & Hardware Interfaces",
           "sectionType": "introduction",
           "type": "text",
-          "urlOrPath": "Welcome to CS3691 Embedded Systems & IoT. In this module, you will explore low-overhead communication protocols like MQTT and real-time microcontroller peripherals.",
+          "urlOrPath": "Welcome to CS3691 Embedded Systems & IoT.\\n\\nIn this module, you will bridge embedded hardware with cloud connectivity:\\n1. ARM Cortex-M Architecture and Memory Map\\n2. Hardware Peripherals: GPIO, ADC, Timers, and Nested Vectored Interrupt Controllers (NVIC)\\n3. Serial Communication: UART, I2C, and SPI protocols\\n4. IoT Application Protocols: MQTT publisher/subscriber pattern and QoS levels\\n5. Constrained Application Protocol (CoAP) and REST comparisons\\n6. Real-Time Operating Systems: FreeRTOS task creation, queues, and scheduling.\\n\\n**Estimated Study Time**: ~170 Minutes\\n**Passing Score**: >=70% on Knowledge Check.",
           "orderIndex": 1,
           "durationSeconds": 240,
-          "summary": "Publisher/subscriber telemetry and embedded hardware."
+          "summary": "ARM microcontrollers, IoT communications, and real-time scheduling."
         },
         "coreContent": [
           {
-            "id": "ci_iot_1_core_1",
+            "id": "ci_iot_v1",
             "moduleId": "mod_iot_1",
-            "title": "Lecture 1: MQTT Protocol Architecture & QoS Levels Explained",
+            "title": "Lecture 1: Embedded Systems Architecture & ARM Cortex-M Microcontrollers",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "WzWwE5W4lUk",
+            "orderIndex": 1,
+            "durationSeconds": 890,
+            "summary": "Harvard architecture, 32-bit registers, NVIC interrupt prioritization, and memory-mapped I/O."
+          },
+          {
+            "id": "ci_iot_v2",
+            "moduleId": "mod_iot_1",
+            "title": "Lecture 2: GPIO, ADC, PWM & Hardware Sensor Interfacing",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "1I1sO_q1r5k",
+            "orderIndex": 2,
+            "durationSeconds": 950,
+            "summary": "Push-pull vs open-drain pins, analog-to-digital conversion, and PWM motor/LED control."
+          },
+          {
+            "id": "ci_iot_v3",
+            "moduleId": "mod_iot_1",
+            "title": "Lecture 3: Communication Protocols - I2C, SPI & UART in Embedded Systems",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "iy_3B236-4k",
+            "orderIndex": 3,
+            "durationSeconds": 1020,
+            "summary": "Master-slave topologies, clock synchronization (SCL/SDA vs MISO/MOSI), and baud rates."
+          },
+          {
+            "id": "ci_iot_v4",
+            "moduleId": "mod_iot_1",
+            "title": "Lecture 4: MQTT Protocol Architecture & QoS Levels Explained",
             "sectionType": "core_content",
             "type": "video",
             "urlOrPath": "GS6yIngO4eg",
-            "orderIndex": 1,
-            "durationSeconds": 870,
-            "summary": "MQTT brokers, topics, and message delivery guarantees (QoS 0, 1, 2)."
+            "orderIndex": 4,
+            "durationSeconds": 980,
+            "summary": "Brokers, topics, subscriptions, payload formats, and QoS 0 (at most once), 1 (at least once), 2 (exactly once)."
+          },
+          {
+            "id": "ci_iot_v5",
+            "moduleId": "mod_iot_1",
+            "title": "Lecture 5: CoAP, HTTP REST vs WebSockets for Constrained IoT Endpoints",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "m_j4wW1f8vU",
+            "orderIndex": 5,
+            "durationSeconds": 920,
+            "summary": "UDP-based CoAP headers, low overhead telemetry, and asynchronous push channels."
+          },
+          {
+            "id": "ci_iot_v6",
+            "moduleId": "mod_iot_1",
+            "title": "Lecture 6: Real-Time Operating Systems - FreeRTOS Task Scheduling & Queues",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "F321087qrY4",
+            "orderIndex": 6,
+            "durationSeconds": 1140,
+            "summary": "Task states (Ready, Running, Blocked), priority preemption, and inter-task message passing with queues."
+          },
+          {
+            "id": "ci_iot_doc1",
+            "moduleId": "mod_iot_1",
+            "title": "Study Notes: ESP32 / STM32 Embedded IoT Firmware Programming Manual",
+            "sectionType": "core_content",
+            "type": "doc",
+            "urlOrPath": "https://raw.githubusercontent.com/chellamuthukumar001/NSCET_FIST/main/docs/cs3691_iot_manual.pdf",
+            "orderIndex": 7,
+            "documentPages": 12,
+            "durationSeconds": 800,
+            "summary": "Circuit schematics and C++ code for Wi-Fi sensor reporting to cloud dashboards."
           }
         ],
         "knowledgeCheck": {
@@ -781,7 +1596,7 @@
           "moduleId": "mod_iot_1",
           "title": "Module 1 Knowledge Check: IoT Protocols",
           "passingScore": 70,
-          "timeLimitMinutes": 10,
+          "timeLimitMinutes": 15,
           "isFinalAssessment": false,
           "questions": [
             {
@@ -798,6 +1613,64 @@
               "correctAnswer": 2,
               "explanation": "QoS 2 is the highest level of service in MQTT, guaranteeing exactly-once delivery via a four-step handshake.",
               "orderIndex": 1
+            },
+            {
+              "id": "q_iot_1_2",
+              "quizId": "quiz_iot_1",
+              "question": "Which serial communication protocol requires only two bus lines: SCL (Clock) and SDA (Data)?",
+              "questionType": "mcq",
+              "options": [
+                "SPI",
+                "I2C",
+                "UART",
+                "CAN Bus"
+              ],
+              "correctAnswer": 1,
+              "explanation": "I2C (Inter-Integrated Circuit) uses two bidirectional lines: Serial Clock (SCL) and Serial Data (SDA).",
+              "orderIndex": 2
+            },
+            {
+              "id": "q_iot_1_3",
+              "quizId": "quiz_iot_1",
+              "question": "What is the default underlying transport protocol used by CoAP?",
+              "questionType": "mcq",
+              "options": [
+                "TCP",
+                "UDP",
+                "SCTP",
+                "Bluetooth LE"
+              ],
+              "correctAnswer": 1,
+              "explanation": "CoAP is designed for constrained devices and runs over UDP to reduce header overhead and handshake latency.",
+              "orderIndex": 3
+            },
+            {
+              "id": "q_iot_1_4",
+              "quizId": "quiz_iot_1",
+              "question": "In FreeRTOS, what happens when a higher-priority task enters the Ready state while a lower-priority task is Running?",
+              "questionType": "mcq",
+              "options": [
+                "The lower-priority task continues until it exits",
+                "The kernel immediately preempts the lower-priority task",
+                "Both tasks run in parallel on a single core",
+                "The kernel throws a runtime exception"
+              ],
+              "correctAnswer": 1,
+              "explanation": "FreeRTOS is a preemptive real-time OS; the scheduler immediately yields execution to higher-priority tasks.",
+              "orderIndex": 4
+            },
+            {
+              "id": "q_iot_1_5",
+              "quizId": "quiz_iot_1",
+              "question": "True or False: In MQTT, subscribers connect directly to publishers without an intermediary server.",
+              "questionType": "true_false",
+              "options": [
+                "True",
+                "False"
+              ],
+              "correctAnswer": 1,
+              "explanation": "False. MQTT relies on a central Broker that receives published messages and filters/forwards them to subscribed clients.",
+              "orderIndex": 5
             }
           ]
         }
@@ -817,44 +1690,112 @@
     "semester": 1,
     "credits": 3,
     "difficultyLevel": "Beginner",
-    "totalDurationHours": 12.0,
+    "totalDurationHours": 16.0,
     "enrolledCount": 185,
     "prerequisites": [],
     "learningOutcomes": [
-      "Write modular Python scripts with functions",
-      "Manipulate nested data structures",
-      "Implement sorting and searching"
+      "Develop structured algorithmic solutions and flowcharts for computational problems.",
+      "Write modular Python scripts using functions, default arguments, and recursion.",
+      "Process complex data using built-in sequences (Lists, Tuples, Sets, Dictionaries).",
+      "Implement robust file input/output workflows with Python exception handling."
     ],
     "modules": [
       {
         "id": "mod_py_1",
         "courseId": "course_ge3151",
-        "title": "Module 1: Computational Thinking & Python Control Flow",
+        "title": "Module 1: Computational Thinking, Control Flow & Collections",
         "orderIndex": 1,
-        "description": "Variables, types, conditionals (if-elif-else), while/for loops, and list comprehensions.",
-        "estimatedMinutes": 45,
+        "description": "Algorithms, branching conditionals, while/for loops, custom functions, data collections, and file handling.",
+        "estimatedMinutes": 165,
         "introduction": {
           "id": "ci_py_1_intro",
           "moduleId": "mod_py_1",
           "title": "Module 1 Introduction: Python Syntax & Flow",
           "sectionType": "introduction",
           "type": "text",
-          "urlOrPath": "Welcome to GE3151 Python Programming. This module introduces the core grammar of Python: variables, branching conditionals, and loops.",
+          "urlOrPath": "Welcome to GE3151 Python Programming.\\n\\nThis foundational course introduces computational problem solving through Python:\\n1. Problem solving strategies, Pseudo-code, and Flowcharts\\n2. Python dynamic typing, variables, and arithmetic expressions\\n3. Conditional Branching (if, elif, else)\\n4. Loops: while, for, range(), break, and continue\\n5. Functions, Parameter passing, and Local/Global variable scope\\n6. Python Sequences: Lists, Tuples, Dictionaries, and Sets\\n7. File I/O operations and Exception handling (try, except, finally).\\n\\n**Estimated Study Time**: ~165 Minutes\\n**Passing Score**: >=70% on Knowledge Check.",
           "orderIndex": 1,
           "durationSeconds": 240,
-          "summary": "Core syntax, dynamic typing, and iterations."
+          "summary": "Core syntax, dynamic typing, iterations, and collection processing."
         },
         "coreContent": [
           {
-            "id": "ci_py_1_core_1",
+            "id": "ci_py_v1",
             "moduleId": "mod_py_1",
-            "title": "Lecture 1: Python Data Types, Conditionals, and Iteration Masterclass",
+            "title": "Lecture 1: Computational Thinking, Flowcharts & Pseudo-code",
             "sectionType": "core_content",
             "type": "video",
             "urlOrPath": "WYo1SpUh9FI",
             "orderIndex": 1,
             "durationSeconds": 860,
-            "summary": "Foundational Python syntax, expressions, and loop execution control."
+            "summary": "Algorithmic thinking, flowchart conventions, and translating logic into Python syntax."
+          },
+          {
+            "id": "ci_py_v2",
+            "moduleId": "mod_py_1",
+            "title": "Lecture 2: Python Data Types, Operators & Conditional Branching",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "kqtD5dpn9C8",
+            "orderIndex": 2,
+            "durationSeconds": 920,
+            "summary": "Integers, floats, strings, boolean operators, if-elif-else execution trees."
+          },
+          {
+            "id": "ci_py_v3",
+            "moduleId": "mod_py_1",
+            "title": "Lecture 3: Iteration in Python - For & While Loops, Break, Continue",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "6iF8Xb7Z3wQ",
+            "orderIndex": 3,
+            "durationSeconds": 980,
+            "summary": "Loop mechanics, range() steps, nested loops, and loop control statements."
+          },
+          {
+            "id": "ci_py_v4",
+            "moduleId": "mod_py_1",
+            "title": "Lecture 4: Modular Programming - Functions, Scope & Recursion",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "9Os0o3wzS_I",
+            "orderIndex": 4,
+            "durationSeconds": 1050,
+            "summary": "Defining functions with def, keyword arguments, return values, and recursive call stacks."
+          },
+          {
+            "id": "ci_py_v5",
+            "moduleId": "mod_py_1",
+            "title": "Lecture 5: Python Collections - Lists, Tuples, Dictionaries & Sets",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "daefaLgNkw0",
+            "orderIndex": 5,
+            "durationSeconds": 1140,
+            "summary": "Indexing, slicing, list comprehensions, dictionary key-value access, and tuple immutability."
+          },
+          {
+            "id": "ci_py_v6",
+            "moduleId": "mod_py_1",
+            "title": "Lecture 6: File I/O (Read, Write) & Exception Handling (Try, Except)",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "aequTxAvQq4",
+            "orderIndex": 6,
+            "durationSeconds": 980,
+            "summary": "Context managers with open(), reading line by line, catching ValueError/IOError exceptions."
+          },
+          {
+            "id": "ci_py_doc1",
+            "moduleId": "mod_py_1",
+            "title": "Study Notes: Anna University Regulation 2021 Python Lab Exercises",
+            "sectionType": "core_content",
+            "type": "doc",
+            "urlOrPath": "https://raw.githubusercontent.com/chellamuthukumar001/NSCET_FIST/main/docs/ge3151_python_notes.pdf",
+            "orderIndex": 7,
+            "documentPages": 16,
+            "durationSeconds": 850,
+            "summary": "Prescribed lab programs: GCD, square root, linear search, binary search, and word frequency."
           }
         ],
         "knowledgeCheck": {
@@ -862,7 +1803,7 @@
           "moduleId": "mod_py_1",
           "title": "Module 1 Knowledge Check: Python Fundamentals",
           "passingScore": 70,
-          "timeLimitMinutes": 10,
+          "timeLimitMinutes": 15,
           "isFinalAssessment": false,
           "questions": [
             {
@@ -879,6 +1820,64 @@
               "correctAnswer": 2,
               "explanation": "Tuples are immutable sequences in Python; once created, their elements cannot be changed.",
               "orderIndex": 1
+            },
+            {
+              "id": "q_py_1_2",
+              "quizId": "quiz_py_1",
+              "question": "What is the output of the Python expression: [x**2 for x in range(4) if x % 2 == 0]?",
+              "questionType": "mcq",
+              "options": [
+                "[0, 1, 4, 9]",
+                "[0, 4]",
+                "[1, 9]",
+                "[4]"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Range(4) yields 0, 1, 2, 3. The even numbers are 0 and 2. 0^2 = 0, 2^2 = 4, producing [0, 4].",
+              "orderIndex": 2
+            },
+            {
+              "id": "q_py_1_3",
+              "quizId": "quiz_py_1",
+              "question": "Which Python keyword is used to handle exceptions raised inside a try block?",
+              "questionType": "mcq",
+              "options": [
+                "catch",
+                "except",
+                "throw",
+                "finally"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Python uses 'try' followed by 'except' to handle runtime exceptions.",
+              "orderIndex": 3
+            },
+            {
+              "id": "q_py_1_4",
+              "quizId": "quiz_py_1",
+              "question": "What does the file open mode 'a' indicate in Python?",
+              "questionType": "mcq",
+              "options": [
+                "Open for reading only",
+                "Open for writing, overwriting existing contents",
+                "Open for appending new data at the end of the file",
+                "Open in binary mode"
+              ],
+              "correctAnswer": 2,
+              "explanation": "Mode 'a' opens the file for appending; pointer is placed at the end without truncating contents.",
+              "orderIndex": 4
+            },
+            {
+              "id": "q_py_1_5",
+              "quizId": "quiz_py_1",
+              "question": "True or False: In Python, dictionary keys must be of an immutable hashable data type.",
+              "questionType": "true_false",
+              "options": [
+                "True",
+                "False"
+              ],
+              "correctAnswer": 0,
+              "explanation": "True. Dictionary keys must be hashable, so mutable types like lists cannot be used as dictionary keys.",
+              "orderIndex": 5
             }
           ]
         }
@@ -898,46 +1897,114 @@
     "semester": 4,
     "credits": 4,
     "difficultyLevel": "Advanced",
-    "totalDurationHours": 16.0,
+    "totalDurationHours": 18.5,
     "enrolledCount": 98,
     "prerequisites": [
       "Discrete Mathematics (MA3354)"
     ],
     "learningOutcomes": [
-      "Construct DFAs and NFAs for regular languages",
-      "Build predictive LL(1) and LR parsing tables",
-      "Generate three-address intermediate code"
+      "Construct Deterministic and Non-Deterministic Finite Automata for regular languages.",
+      "Eliminate ambiguity and left-recursion from Context-Free Grammars.",
+      "Compute FIRST and FOLLOW sets to generate predictive LL(1) parsing tables.",
+      "Design intermediate three-address code and basic block DAG optimizations."
     ],
     "modules": [
       {
         "id": "mod_toc_1",
         "courseId": "course_cs3452",
-        "title": "Module 1: Finite Automata & Predictive LL(1) Parsing",
+        "title": "Module 1: Automata, Grammars, Parsing & Intermediate Code",
         "orderIndex": 1,
-        "description": "NFA to DFA subset construction, FIRST and FOLLOW set computations, and predictive parsing table validation.",
-        "estimatedMinutes": 55,
+        "description": "Finite automata, regular expressions, context-free grammars, predictive LL(1) parsers, and intermediate code generation.",
+        "estimatedMinutes": 180,
         "introduction": {
           "id": "ci_toc_1_intro",
           "moduleId": "mod_toc_1",
           "title": "Module 1 Introduction: Automata & Compilers",
           "sectionType": "introduction",
           "type": "text",
-          "urlOrPath": "Welcome to CS3452 Theory of Computation & Compiler Design. In this module you will connect theoretical regular languages with practical lexer/parser construction.",
+          "urlOrPath": "Welcome to CS3452 Theory of Computation & Compiler Design.\\n\\nIn this module, you connect mathematical automata theory with compiler frontend engineering:\\n1. Chomsky Hierarchy of Formal Languages\\n2. Deterministic Finite Automata (DFA) and Minimization algorithms\\n3. NFA to DFA Subset Construction and Regular Expressions\\n4. Context-Free Grammars (CFG), Ambiguity, and Left-Recursion Elimination\\n5. Predictive Parsing: Computing FIRST and FOLLOW sets for LL(1) tables\\n6. Bottom-Up Parsing (LR) and Intermediate Three-Address Code Generation.\\n\\n**Estimated Study Time**: ~180 Minutes\\n**Passing Score**: >=70% on Knowledge Check.",
           "orderIndex": 1,
           "durationSeconds": 240,
           "summary": "Regular languages, automata, and compiler frontends."
         },
         "coreContent": [
           {
-            "id": "ci_toc_1_core_1",
+            "id": "ci_toc_v1",
             "moduleId": "mod_toc_1",
-            "title": "Lecture 1: Deterministic Finite Automata (DFA) Construction and Minimization",
+            "title": "Lecture 1: Chomsky Hierarchy of Languages & Grammar Classification",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "5_elhPEB628",
+            "orderIndex": 1,
+            "durationSeconds": 910,
+            "summary": "Type 0 (Unrestricted), Type 1 (Context-Sensitive), Type 2 (Context-Free), and Type 3 (Regular) grammars."
+          },
+          {
+            "id": "ci_toc_v2",
+            "moduleId": "mod_toc_1",
+            "title": "Lecture 2: Deterministic Finite Automata (DFA) Construction & Minimization",
             "sectionType": "core_content",
             "type": "video",
             "urlOrPath": "TxjIlNYRZ5M",
-            "orderIndex": 1,
-            "durationSeconds": 910,
-            "summary": "State transitions, language acceptance, and DFA minimization using equivalence partitioning."
+            "orderIndex": 2,
+            "durationSeconds": 960,
+            "summary": "5-tuple formal definition, transition diagrams, string acceptance, and Myhill-Nerode table filling minimization."
+          },
+          {
+            "id": "ci_toc_v3",
+            "moduleId": "mod_toc_1",
+            "title": "Lecture 3: Non-Deterministic Finite Automata (NFA) to DFA Subset Construction",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "40i4BApM0wA",
+            "orderIndex": 3,
+            "durationSeconds": 1050,
+            "summary": "Epsilon transitions, epsilon-closure algorithm, and power-set construction tables."
+          },
+          {
+            "id": "ci_toc_v4",
+            "moduleId": "mod_toc_1",
+            "title": "Lecture 4: Context-Free Grammars (CFG) & Ambiguity Elimination",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "1y7l1l7I2l8",
+            "orderIndex": 4,
+            "durationSeconds": 1010,
+            "summary": "Parse trees, leftmost and rightmost derivations, ambiguity proofs, and left factoring."
+          },
+          {
+            "id": "ci_toc_v5",
+            "moduleId": "mod_toc_1",
+            "title": "Lecture 5: Compiler Lexical Analysis & Predictive LL(1) Parsing Tables",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "Qkwj65l_96I",
+            "orderIndex": 5,
+            "durationSeconds": 1180,
+            "summary": "Calculating FIRST and FOLLOW sets, conflict detection, and non-recursive predictive parsing."
+          },
+          {
+            "id": "ci_toc_v6",
+            "moduleId": "mod_toc_1",
+            "title": "Lecture 6: Bottom-Up LR Parsing & Intermediate Three-Address Code (TAC)",
+            "sectionType": "core_content",
+            "type": "video",
+            "urlOrPath": "S_hY06c-GqQ",
+            "orderIndex": 6,
+            "durationSeconds": 1220,
+            "summary": "Shift-reduce parsing, handles, quadruples, triples, and basic block directed acyclic graphs (DAG)."
+          },
+          {
+            "id": "ci_toc_doc1",
+            "moduleId": "mod_toc_1",
+            "title": "Study Notes: Compiler Design Lex and Yacc Lab Manual",
+            "sectionType": "core_content",
+            "type": "doc",
+            "urlOrPath": "https://raw.githubusercontent.com/chellamuthukumar001/NSCET_FIST/main/docs/cs3452_compiler_manual.pdf",
+            "orderIndex": 7,
+            "documentPages": 14,
+            "durationSeconds": 900,
+            "summary": "Flex lexer specifications, Bison parser grammars, and symbol table management."
           }
         ],
         "knowledgeCheck": {
@@ -945,7 +2012,7 @@
           "moduleId": "mod_toc_1",
           "title": "Module 1 Knowledge Check: Automata & Grammars",
           "passingScore": 70,
-          "timeLimitMinutes": 10,
+          "timeLimitMinutes": 15,
           "isFinalAssessment": false,
           "questions": [
             {
@@ -962,6 +2029,64 @@
               "correctAnswer": 0,
               "explanation": "By the Powerset Construction algorithm, every NFA with N states has an equivalent DFA with at most 2^N states.",
               "orderIndex": 1
+            },
+            {
+              "id": "q_toc_1_2",
+              "quizId": "quiz_toc_1",
+              "question": "Which of the following grammar properties causes an immediate conflict in an LL(1) parsing table?",
+              "questionType": "mcq",
+              "options": [
+                "Left-Recursion",
+                "Right-Recursion",
+                "Short production rules",
+                "Terminal symbols"
+              ],
+              "correctAnswer": 0,
+              "explanation": "Direct or indirect left-recursion produces infinite loops in predictive parsers and leads to multiple entries in LL(1) tables.",
+              "orderIndex": 2
+            },
+            {
+              "id": "q_toc_1_3",
+              "quizId": "quiz_toc_1",
+              "question": "In Chomsky's hierarchy, which class of automata accepts Type-2 (Context-Free) languages?",
+              "questionType": "mcq",
+              "options": [
+                "Finite State Automata",
+                "Pushdown Automata (PDA)",
+                "Linear Bounded Automata",
+                "Turing Machines"
+              ],
+              "correctAnswer": 1,
+              "explanation": "Pushdown Automata utilize an auxiliary stack memory to accept Context-Free Languages.",
+              "orderIndex": 3
+            },
+            {
+              "id": "q_toc_1_4",
+              "quizId": "quiz_toc_1",
+              "question": "What is the purpose of Three-Address Code (TAC) in compiler construction?",
+              "questionType": "mcq",
+              "options": [
+                "To optimize CPU cache speed directly",
+                "To serve as a machine-independent intermediate representation with at most one operator per instruction",
+                "To compress source files",
+                "To format code comments"
+              ],
+              "correctAnswer": 1,
+              "explanation": "TAC linearizes complex parse trees into simple instructions of form x := y op z, facilitating optimization and code generation.",
+              "orderIndex": 4
+            },
+            {
+              "id": "q_toc_1_5",
+              "quizId": "quiz_toc_1",
+              "question": "True or False: The Pumping Lemma for regular languages can be used to prove that a language IS regular.",
+              "questionType": "true_false",
+              "options": [
+                "True",
+                "False"
+              ],
+              "correctAnswer": 1,
+              "explanation": "False. The Pumping Lemma is a negative test; it is used by contradiction to prove that a language is NOT regular.",
+              "orderIndex": 5
             }
           ]
         }
