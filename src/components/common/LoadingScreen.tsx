@@ -18,7 +18,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
     'Loading Department of Computer Science & Engineering Hub...',
     'Indexing Anna University Regulation 2021 Syllabi...',
     'Synchronizing YouTube Lecture Transcripts & Timestamps...',
-    'Activating Student Voice PII Shield & Hybrid RAG...',
+    'Activating Campus Knowledge Base & Hybrid RAG...',
     'Welcome to CampusIQ — Platform Ready'
   ];
 

@@ -7,16 +7,14 @@ import {
   Search,
   BookOpen,
   Video,
-  MessageSquareHeart,
   ArrowRight,
   ShieldCheck,
   TrendingUp,
   Award,
-  CheckCircle2,
   Users,
   Compass
 } from 'lucide-react';
-import { MOCK_VIDEOS, MOCK_DEPARTMENTS, MOCK_CLOSED_LOOP_ISSUES } from '../../lib/mockDatabase';
+import { MOCK_VIDEOS, MOCK_DEPARTMENTS } from '../../lib/mockDatabase';
 import { VideoCard } from '../../components/video/VideoCard';
 import { GlassCard } from '../../components/common/GlassCard';
 
@@ -26,7 +24,6 @@ export const HomePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const featuredVideos = MOCK_VIDEOS.slice(0, 3);
-  const recentResolution = MOCK_CLOSED_LOOP_ISSUES[0];
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -261,85 +258,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* ========================================================================= */}
-      {/* SECTION 4: STUDENT VOICE & CLOSED-LOOP ACTION TICKER                      */}
-      {/* ========================================================================= */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-        <div className="relative rounded-3xl overflow-hidden bg-[#101815] text-white p-8 sm:p-12 border border-white/10 shadow-2xl">
-          
-          {/* Subtle Background Campus Texture */}
-          <div className="absolute inset-0 opacity-15 pointer-events-none mix-blend-luminosity">
-            <img
-              src="/assets/campus/campus-aerial-overview.jpg"
-              alt="Campus Aerial"
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            <div className="lg:col-span-7 space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#6E7F45]/30 text-[#C49A55] text-xs font-bold uppercase tracking-wider border border-[#6E7F45]/40">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Closed-Loop Institutional Action</span>
-              </div>
-
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
-                Turning student voices into concrete campus improvements.
-              </h3>
-
-              <p className="text-xs sm:text-sm text-[#DCE7E1] leading-relaxed">
-                Feedback on CampusIQ is not tossed into an unmonitored mailbox. Our system automatically clusters recurring feedback, alerts HODs, generates departmental tickets, and broadcasts verified resolutions back to students.
-              </p>
-
-              <div className="pt-2 flex flex-wrap gap-3">
-                <Link
-                  to="/student/feedback"
-                  className="px-5 py-2.5 rounded-xl bg-[#C49A55] hover:bg-[#D97736] text-white text-xs font-bold tracking-wide shadow-md transition-all cursor-pointer"
-                >
-                  Share Anonymous Feedback
-                </Link>
-                <Link
-                  to="/admin/closed-loop"
-                  className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold border border-white/20 transition-all cursor-pointer"
-                >
-                  View Public Resolution Log
-                </Link>
-              </div>
-            </div>
-
-            {/* Live Case Study Card */}
-            <div className="lg:col-span-5">
-              <div className="rounded-2xl p-6 bg-white/10 backdrop-blur-md border border-white/20 space-y-4">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-300 font-semibold border border-emerald-500/30">
-                    STATUS: {recentResolution.status.toUpperCase()}
-                  </span>
-                  <span className="text-[11px] text-gray-400">
-                    {recentResolution.resolvedDate}
-                  </span>
-                </div>
-
-                <h4 className="text-sm font-bold text-white leading-snug">
-                  {recentResolution.title}
-                </h4>
-
-                <p className="text-xs text-gray-300 leading-relaxed italic">
-                  "{recentResolution.publicResolutionNotice}"
-                </p>
-
-                <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[11px] text-gray-400 font-mono">
-                  <span>Assigned: {recentResolution.assignedPerson}</span>
-                  <span className="text-[#C49A55] font-bold">★ {recentResolution.studentSatisfactionRating}/5</span>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
-      {/* SECTION 5: CAMPUS DEPARTMENTS SHOWCASE                                    */}
+      {/* SECTION 4: CAMPUS DEPARTMENTS SHOWCASE                                    */}
       {/* ========================================================================= */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white border-t border-gray-200">
         <div className="max-w-7xl mx-auto">
@@ -392,7 +311,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* ========================================================================= */}
-      {/* SECTION 6: INSTITUTIONAL CALL-TO-ACTION                                    */}
+      {/* SECTION 5: INSTITUTIONAL CALL-TO-ACTION                                    */}
       {/* ========================================================================= */}
       <section className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden bg-[#173B2F] text-white text-center">
         <div className="absolute inset-0 opacity-15 pointer-events-none">

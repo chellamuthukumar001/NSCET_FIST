@@ -17,7 +17,7 @@ export const StudentNotificationsPage: React.FC = () => {
             Notifications ({unreadCount} unread)
           </h1>
           <p className="text-xs sm:text-sm text-[#66736C]">
-            Official updates regarding exams, feedback resolution, placements, and lectures.
+            Official updates regarding exams, academic schedules, placements, and lectures.
           </p>
         </div>
 

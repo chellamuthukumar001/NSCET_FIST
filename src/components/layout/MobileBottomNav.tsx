@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCopilot } from '../../context/CopilotContext';
-import { LayoutDashboard, Video, Sparkles, MessageSquareHeart, User } from 'lucide-react';
+import { LayoutDashboard, Video, Sparkles, MessageSquareHeart, User, GraduationCap } from 'lucide-react';
 
 export const MobileBottomNav: React.FC = () => {
   const { role } = useAuth();
@@ -36,8 +36,8 @@ export const MobileBottomNav: React.FC = () => {
       default:
         return [
           { label: 'Dashboard', path: '/student', icon: LayoutDashboard },
+          { label: 'Courses', path: '/student/courses', icon: GraduationCap },
           { label: 'Videos', path: '/student/videos', icon: Video },
-          { label: 'Feedback', path: '/student/feedback', icon: MessageSquareHeart },
           { label: 'Profile', path: '/student/profile', icon: User },
         ];
     }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useCopilot } from '../../context/CopilotContext';
-import { MOCK_VIDEOS, MOCK_NOTIFICATIONS, MOCK_FEEDBACK } from '../../lib/mockDatabase';
+import { MOCK_VIDEOS, MOCK_NOTIFICATIONS } from '../../lib/mockDatabase';
 import { VideoCard } from '../../components/video/VideoCard';
 import {
   Sparkles,
@@ -12,7 +12,6 @@ import {
   Award,
   ArrowRight,
   TrendingUp,
-  MessageSquareHeart,
   ChevronRight,
   Play
 } from 'lucide-react';
@@ -27,7 +26,6 @@ export const StudentDashboard: React.FC = () => {
     (v) => v.userProgressSeconds && !v.isCompleted
   );
   const recommendedVideos = MOCK_VIDEOS.slice(0, 3);
-  const recentFeedback = MOCK_FEEDBACK.slice(0, 2);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -185,97 +183,48 @@ export const StudentDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* TWO COLUMNS: COLLEGE ASSISTANT & CAMPUS VOICE */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        {/* College Assistant Glass Panel */}
-        <div className="lg:col-span-7 rounded-3xl p-6 bg-[#173B2F] text-white border border-white/10 shadow-xl flex flex-col justify-between space-y-4">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-xs text-[#C49A55] font-semibold uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>CampusIQ College Assistant</span>
-            </div>
-            <h3 className="text-xl font-bold text-white">
-              Ask CampusIQ anything about your college.
-            </h3>
-            <p className="text-xs text-[#DCE7E1] leading-relaxed">
-              Instant grounded answers verified against Anna University 2021 regulations, semester syllabi, and official NSCET notices.
-            </p>
+      {/* COLLEGE ASSISTANT BANNER */}
+      <div className="w-full rounded-3xl p-6 sm:p-8 bg-[#173B2F] text-white border border-white/10 shadow-xl flex flex-col justify-between space-y-5">
+        <div className="space-y-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-xs text-[#C49A55] font-semibold uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>CampusIQ College Assistant</span>
           </div>
-
-          <div className="space-y-2">
-            <div className="text-[11px] text-gray-300 font-medium">Common questions today:</div>
-            <div className="flex flex-wrap gap-2">
-              {[
-                'What is the attendance requirement?',
-                'Show me DBMS Unit 3 lectures',
-                'How do I apply for a bonafide certificate?',
-              ].map((q, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => openCopilot(q)}
-                  className="px-3 py-1.5 rounded-xl text-xs bg-white/10 hover:bg-white/20 border border-white/15 text-white/90 text-left transition-colors cursor-pointer"
-                >
-                  {q}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <button
-            onClick={() => openCopilot()}
-            className="w-full py-3 rounded-2xl bg-gradient-to-r from-[#C49A55] to-[#D97736] hover:brightness-110 text-white font-bold text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <span>Launch CampusIQ Assistant</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          <h3 className="text-xl sm:text-2xl font-bold text-white">
+            Ask CampusIQ anything about your college.
+          </h3>
+          <p className="text-xs sm:text-sm text-[#DCE7E1] leading-relaxed max-w-3xl">
+            Instant grounded answers verified against Anna University 2021 regulations, semester syllabi, and official NSCET notices.
+          </p>
         </div>
 
-        {/* Recent Feedback Activity */}
-        <div className="lg:col-span-5 rounded-3xl p-6 bg-white border border-gray-200 shadow-sm flex flex-col justify-between space-y-4">
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#C49A55]">
-                Campus Voice
-              </span>
-              <Link
-                to="/student/feedback"
-                className="text-[11px] font-bold text-[#173B2F] hover:underline"
+        <div className="space-y-2">
+          <div className="text-[11px] text-gray-300 font-medium">Common questions today:</div>
+          <div className="flex flex-wrap gap-2">
+            {[
+              'What is the attendance requirement?',
+              'Show me DBMS Unit 3 lectures',
+              'How do I apply for a bonafide certificate?',
+              'What are the CIA internal assessment marks?',
+            ].map((q, idx) => (
+              <button
+                key={idx}
+                onClick={() => openCopilot(q)}
+                className="px-3.5 py-1.5 rounded-xl text-xs bg-white/10 hover:bg-white/20 border border-white/15 text-white/90 text-left transition-colors cursor-pointer"
               >
-                + New Feedback
-              </Link>
-            </div>
-            <h3 className="text-base font-bold text-[#17201C] mb-2">
-              Recent Institutional Feedback
-            </h3>
-            <p className="text-xs text-[#66736C]">
-              Your suggestions help our department upgrade facilities. All reports are 100% anonymous.
-            </p>
-          </div>
-
-          <div className="space-y-2.5">
-            {recentFeedback.map((fb) => (
-              <div
-                key={fb.id}
-                className="p-3 rounded-xl bg-gray-50 border border-gray-200/80 text-xs space-y-1"
-              >
-                <div className="flex items-center justify-between text-[10px]">
-                  <span className="font-bold text-[#173B2F]">{fb.category}</span>
-                  <span className="text-gray-400 font-mono">{fb.anonymousToken}</span>
-                </div>
-                <p className="text-[#17201C] line-clamp-2 italic">"{fb.text}"</p>
-              </div>
+                {q}
+              </button>
             ))}
           </div>
-
-          <Link
-            to="/student/feedback"
-            className="w-full py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-[#173B2F] font-bold text-xs text-center uppercase tracking-wider block transition-colors"
-          >
-            Submit Anonymous Feedback
-          </Link>
         </div>
 
+        <button
+          onClick={() => openCopilot()}
+          className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-gradient-to-r from-[#C49A55] to-[#D97736] hover:brightness-110 text-white font-bold text-xs uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 cursor-pointer transition-all self-start"
+        >
+          <span>Launch CampusIQ Assistant</span>
+          <ArrowRight className="w-4 h-4" />
+        </button>
       </div>
 
     </div>

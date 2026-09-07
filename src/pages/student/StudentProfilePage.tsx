@@ -524,7 +524,7 @@ export const StudentProfilePage: React.FC = () => {
                 <span>Zero-Identity Retaliation Privacy Shield</span>
               </h3>
               <p className="text-xs text-gray-500">
-                Guaranteed by NSCET Student Voice Governance & Autonomous PII Sanitization.
+                Guaranteed by NSCET Autonomous Privacy & PII Sanitization.
               </p>
             </div>
           </div>

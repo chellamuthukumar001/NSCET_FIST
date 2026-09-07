@@ -31,7 +31,6 @@ import { SubjectsPage } from './pages/student/SubjectsPage';
 import { BookmarksPage } from './pages/student/BookmarksPage';
 import { WatchHistoryPage } from './pages/student/WatchHistoryPage';
 import { LearningProgressPage } from './pages/student/LearningProgressPage';
-import { StudentFeedbackPage } from './pages/student/StudentFeedbackPage';
 import { StudentAssistantPage } from './pages/student/StudentAssistantPage';
 import { StudentQuizPage } from './pages/student/StudentQuizPage';
 import { StudentNotificationsPage } from './pages/student/StudentNotificationsPage';
@@ -151,7 +150,7 @@ export function App() {
                 <Route path="/student/bookmarks" element={<BookmarksPage />} />
                 <Route path="/student/history" element={<WatchHistoryPage />} />
                 <Route path="/student/progress" element={<LearningProgressPage />} />
-                <Route path="/student/feedback" element={<StudentFeedbackPage />} />
+                <Route path="/student/feedback" element={<Navigate to="/student" replace />} />
                 <Route path="/student/assistant" element={<StudentAssistantPage />} />
                 <Route path="/student/quiz" element={<StudentQuizPage />} />
                 <Route path="/student/notifications" element={<StudentNotificationsPage />} />

@@ -41,7 +41,6 @@ export const AppSidebar: React.FC = () => {
           { label: 'Watch History', path: '/student/history', icon: History },
           { label: 'Learning Progress', path: '/student/progress', icon: TrendingUp },
           { label: 'AI Practice Quiz', path: '/student/quiz', icon: Award },
-          { label: 'Student Voice (Feedback)', path: '/student/feedback', icon: MessageSquareHeart },
           { label: 'CampusIQ Copilot', path: '/student/assistant', icon: Bot },
           { label: 'Notifications', path: '/student/notifications', icon: Bell },
           { label: 'My Profile', path: '/student/profile', icon: User },

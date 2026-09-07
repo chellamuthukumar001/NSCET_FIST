@@ -77,20 +77,20 @@ export const PublicFooter: React.FC = () => {
             </ul>
           </div>
 
-          {/* Column 3: Student Voice & Support */}
+          {/* Column 3: Student Learning & Support */}
           <div>
             <h4 className="text-sm font-bold uppercase tracking-wider text-[#C49A55] mb-4">
-              Student Voice
+              Student Support
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link to="/student/feedback" className="hover:text-white transition-colors">
-                  Anonymous Feedback Portal
+                <Link to="/courses" className="hover:text-white transition-colors">
+                  Academic Courses
                 </Link>
               </li>
               <li>
-                <Link to="/admin/closed-loop" className="hover:text-white transition-colors">
-                  Closed-Loop Resolution Tracker
+                <Link to="/public-learning" className="hover:text-white transition-colors">
+                  Open Learning Hub
                 </Link>
               </li>
               <li>
