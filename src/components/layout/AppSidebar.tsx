@@ -56,18 +56,17 @@ export const AppSidebar: React.FC = () => {
       case 'HOD':
         return [
           { label: 'Department Overview', path: '/hod', icon: LayoutDashboard },
-          { label: 'Department Analytics', path: '/hod/analytics', icon: TrendingUp },
-          { label: 'AI Health Reports', path: '/hod/reports', icon: FileText },
+          { label: 'Academic Performance', path: '/hod/analytics', icon: TrendingUp },
+          { label: 'Curriculum Catalog', path: '/student/courses', icon: GraduationCap },
         ];
       case 'ADMIN':
       case 'SUPER_ADMIN':
         return [
-          { label: 'Campus Intelligence', path: '/admin', icon: LayoutDashboard },
-          { label: 'Closed-Loop Issues', path: '/admin/closed-loop', icon: CheckCircle2 },
-          { label: 'Knowledge Base (RAG)', path: '/admin/knowledge', icon: Database },
-          { label: 'YouTube Channel Sync', path: '/admin/videos', icon: Video },
-          { label: 'User Directory & RBAC', path: '/admin/users', icon: Users },
-          { label: 'Audit & Compliance', path: '/admin/audit', icon: FileText },
+          { label: 'Learning Intelligence', path: '/admin', icon: LayoutDashboard },
+          { label: '10 Course Modules', path: '/student/courses', icon: GraduationCap },
+          { label: 'YouTube Video Sync', path: '/admin/videos', icon: Video },
+          { label: 'Academic Knowledge Base', path: '/admin/knowledge', icon: Database },
+          { label: 'Learners & Faculty', path: '/admin/users', icon: Users },
         ];
       default:
         return [];

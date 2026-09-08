@@ -10,7 +10,7 @@
   <br />
 
   [![Anna University Regulation 2021](https://img.shields.io/badge/Anna%20University-Regulation%202021-173B2F?style=for-the-badge&logo=googlescholar&logoColor=white)](https://www.annauniv.edu/)
-  [![Powered by Groq LPU](https://img.shields.io/badge/Groq%20LPU-Ultra--Fast%20Inference-F55036?style=for-the-badge&logo=fastapi&logoColor=white)](https://groq.com/)
+  [![Powered by Groq LPU](https://img.shields.io/badge/Groq%20LPU-Ultra--Fast%20Inference-F55036?style=for-the-badge&logo=node.js&logoColor=white)](https://groq.com/)
   [![React 19](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
@@ -36,7 +36,7 @@
 1. 🧠 **Grounded RAG Copilot (Groq LPU Inference)**: High-speed bilingual academic assistant providing Part-A (2-Mark) and Part-B (16-Mark) exam-calibrated explanations with zero hallucinations.
 2. 📺 **Curated YouTube Learning Hub**: 16 categorized engineering lectures mapped unit-by-unit with deep spoken audio transcript search and synchronized classroom note-taking.
 3. ⚡ **AI Exam Quiz Generator Studio**: Synthesizes syllabus-grounded self-assessment practice quizzes on demand with real-time countdown timers, interactive question ribbons, and printable scorecards.
-4. 🛡️ **Privacy-Preserving Closed-Loop Student Voice**: 100% anonymous feedback engine with automated dual-layer PII redaction and an auditable 7-stage administrative resolution pipeline.
+4. 📜 **Modular Curriculum & Certified Mastery**: 10 Anna University modular engineering courses with rich YouTube video lectures, conceptual assessments, and downloadable verified completion certificates.
 
 ---
 
@@ -182,21 +182,20 @@ flowchart TB
         Speech["Web Speech API (EN / TA / HI)"]
     end
 
-    subgraph Services ["Backend Services Tier"]
-        Express["Express.js API Server (:5000)"]
-        FastAPI["FastAPI Python Microservice (:8000)"]
+    subgraph Services ["Backend Services Tier (100% Express.js)"]
+        Express["Express.js API Server (:5000)\nCurriculum • Quizzes • Videos • RAG • Certs"]
     end
 
     subgraph Data ["Knowledge & Database Tier"]
         MockDB["Curriculum Mock Database (Regulation 2021)"]
-        SQLite["Institutional DB (Feedback & Audits)"]
+        SQLite["Institutional SQLite & Storage"]
         Transcripts["Spoken Audio Transcript Index"]
     end
 
     UI --> Copilot & Player & QuizStudio
     Copilot --> GroqClient & Speech
     QuizStudio --> GroqClient
-    UI --> PII --> Express & FastAPI
+    UI --> Express
     Express --> SQLite & MockDB
     Player --> Transcripts
     GroqClient -->|qwen/qwen3.8-27b| LLM["Groq LPU Cloud"]
@@ -210,10 +209,10 @@ CampusIQ tailors its navigation and capabilities across 4 distinct institutional
 
 | Role | Access Route | Key Capabilities |
 | :--- | :--- | :--- |
-| **Student** | `/student/dashboard` | Learning Hub, AI Quiz Studio, Bookmarks, Lecture Watch History, Anonymous Grievances, AI Assistant |
-| **Faculty** | `/faculty/dashboard` | Course Content Uploads, Lecture Engagement Analytics, Student Performance Drills, Syllabus Coverage |
-| **HOD** | `/hod/dashboard` | Department Feedback Analytics, Resolution Approvals, NBA Accreditation Reports with `window.print()` |
-| **Admin** | `/admin/dashboard` | Closed-Loop Resolution Stepper, User Management, Content Moderation, Security Audit Logs |
+| **Student** | `/student` | 10 Course Modules, Learning Hub, AI Quiz Studio, Bookmarks, Watch History, Certificates, AI Assistant |
+| **Faculty** | `/faculty` | Course Content Uploads, Lecture Engagement Analytics, Student Performance Drills, Syllabus Coverage |
+| **HOD** | `/hod` | Department Academic Mastery, Course Progression Tracking, Accreditation Reports with `window.print()` |
+| **Admin** | `/admin` | Curriculum Management, Video Hub Sync, Knowledge Base Administration, User Directory |
 
 ---
 
@@ -243,18 +242,13 @@ npm run dev
 
 Open your browser and navigate to: **`http://localhost:5173`**
 
-### Backend Services (Optional for Local API Emulation)
+### Backend Services (100% Express.js)
 
 ```bash
 # Start Express.js server
 cd backend
 npm install
 npm run dev
-
-# Start FastAPI Python microservice (in a separate terminal)
-cd ../fastapi_service
-pip install -r requirements.txt
-uvicorn main:app --reload --port 8000
 ```
 
 ### Environment Variables
@@ -361,7 +355,6 @@ NSCET_FIST/
 │   ├── App.tsx                 # Client router & navigation scaffolding
 │   └── main.tsx                # React application entry point
 ├── backend/                    # Express.js backend API controllers & SQLite schema
-├── fastapi_service/            # Python FastAPI microservice for embeddings & vector search
 ├── .env.example                # Environment configuration template
 ├── vite.config.ts              # Vite bundler build configuration
 └── package.json                # Project dependencies & npm scripts

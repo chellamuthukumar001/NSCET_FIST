@@ -137,12 +137,12 @@ export const AboutPage: React.FC = () => {
             </div>
 
             <p className="text-xs text-gray-300 leading-relaxed">
-              The official association powering CAMPUSIQ. Built with a commitment to open digital learning, anonymous student feedback channels, and cutting-edge artificial intelligence.
+              The official association powering CAMPUSIQ. Built with a commitment to open digital learning, Anna University modular curriculum mastery, and cutting-edge artificial intelligence.
             </p>
           </div>
 
           <div className="p-3 rounded-2xl bg-white/5 border border-white/10 text-xs text-[#A2B6AC]">
-            <span className="font-semibold text-white">CampusIQ Motto:</span> "Learn. Connect. Be Heard."
+            <span className="font-semibold text-white">CampusIQ Motto:</span> "Learn. Master. Excel."
           </div>
         </div>
       </div>

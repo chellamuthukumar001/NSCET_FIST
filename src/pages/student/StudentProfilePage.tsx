@@ -49,7 +49,7 @@ export const StudentProfilePage: React.FC = () => {
   const [busRoute, setBusRoute] = useState('Route 4: Cumbum - Theni - NSCET');
   const [preferredLang, setPreferredLang] = useState<'en' | 'ta'>('en');
   const [dailyGoal, setDailyGoal] = useState(45);
-  const [notifyFeedback, setNotifyFeedback] = useState(true);
+  const [notifyCertificates, setNotifyCertificates] = useState(true);
   const [notifyLectures, setNotifyLectures] = useState(true);
   const [notifyPlacement, setNotifyPlacement] = useState(true);
   const [notifyHallTicket, setNotifyHallTicket] = useState(true);
@@ -531,7 +531,7 @@ export const StudentProfilePage: React.FC = () => {
 
           <div className="p-5 rounded-2xl bg-gray-50 border border-gray-200 space-y-3">
             <span className="text-[10px] font-bold uppercase text-gray-500 block">
-              Your Private Anonymous Feedback Token
+              Your Academic Verification & Security Token
             </span>
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
               <div className="px-4 py-2.5 rounded-xl bg-white border border-gray-200 font-mono text-sm font-bold text-[#173B2F] flex-1">
@@ -547,14 +547,14 @@ export const StudentProfilePage: React.FC = () => {
               <button
                 onClick={handleRegenerateToken}
                 className="px-4 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
-                title="Generates a new token for future feedback"
+                title="Generates a new token for certificate verification"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 <span>Cycle Token</span>
               </button>
             </div>
             <p className="text-[11px] text-gray-500">
-              This cryptographic token links your submitted campus feedback to your dashboard without revealing your name, email, or roll number to HODs or administrative reviewers.
+              This cryptographic token validates your academic identity, module completion records, and certificate issuance credentials securely across Anna University systems.
             </p>
           </div>
 
@@ -691,11 +691,11 @@ export const StudentProfilePage: React.FC = () => {
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={notifyFeedback}
-                  onChange={(e) => setNotifyFeedback(e.target.checked)}
+                  checked={notifyCertificates}
+                  onChange={(e) => setNotifyCertificates(e.target.checked)}
                   className="rounded text-[#173B2F]"
                 />
-                <span>Instant alert when an anonymous feedback issue reaches <strong>Action Closed</strong></span>
+                <span>Instant alert when a module certificate reaches <strong>Verified & Issued</strong></span>
               </label>
 
               <label className="flex items-center gap-2 cursor-pointer">

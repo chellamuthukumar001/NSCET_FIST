@@ -51,20 +51,17 @@ import { FacultyAssistantPage } from './pages/faculty/FacultyAssistantPage';
 // HOD Pages
 import { HodDashboard } from './pages/hod/HodDashboard';
 import { HodAnalyticsPage } from './pages/hod/HodAnalyticsPage';
-import { HodReportsPage } from './pages/hod/HodReportsPage';
 
 // Admin Pages
 import { AdminDashboard } from './pages/admin/AdminDashboard';
-import { AdminClosedLoopPage } from './pages/admin/AdminClosedLoopPage';
 import { AdminKnowledgePage } from './pages/admin/AdminKnowledgePage';
 import { AdminVideosPage } from './pages/admin/AdminVideosPage';
 import { AdminUsersPage } from './pages/admin/AdminUsersPage';
-import { AdminAuditPage } from './pages/admin/AdminAuditPage';
 
 // Layout Wrappers
 const PublicLayout: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-[#F5F4EF] text-[#17201C]">
+    <div className="min-h-screen flex flex-col bg-[#0B1410] text-white">
       <PublicNavbar />
       <main className="flex-1">
         <Outlet />
@@ -182,15 +179,12 @@ export function App() {
                 {/* HOD Routes */}
                 <Route path="/hod" element={<HodDashboard />} />
                 <Route path="/hod/analytics" element={<HodAnalyticsPage />} />
-                <Route path="/hod/reports" element={<HodReportsPage />} />
 
                 {/* Admin Routes */}
                 <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/admin/closed-loop" element={<AdminClosedLoopPage />} />
                 <Route path="/admin/knowledge" element={<AdminKnowledgePage />} />
                 <Route path="/admin/videos" element={<AdminVideosPage />} />
                 <Route path="/admin/users" element={<AdminUsersPage />} />
-                <Route path="/admin/audit" element={<AdminAuditPage />} />
               </Route>
 
               {/* Catch-all redirect */}
