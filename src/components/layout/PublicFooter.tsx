@@ -94,8 +94,8 @@ export const PublicFooter: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/student/assistant" className="hover:text-white transition-colors">
-                  CampusIQ Multilingual Copilot
+                <Link to="/courses" className="hover:text-white transition-colors">
+                  Anna University Regulation 2021
                 </Link>
               </li>
               <li>

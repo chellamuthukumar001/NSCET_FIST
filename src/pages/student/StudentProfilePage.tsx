@@ -135,7 +135,7 @@ export const StudentProfilePage: React.FC = () => {
               </span>
               <span className="px-2.5 py-1 rounded-lg bg-black/30 border border-white/10 flex items-center gap-1.5">
                 <Zap className="w-3.5 h-3.5 text-amber-300" />
-                <span>Groq AI Copilot Synchronized</span>
+                <span>Academic Records Synchronized</span>
               </span>
             </div>
           </div>
@@ -654,7 +654,7 @@ export const StudentProfilePage: React.FC = () => {
             )}
 
             <div className="space-y-1.5">
-              <label className="font-bold text-gray-700">Preferred AI Copilot Language:</label>
+              <label className="font-bold text-gray-700">Preferred Portal Language:</label>
               <select
                 value={preferredLang}
                 onChange={(e: any) => setPreferredLang(e.target.value)}

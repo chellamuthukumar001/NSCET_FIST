@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCopilot } from '../../context/CopilotContext';
 import {
-  Sparkles,
   Menu,
   X,
   ArrowRight,
@@ -18,7 +17,7 @@ import { Role } from '../../types';
 
 export const PublicNavbar: React.FC = () => {
   const { currentUser, role, switchRole, logout } = useAuth();
-  const { openCopilot, selectedLanguage, setSelectedLanguage } = useCopilot();
+  const { selectedLanguage, setSelectedLanguage } = useCopilot();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -154,15 +153,6 @@ export const PublicNavbar: React.FC = () => {
               )}
             </div>
 
-            {/* Ask CampusIQ AI Pill */}
-            <button
-              onClick={() => openCopilot('What courses and syllabus modules are offered at NSCET?')}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-[#6E7F45] to-[#285443] text-white border border-white/20 hover:brightness-110 shadow-sm transition-all cursor-pointer"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#C49A55] animate-pulse" />
-              <span>Ask AI</span>
-            </button>
-
             {/* Persona Switcher Dropdown */}
             <div className="relative group">
               <button className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/30 border border-white/15 text-xs text-white hover:border-white/30 transition-all cursor-pointer shadow-inner">
@@ -220,13 +210,6 @@ export const PublicNavbar: React.FC = () => {
 
           {/* Mobile Action Controls */}
           <div className="flex md:hidden items-center gap-2">
-            <button
-              onClick={() => openCopilot()}
-              className="p-2 rounded-xl bg-white/10 text-[#C49A55] border border-white/10 shadow-sm"
-              title="Open AI Copilot"
-            >
-              <Sparkles className="w-4 h-4" />
-            </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-xl bg-white/10 text-white border border-white/10 shadow-sm"

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useCopilot } from '../../context/CopilotContext';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
   Sparkles,
@@ -21,7 +20,7 @@ import { VideoCard } from '../../components/video/VideoCard';
 import { GlassCard } from '../../components/common/GlassCard';
 
 export const LandingPage: React.FC = () => {
-  const { openCopilot } = useCopilot();
+  const navigate = useNavigate();
   const { currentUser, role } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -30,16 +29,15 @@ export const LandingPage: React.FC = () => {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      openCopilot(searchQuery.trim());
-      setSearchQuery('');
+      navigate('/student/courses');
     }
   };
 
   const samplePrompts = [
-    'Show me DBMS Unit 3 lectures',
-    'What is the attendance requirement?',
-    'Explain Operating Systems CPU scheduling',
-    'How do I apply for a bonafide certificate?',
+    'Database Management Systems',
+    'Operating Systems',
+    'Data Structures & Algorithms',
+    'Computer Networks',
   ];
 
   return (
@@ -113,14 +111,6 @@ export const LandingPage: React.FC = () => {
               <GraduationCap className="w-4 h-4 text-[#C49A55]" />
               <span>Explore Courses</span>
             </Link>
-
-            <button
-              onClick={() => openCopilot()}
-              className="px-7 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm tracking-wide border border-white/30 backdrop-blur-md flex items-center gap-2 transition-all cursor-pointer"
-            >
-              <Sparkles className="w-4 h-4 text-[#C49A55]" />
-              <span>Ask CampusIQ</span>
-            </button>
           </div>
 
           {/* Intelligent Glass Search Interface */}
@@ -132,7 +122,7 @@ export const LandingPage: React.FC = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Ask anything about your college (e.g. DBMS Unit 3, attendance rules)..."
+                  placeholder="Search accredited courses and curriculum tracks..."
                   className="w-full py-2.5 bg-transparent text-white placeholder-white/60 text-sm focus:outline-none"
                 />
                 <button
@@ -146,11 +136,14 @@ export const LandingPage: React.FC = () => {
 
             {/* Quick Prompt Pills */}
             <div className="mt-3 flex flex-wrap items-center justify-center gap-1.5">
-              <span className="text-[11px] text-[#A2B6AC] font-medium mr-1">Quick prompts:</span>
+              <span className="text-[11px] text-[#A2B6AC] font-medium mr-1">Core subjects:</span>
               {samplePrompts.map((prompt, idx) => (
                 <button
                   key={idx}
-                  onClick={() => openCopilot(prompt)}
+                  onClick={() => {
+                    setSearchQuery(prompt);
+                    navigate('/student/courses');
+                  }}
                   className="px-3 py-1 rounded-full text-[11px] bg-black/30 hover:bg-black/50 text-white/90 border border-white/15 backdrop-blur-sm transition-all cursor-pointer"
                 >
                   {prompt}

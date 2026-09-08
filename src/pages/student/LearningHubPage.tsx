@@ -9,7 +9,6 @@ import {
   Search,
   Filter,
   SlidersHorizontal,
-  Bookmark,
   RotateCcw,
   BookOpen,
   Sparkles,
@@ -38,7 +37,6 @@ export const LearningHubPage: React.FC = () => {
   const [selectedSem, setSelectedSem] = useState<number | 'ALL'>('ALL');
   const [selectedUnit, setSelectedUnit] = useState<number | 'ALL'>('ALL');
   const [sortBy, setSortBy] = useState<'recent' | 'views' | 'duration'>('recent');
-  const [onlyBookmarked, setOnlyBookmarked] = useState(false);
   const [transcriptSearchMode, setTranscriptSearchMode] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'category' | 'syllabus'>('category');
   const [revisionModalVideo, setRevisionModalVideo] = useState<Video | null>(null);
@@ -59,7 +57,6 @@ export const LearningHubPage: React.FC = () => {
     setSelectedDept('ALL');
     setSelectedSem('ALL');
     setSelectedUnit('ALL');
-    setOnlyBookmarked(false);
     setSortBy('recent');
     setTranscriptSearchMode(false);
   };
@@ -123,7 +120,6 @@ export const LearningHubPage: React.FC = () => {
       const matchesDept = selectedDept === 'ALL' || v.departmentCode === selectedDept;
       const matchesSem = selectedSem === 'ALL' || v.semester === selectedSem;
       const matchesUnit = selectedUnit === 'ALL' || v.unitNumber === selectedUnit;
-      const matchesBookmark = !onlyBookmarked || v.isBookmarked;
 
       return (
         matchesSearch &&
@@ -131,8 +127,7 @@ export const LearningHubPage: React.FC = () => {
         matchesSubject &&
         matchesDept &&
         matchesSem &&
-        matchesUnit &&
-        matchesBookmark
+        matchesUnit
       );
     })
     .sort((a, b) => {
@@ -203,17 +198,6 @@ export const LearningHubPage: React.FC = () => {
               <span>Generate AI Exam Kit ✨</span>
             </button>
 
-            <button
-              onClick={() => setOnlyBookmarked(!onlyBookmarked)}
-              className={`px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 border transition-all cursor-pointer ${
-                onlyBookmarked
-                  ? 'bg-white text-[#173B2F] border-white shadow'
-                  : 'bg-white/10 hover:bg-white/20 text-white border-white/20'
-              }`}
-            >
-              <Bookmark className={`w-4 h-4 ${onlyBookmarked ? 'fill-[#173B2F]' : ''}`} />
-              <span>{onlyBookmarked ? 'Bookmarked Only (Active)' : 'View Bookmarks'}</span>
-            </button>
           </div>
         </div>
       </div>
@@ -264,7 +248,7 @@ export const LearningHubPage: React.FC = () => {
       ) : (
         <>
           {/* 3. Spotlight "Continue Watching" Card */}
-          {inProgressVideo && !onlyBookmarked && (
+          {inProgressVideo && (
             <div className="rounded-3xl bg-white border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">

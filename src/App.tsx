@@ -13,7 +13,6 @@ import { PublicFooter } from './components/layout/PublicFooter';
 import { AppHeader } from './components/layout/AppHeader';
 import { AppSidebar } from './components/layout/AppSidebar';
 import { MobileBottomNav } from './components/layout/MobileBottomNav';
-import { CopilotDrawer } from './components/copilot/CopilotDrawer';
 
 // Public Pages
 import { LandingPage } from './pages/public/LandingPage';
@@ -29,10 +28,8 @@ import { StudentDashboard } from './pages/student/StudentDashboard';
 import { LearningHubPage } from './pages/student/LearningHubPage';
 import { VideoDetailPage } from './pages/student/VideoDetailPage';
 import { SubjectsPage } from './pages/student/SubjectsPage';
-import { BookmarksPage } from './pages/student/BookmarksPage';
 import { WatchHistoryPage } from './pages/student/WatchHistoryPage';
 import { LearningProgressPage } from './pages/student/LearningProgressPage';
-import { StudentAssistantPage } from './pages/student/StudentAssistantPage';
 import { StudentQuizPage } from './pages/student/StudentQuizPage';
 import { StudentNotificationsPage } from './pages/student/StudentNotificationsPage';
 import { StudentProfilePage } from './pages/student/StudentProfilePage';
@@ -46,7 +43,6 @@ import { FacultyDashboard } from './pages/faculty/FacultyDashboard';
 import { FacultyCoursesPage } from './pages/faculty/FacultyCoursesPage';
 import { FacultyContentPage } from './pages/faculty/FacultyContentPage';
 import { FacultyAnalyticsPage } from './pages/faculty/FacultyAnalyticsPage';
-import { FacultyAssistantPage } from './pages/faculty/FacultyAssistantPage';
 
 // HOD Pages
 import { HodDashboard } from './pages/hod/HodDashboard';
@@ -67,22 +63,21 @@ const PublicLayout: React.FC = () => {
         <Outlet />
       </main>
       <PublicFooter />
-      <CopilotDrawer />
     </div>
   );
 };
 
-// RootRedirect enforces the required initial entry flow: login page -> landing page
+// RootRedirect enforces the required initial entry flow: unauthenticated -> login page, authenticated -> role dashboard
 const RootRedirect: React.FC = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, role } = useAuth();
   if (!currentUser) {
     return <Navigate to="/login" replace />;
   }
-  return <Navigate to="/landing" replace />;
+  return <Navigate to={role === 'ADMIN' ? '/admin' : '/student'} replace />;
 };
 
 const AuthenticatedLayout: React.FC = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, role } = useAuth();
 
   // If user is unauthenticated, redirect to login page first
   if (!currentUser) {
@@ -116,9 +111,6 @@ const AuthenticatedLayout: React.FC = () => {
 
       {/* Mobile Touch Bottom Nav */}
       <MobileBottomNav />
-
-      {/* Global Slide-over Copilot Drawer */}
-      <CopilotDrawer />
     </div>
   );
 };
@@ -155,16 +147,16 @@ export function App() {
                 <Route path="/student/courses" element={<CourseCatalogPage />} />
                 <Route path="/student/courses/:courseId" element={<CourseDetailPage />} />
                 <Route path="/student/courses/:courseId/modules/:moduleId" element={<ModulePlayerPage />} />
-                <Route path="/student/certificates" element={<CertificateVerificationPage />} />
+                <Route path="/student/certificates" element={<Navigate to="/student" replace />} />
                 <Route path="/verify-certificate/:verificationId" element={<CertificateVerificationPage />} />
                 <Route path="/verify-certificate" element={<CertificateVerificationPage />} />
                 <Route path="/student/videos" element={<LearningHubPage />} />
                 <Route path="/student/videos/:videoId" element={<VideoDetailPage />} />
                 <Route path="/student/subjects" element={<SubjectsPage />} />
-                <Route path="/student/bookmarks" element={<BookmarksPage />} />
+                <Route path="/student/bookmarks" element={<Navigate to="/student" replace />} />
                 <Route path="/student/history" element={<WatchHistoryPage />} />
                 <Route path="/student/progress" element={<LearningProgressPage />} />
-                <Route path="/student/assistant" element={<StudentAssistantPage />} />
+                <Route path="/student/assistant" element={<Navigate to="/student" replace />} />
                 <Route path="/student/quiz" element={<StudentQuizPage />} />
                 <Route path="/student/notifications" element={<StudentNotificationsPage />} />
                 <Route path="/student/profile" element={<StudentProfilePage />} />
@@ -174,7 +166,7 @@ export function App() {
                 <Route path="/faculty/courses" element={<FacultyCoursesPage />} />
                 <Route path="/faculty/content" element={<FacultyContentPage />} />
                 <Route path="/faculty/analytics" element={<FacultyAnalyticsPage />} />
-                <Route path="/faculty/assistant" element={<FacultyAssistantPage />} />
+                <Route path="/faculty/assistant" element={<Navigate to="/faculty" replace />} />
 
                 {/* HOD Routes */}
                 <Route path="/hod" element={<HodDashboard />} />

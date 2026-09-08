@@ -6,14 +6,12 @@ interface TranscriptViewerProps {
   transcript?: TranscriptChunk[];
   currentTimeSeconds?: number;
   onSeek: (seconds: number) => void;
-  onAskCopilotAboutChunk?: (chunkText: string, timestampStr: string) => void;
 }
 
 export const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
   transcript,
   currentTimeSeconds = 0,
   onSeek,
-  onAskCopilotAboutChunk,
 }) => {
   const [searchFilter, setSearchFilter] = useState('');
 
@@ -96,18 +94,6 @@ export const TranscriptViewer: React.FC<TranscriptViewerProps> = ({
                     <Play className="w-2.5 h-2.5 fill-white" />
                     <span>{timeStr}</span>
                   </button>
-
-                  <div className="flex items-center gap-2">
-                    {onAskCopilotAboutChunk && (
-                      <button
-                        onClick={() => onAskCopilotAboutChunk(chunk.text, timeStr)}
-                        className="inline-flex items-center gap-1 text-[10px] text-[#C49A55] hover:text-[#D97736] font-semibold cursor-pointer"
-                      >
-                        <Sparkles className="w-3 h-3" />
-                        <span>Ask AI</span>
-                      </button>
-                    )}
-                  </div>
                 </div>
 
                 <p className="text-[12px] text-[#17201C] leading-relaxed">{chunk.text}</p>

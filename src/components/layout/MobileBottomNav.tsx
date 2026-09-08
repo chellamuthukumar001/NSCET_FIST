@@ -1,12 +1,10 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { useCopilot } from '../../context/CopilotContext';
-import { LayoutDashboard, Video, Sparkles, MessageSquareHeart, User, GraduationCap } from 'lucide-react';
+import { LayoutDashboard, Video, MessageSquareHeart, User, GraduationCap } from 'lucide-react';
 
 export const MobileBottomNav: React.FC = () => {
   const { role } = useAuth();
-  const { openCopilot } = useCopilot();
   const location = useLocation();
 
   const getRoleNavItems = () => {
@@ -68,13 +66,6 @@ export const MobileBottomNav: React.FC = () => {
         <span>{navItems[1].label}</span>
       </Link>
 
-      {/* Center Floating Action Button */}
-      <button
-        onClick={() => openCopilot()}
-        className="-mt-5 w-12 h-12 rounded-full bg-gradient-to-tr from-[#6E7F45] to-[#C49A55] p-0.5 shadow-xl flex items-center justify-center border-2 border-[#101815] cursor-pointer shrink-0"
-      >
-        <Sparkles className="w-6 h-6 text-white animate-pulse" />
-      </button>
 
       {/* Item 3 */}
       <Link

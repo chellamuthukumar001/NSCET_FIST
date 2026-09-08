@@ -4,7 +4,6 @@ import { MOCK_VIDEOS, MOCK_QUIZ_QUESTIONS } from '../../lib/mockDatabase';
 import { TranscriptViewer } from '../../components/video/TranscriptViewer';
 import { LectureQuizModal } from '../../components/video/LectureQuizModal';
 import { ExamRevisionModal } from '../../components/video/ExamRevisionModal';
-import { useCopilot } from '../../context/CopilotContext';
 import {
   Bookmark,
   Sparkles,
@@ -36,7 +35,6 @@ interface StudentNote {
 export const VideoDetailPage: React.FC = () => {
   const { videoId } = useParams<{ videoId: string }>();
   const [searchParams] = useSearchParams();
-  const { openCopilot } = useCopilot();
 
   const video = MOCK_VIDEOS.find((v) => v.id === videoId) || MOCK_VIDEOS[0];
   const nextVideo = MOCK_VIDEOS.find((v) => v.id !== video.id) || MOCK_VIDEOS[1];
@@ -48,7 +46,7 @@ export const VideoDetailPage: React.FC = () => {
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
   const [isRevisionModalOpen, setIsRevisionModalOpen] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
-  const [sidebarTab, setSidebarTab] = useState<'transcript' | 'notes' | 'ai'>('transcript');
+  const [sidebarTab, setSidebarTab] = useState<'transcript' | 'notes'>('transcript');
   
   // Interactive student notes
   const [notes, setNotes] = useState<StudentNote[]>([
@@ -96,12 +94,6 @@ export const VideoDetailPage: React.FC = () => {
 
   const handleDeleteNote = (id: string) => {
     setNotes((prev) => prev.filter((n) => n.id !== id));
-  };
-
-  const handleAskCopilotAboutChunk = (chunkText: string, timestampStr: string) => {
-    openCopilot(
-      `In the lecture "${video.title}" at section [${timestampStr}], the professor explains: "${chunkText}". Can you provide a detailed technical explanation and an exam example for this topic?`
-    );
   };
 
   const handleShare = () => {
@@ -271,18 +263,6 @@ export const VideoDetailPage: React.FC = () => {
                 <Award className="w-4 h-4 text-[#C49A55]" />
                 <span>Take Practice Quiz</span>
               </button>
-
-              <button
-                onClick={() =>
-                  openCopilot(
-                    `Can you summarize the core technical takeaways and expected Anna University questions from "${video.title}" for Unit ${video.unitNumber}?`
-                  )
-                }
-                className="px-4 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-[#17201C] text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer"
-              >
-                <Sparkles className="w-4 h-4 text-[#C49A55]" />
-                <span>Ask Copilot</span>
-              </button>
             </div>
 
             {/* Description */}
@@ -358,7 +338,7 @@ export const VideoDetailPage: React.FC = () => {
 
         </div>
 
-        {/* Right Column (4 cols): Tabbed Interactive Sidebar (Transcript, Notes, AI Copilot) */}
+        {/* Right Column (4 cols): Tabbed Interactive Sidebar (Transcript, Notes) */}
         <div className="lg:col-span-5 xl:col-span-4 space-y-6">
           
           {/* Sidebar Tab Selector */}
@@ -386,18 +366,6 @@ export const VideoDetailPage: React.FC = () => {
               <FileText className="w-3.5 h-3.5" />
               <span>Notes ({notes.length})</span>
             </button>
-
-            <button
-              onClick={() => setSidebarTab('ai')}
-              className={`flex-1 py-2 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
-                sidebarTab === 'ai'
-                  ? 'bg-[#173B2F] text-white shadow'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#C49A55]" />
-              <span>AI Copilot</span>
-            </button>
           </div>
 
           {/* TAB 1: Transcript Viewer */}
@@ -407,7 +375,6 @@ export const VideoDetailPage: React.FC = () => {
                 transcript={video.transcript}
                 currentTimeSeconds={currentTimeSeconds}
                 onSeek={handleSeek}
-                onAskCopilotAboutChunk={handleAskCopilotAboutChunk}
               />
             </div>
           )}
@@ -470,44 +437,6 @@ export const VideoDetailPage: React.FC = () => {
                   </div>
                 ))}
               </div>
-            </div>
-          )}
-
-          {/* TAB 3: "Ask About This Lecture" RAG Card */}
-          {sidebarTab === 'ai' && (
-            <div className="p-5 rounded-3xl bg-gradient-to-br from-[#173B2F] to-[#101815] text-white border border-white/15 shadow-xl space-y-4">
-              <div className="flex items-center gap-2 text-[#C49A55] text-xs font-bold uppercase tracking-wider">
-                <Sparkles className="w-4 h-4" />
-                <span>CampusIQ AI Lecture Assistant</span>
-              </div>
-              <p className="text-xs text-[#DCE7E1] leading-relaxed">
-                Powered by Groq LPU inference. Grounded in this video's verified transcript chunks and Anna University syllabus standards.
-              </p>
-
-              <div className="space-y-2 pt-1">
-                {[
-                  `Explain 3NF vs BCNF differences in this lecture`,
-                  `Generate Anna University 2-mark questions for Unit ${video.unitNumber}`,
-                  `What are the database update anomalies explained here?`,
-                  `How do I solve BCNF decomposition step-by-step?`
-                ].map((sample, i) => (
-                  <button
-                    key={i}
-                    onClick={() => openCopilot(sample)}
-                    className="w-full text-left p-2.5 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 text-[11px] text-white/90 transition-colors cursor-pointer"
-                  >
-                    💡 {sample}
-                  </button>
-                ))}
-              </div>
-
-              <button
-                onClick={() => setIsRevisionModalOpen(true)}
-                className="w-full py-2 rounded-xl bg-gradient-to-r from-[#C49A55] to-[#D97736] text-white text-xs font-bold flex items-center justify-center gap-2 shadow"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Launch Full University Exam Revision Kit</span>
-              </button>
             </div>
           )}
 

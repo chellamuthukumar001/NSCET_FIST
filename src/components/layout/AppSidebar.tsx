@@ -36,12 +36,8 @@ export const AppSidebar: React.FC = () => {
           { label: '10 Course Modules', path: '/student/courses', icon: GraduationCap },
           { label: 'YouTube Search & Watch', path: '/student/videos', icon: Video },
           { label: 'Subjects & Units', path: '/student/subjects', icon: BookOpen },
-          { label: 'Certificates', path: '/student/certificates', icon: Award },
-          { label: 'Bookmarks', path: '/student/bookmarks', icon: Bookmark },
           { label: 'Watch History', path: '/student/history', icon: History },
           { label: 'Learning Progress', path: '/student/progress', icon: TrendingUp },
-          { label: 'AI Practice Quiz', path: '/student/quiz', icon: Award },
-          { label: 'CampusIQ Copilot', path: '/student/assistant', icon: Bot },
           { label: 'Notifications', path: '/student/notifications', icon: Bell },
           { label: 'My Profile', path: '/student/profile', icon: User },
         ];
@@ -51,7 +47,6 @@ export const AppSidebar: React.FC = () => {
           { label: 'Assigned Courses', path: '/faculty/courses', icon: BookOpen },
           { label: 'Video Lecture Sync', path: '/faculty/content', icon: Video },
           { label: 'Class Analytics', path: '/faculty/analytics', icon: TrendingUp },
-          { label: 'Faculty Copilot', path: '/faculty/assistant', icon: Sparkles },
         ];
       case 'HOD':
         return [

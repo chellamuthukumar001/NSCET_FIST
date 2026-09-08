@@ -1,47 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCopilot } from '../../context/CopilotContext';
 import { useNotifications } from '../../context/NotificationContext';
 import {
-  Sparkles,
   Bell,
   Globe,
-  Mic,
   ChevronDown,
   UserCheck,
   CheckCircle2,
   ExternalLink,
   LogOut,
-  Search,
-  Command,
-  HelpCircle,
   GraduationCap
 } from 'lucide-react';
 import { Role } from '../../types';
-import { VoiceQueryModal } from '../copilot/VoiceQueryModal';
 
 export const AppHeader: React.FC = () => {
   const { currentUser, role, switchRole, logout } = useAuth();
-  const { openCopilot, selectedLanguage, setSelectedLanguage, sendMessage } = useCopilot();
+  const { selectedLanguage, setSelectedLanguage } = useCopilot();
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
 
   const [notifOpen, setNotifOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [personaOpen, setPersonaOpen] = useState(false);
-  const [voiceOpen, setVoiceOpen] = useState(false);
-
-  // Global Ctrl+K / Cmd+K shortcut to open AI Copilot
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        openCopilot();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [openCopilot]);
 
   const roles: { role: Role; label: string; name: string }[] = [
     { role: 'STUDENT', label: 'Student Portal', name: 'Vignesh R. (3rd Yr CSE)' },
@@ -102,30 +83,17 @@ export const AppHeader: React.FC = () => {
               </span>
             </Link>
 
-            {/* Quick Copilot Search Input Pill */}
-            <div className="flex items-center gap-1 bg-black/30 hover:bg-black/45 border border-white/15 focus-within:border-[#C49A55] rounded-xl px-3 py-1.5 transition-all shadow-inner w-72">
-              <Search className="w-3.5 h-3.5 text-[#C49A55] shrink-0" />
-              <button
-                onClick={() => openCopilot()}
-                className="flex-1 text-left text-[11px] text-white/70 hover:text-white truncate cursor-pointer"
-              >
-                Ask CampusIQ Copilot...
-              </button>
-              <kbd className="hidden sm:inline-flex items-center gap-0.5 text-[9px] font-mono text-white/50 bg-white/10 px-1.5 py-0.5 rounded border border-white/10">
-                <span>⌘K</span>
-              </kbd>
-              <button
-                onClick={() => setVoiceOpen(true)}
-                className="p-1 rounded-md text-[#C49A55] hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
-                title="Voice Assistant (Mic)"
-              >
-                <Mic className="w-3.5 h-3.5" />
-              </button>
+            {/* Official Status Pill */}
+            <div className="hidden sm:flex items-center gap-2 bg-black/30 border border-white/15 rounded-xl px-3 py-1.5 shadow-inner">
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              <span className="text-[11px] text-white/80 font-medium">
+                NSCET Theni • Official Institutional Portal
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Right: Actions, Languages, Copilot & Persona */}
+        {/* Right: Actions, Languages & Persona */}
         <div className="flex items-center gap-2 sm:gap-3">
           
           {/* Language Selector */}
@@ -161,15 +129,6 @@ export const AppHeader: React.FC = () => {
               </div>
             )}
           </div>
-
-          {/* Ask CampusIQ AI Trigger Button */}
-          <button
-            onClick={() => openCopilot()}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#6E7F45] to-[#285443] hover:from-[#7B8F4F] hover:to-[#316853] text-white text-xs font-bold shadow-md border border-white/15 hover:scale-105 transition-all cursor-pointer"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-[#C49A55] animate-pulse" />
-            <span className="hidden md:inline">Ask Copilot</span>
-          </button>
 
           {/* Notifications Bell with Category Badges */}
           <div className="relative">
@@ -301,15 +260,6 @@ export const AppHeader: React.FC = () => {
 
         </div>
       </div>
-
-      {/* Voice Query Modal Integration */}
-      <VoiceQueryModal
-        isOpen={voiceOpen}
-        onClose={() => setVoiceOpen(false)}
-        onSubmitQuery={(q) => sendMessage(q)}
-        selectedLanguage={selectedLanguage}
-        onSelectLanguage={setSelectedLanguage}
-      />
     </header>
   );
 };

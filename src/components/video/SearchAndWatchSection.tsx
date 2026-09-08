@@ -13,7 +13,6 @@ import {
   Globe
 } from 'lucide-react';
 import { searchVideosApi, getRelatedVideosApi, VideoSearchResult } from '../../services/videoSearchService';
-import { useCopilot } from '../../context/CopilotContext';
 
 interface SearchAndWatchSectionProps {
   initialQuery?: string;
@@ -33,8 +32,6 @@ const TOPIC_SUGGESTIONS = [
 ];
 
 export const SearchAndWatchSection: React.FC<SearchAndWatchSectionProps> = ({ initialQuery = 'DBMS' }) => {
-  const { openCopilot } = useCopilot();
-
   const [query, setQuery] = useState(initialQuery);
   const [selectedDept, setSelectedDept] = useState<'ALL' | 'CSE' | 'ECE' | 'AI&DS'>('ALL');
   const [selectedDuration, setSelectedDuration] = useState<'any' | 'medium' | 'long'>('medium');
@@ -363,14 +360,6 @@ export const SearchAndWatchSection: React.FC<SearchAndWatchSectionProps> = ({ in
               </div>
 
               <div className="flex items-center gap-2">
-                <button
-                  onClick={() => openCopilot('Explain the key concepts from this lecture: ' + activeVideo.title)}
-                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#C49A55] hover:bg-[#D97736] text-white text-xs font-bold shadow cursor-pointer transition-all"
-                >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Ask Copilot ✨</span>
-                </button>
-
                 <button
                   onClick={() => setActiveVideo(null)}
                   className="p-2 rounded-xl bg-white/10 hover:bg-rose-500/30 text-gray-300 hover:text-white transition-colors cursor-pointer"

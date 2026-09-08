@@ -36,7 +36,7 @@ export const LoginPage: React.FC = () => {
     setAuthError(null);
     try {
       await loginWithGoogle('STUDENT');
-      navigate('/landing');
+      navigate('/student');
     } catch (err: any) {
       console.error('Google Sign-In Error:', err);
       if (err.code === 'auth/popup-closed-by-user') {
@@ -74,7 +74,7 @@ export const LoginPage: React.FC = () => {
       if (selectedRole === 'ADMIN') {
         navigate('/admin');
       } else {
-        navigate('/landing');
+        navigate('/student');
       }
     } catch (err: any) {
       setAuthError('Authentication failed. Please verify your credentials.');
@@ -182,7 +182,7 @@ export const LoginPage: React.FC = () => {
                 <div>
                   <div className="text-[11px] font-black uppercase tracking-wider text-[#C49A55]">Student Portal</div>
                   <div className="text-xs font-bold text-white truncate mt-0.5">Vignesh R.</div>
-                  <div className="text-[10px] text-gray-300 truncate">3rd Year CSE &bull; Roll 921022</div>
+                  <div className="text-[10px] text-gray-300 truncate">Admin Uploaded Data & Syllabi</div>
                 </div>
               </button>
 

@@ -1,12 +1,10 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { useCopilot } from '../../context/CopilotContext';
-import { BookOpen, Video, Users, Sparkles, TrendingUp, Award, ArrowRight } from 'lucide-react';
+import { BookOpen, Video, Users, TrendingUp, Award, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const FacultyDashboard: React.FC = () => {
   const { currentUser } = useAuth();
-  const { openCopilot } = useCopilot();
 
   return (
     <div className="space-y-8 pb-16">
@@ -52,30 +50,38 @@ export const FacultyDashboard: React.FC = () => {
         <div className="p-6 rounded-3xl bg-white border border-gray-200 shadow-sm space-y-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-[#173B2F]/10 text-[#173B2F] flex items-center justify-center font-bold">
-              <Sparkles className="w-5 h-5" />
+              <BookOpen className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#17201C]">Faculty Copilot Assistant</h3>
+              <h3 className="text-base font-bold text-[#17201C]">Curriculum & Lecture Content</h3>
               <p className="text-xs text-gray-500">
-                Draft semester quizzes, create lesson plans, or generate syllabus guides.
+                Manage Anna University syllabus coverage, upload video masterclasses, and review unit materials.
               </p>
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2 pt-2">
-            {[
-              'Generate 5 revision MCQs for CS3451 Unit 2',
-              'Draft Unit 3 Lecture Plan for DBMS CS3351',
-              'Create lesson outline for Process Scheduling'
-            ].map((prompt, i) => (
-              <button
-                key={i}
-                onClick={() => openCopilot(prompt)}
-                className="text-left p-2.5 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 text-xs text-[#17201C] w-full transition-colors cursor-pointer"
-              >
-                💡 {prompt}
-              </button>
-            ))}
+          <div className="space-y-2 pt-2">
+            <Link
+              to="/faculty/courses"
+              className="p-3 rounded-2xl bg-gray-50 hover:bg-gray-100 border border-gray-200 text-xs text-[#17201C] flex items-center justify-between transition-colors"
+            >
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span className="font-semibold">Review Assigned Semester Syllabi</span>
+              </div>
+              <ArrowRight className="w-3.5 h-3.5 text-gray-400" />
+            </Link>
+
+            <Link
+              to="/faculty/content"
+              className="p-3 rounded-2xl bg-gray-50 hover:bg-gray-100 border border-gray-200 text-xs text-[#17201C] flex items-center justify-between transition-colors"
+            >
+              <div className="flex items-center gap-2">
+                <Video className="w-4 h-4 text-[#173B2F]" />
+                <span className="font-semibold">Sync Video Lectures & Transcripts</span>
+              </div>
+              <ArrowRight className="w-3.5 h-3.5 text-gray-400" />
+            </Link>
           </div>
         </div>
 

@@ -14,7 +14,6 @@ import {
   MessageSquareShare
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { useCopilot } from '../../context/CopilotContext';
 
 interface LectureQuizModalProps {
   isOpen: boolean;
@@ -29,7 +28,6 @@ export const LectureQuizModal: React.FC<LectureQuizModalProps> = ({
   questions,
   subjectTitle,
 }) => {
-  const { openCopilot } = useCopilot();
   const [userAnswers, setUserAnswers] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
   const [currentQIndex, setCurrentQIndex] = useState(0);
@@ -282,18 +280,6 @@ export const LectureQuizModal: React.FC<LectureQuizModalProps> = ({
                         <BookOpen className="w-3.5 h-3.5" />
                         <span>Anna University Concept Rationale:</span>
                       </span>
-
-                      <button
-                        onClick={() =>
-                          openCopilot(
-                            `In the quiz for "${subjectTitle}", explain question ${qIdx + 1}: "${q.question}". Why is "${q.options[q.correctAnswerIndex]}" correct, and why were other options incorrect?`
-                          )
-                        }
-                        className="text-[10px] font-bold text-[#173B2F] hover:underline flex items-center gap-1 cursor-pointer"
-                      >
-                        <MessageSquareShare className="w-3 h-3" />
-                        <span>Ask Copilot to explain</span>
-                      </button>
                     </div>
                     <p className="leading-relaxed text-blue-900">{q.explanation}</p>
                   </div>

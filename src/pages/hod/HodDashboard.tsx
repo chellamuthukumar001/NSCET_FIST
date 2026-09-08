@@ -1,6 +1,5 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { useCopilot } from '../../context/CopilotContext';
 import {
   TrendingUp,
   Users,
@@ -15,7 +14,6 @@ import { Link } from 'react-router-dom';
 
 export const HodDashboard: React.FC = () => {
   const { currentUser } = useAuth();
-  const { openCopilot } = useCopilot();
 
   const curriculumProgression = [
     { title: 'Database Management Systems', score: 88, status: 'Strong Mastery' },
