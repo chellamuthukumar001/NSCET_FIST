@@ -61,7 +61,7 @@ import { AdminUsersPage } from './pages/admin/AdminUsersPage';
 // Layout Wrappers
 const PublicLayout: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-[#0B1410] text-white">
+    <div className="min-h-screen flex flex-col bg-[#F9FAF8] text-[#17201C]">
       <PublicNavbar />
       <main className="flex-1">
         <Outlet />

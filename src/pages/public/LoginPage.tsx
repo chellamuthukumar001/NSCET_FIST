@@ -86,39 +86,40 @@ export const LoginPage: React.FC = () => {
   return (
     <div className="relative min-h-screen flex items-center justify-center p-4 pt-24 pb-16 overflow-hidden bg-[#0A120E] selection:bg-[#C49A55]/30">
       
-      {/* Background Campus Photograph with Ambient Depth Layer */}
-      <div className="absolute inset-0 z-0">
+      {/* Prominent College Background Image with Translucent Ambient Layer */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <img
           src="/assets/campus/nscet-entrance-gate.jpg"
-          alt="NSCET Entrance Gate"
-          className="w-full h-full object-cover object-center transform scale-105 transition-transform duration-1000 opacity-20"
+          alt="Nadar Saraswathi College of Engineering & Technology"
+          className="w-full h-full object-cover object-center transform scale-105 transition-transform duration-1000"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0A120E]/95 via-[#0D1813]/90 to-[#0A120E]" />
+        {/* Balanced Translucent Glass Overlay: college gate clearly visible behind the login card */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0A120E]/75 via-[#0D1813]/60 to-[#0A120E]/85 backdrop-blur-[1px]" />
         
         {/* Ambient Glow Orbs */}
-        <div className="absolute top-1/4 -left-20 w-96 h-96 rounded-full bg-[#173B2F]/50 blur-[120px] pointer-events-none animate-pulse" />
-        <div className="absolute bottom-1/4 -right-20 w-96 h-96 rounded-full bg-[#C49A55]/20 blur-[130px] pointer-events-none" />
+        <div className="absolute top-1/4 -left-20 w-96 h-96 rounded-full bg-[#173B2F]/40 blur-[100px] pointer-events-none animate-pulse" />
+        <div className="absolute bottom-1/4 -right-20 w-96 h-96 rounded-full bg-[#C49A55]/20 blur-[110px] pointer-events-none" />
       </div>
 
       {/* Main Login Card Container */}
       <div className="relative z-10 w-full max-w-lg">
         
         {/* Back Link to Campus Home */}
-        <div className="mb-4 flex items-center justify-between px-2">
+        <div className="mb-4 flex items-center justify-between px-1">
           <Link
             to="/landing"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-400 hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/90 hover:text-white bg-black/50 hover:bg-black/70 px-3.5 py-1.5 rounded-full backdrop-blur-md border border-white/20 transition-all shadow-md cursor-pointer"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
+            <ArrowLeft className="w-3.5 h-3.5 text-[#C49A55]" />
             <span>Return to Campus Home</span>
           </Link>
-          <span className="text-[11px] font-mono text-[#C49A55] uppercase tracking-wider">
+          <span className="text-[11px] font-mono text-[#C49A55] font-bold bg-black/50 px-3 py-1.5 rounded-full backdrop-blur-md border border-white/20 uppercase tracking-wider shadow-md">
             Reg 2021 &bull; Anna University
           </span>
         </div>
 
         {/* Enhanced Glassmorphic Card */}
-        <div className="rounded-3xl bg-[#111C17]/85 backdrop-blur-2xl p-6 sm:p-9 border border-white/15 shadow-2xl shadow-black/80 text-white space-y-6">
+        <div className="rounded-3xl bg-[#111C17]/90 backdrop-blur-2xl p-6 sm:p-9 border border-white/20 shadow-2xl shadow-black/80 text-white space-y-6">
           
           {/* Header & Official College Identity */}
           <div className="text-center space-y-3">
