@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCopilot } from '../../context/CopilotContext';
 import { useNotifications } from '../../context/NotificationContext';
@@ -15,16 +15,18 @@ import {
   LogOut,
   Search,
   Command,
-  HelpCircle,
-  GraduationCap
+  GraduationCap,
+  User,
+  Shield
 } from 'lucide-react';
 import { Role } from '../../types';
 import { VoiceQueryModal } from '../copilot/VoiceQueryModal';
 
 export const AppHeader: React.FC = () => {
   const { currentUser, role, switchRole, logout } = useAuth();
-  const { openCopilot, selectedLanguage, setSelectedLanguage, sendMessage } = useCopilot();
+  const { openCopilot, selectedLanguage, setSelectedLanguage } = useCopilot();
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
+  const location = useLocation();
 
   const [notifOpen, setNotifOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
@@ -62,13 +64,28 @@ export const AppHeader: React.FC = () => {
     }
   };
 
+  const getPageTitle = () => {
+    const path = location.pathname;
+    if (path === '/student') return 'Dashboard';
+    if (path.includes('/student/courses')) return '10 Course Modules';
+    if (path.includes('/student/videos')) return 'YouTube Video Hub';
+    if (path.includes('/student/certificates')) return 'Certificates';
+    if (path.includes('/student/quiz')) return 'AI Practice Quiz';
+    if (path.includes('/student/progress')) return 'Progress Analytics';
+    if (path.includes('/student/assistant')) return 'CampusIQ Copilot';
+    if (path.includes('/admin')) return 'Academic Control';
+    if (path.includes('/faculty')) return 'Faculty Workspace';
+    if (path.includes('/hod')) return 'Department Leadership';
+    return 'Workspace';
+  };
+
   return (
-    <header className="sticky top-0 z-20 bg-[#173B2F]/95 backdrop-blur-xl border-b border-[#C49A55]/20 text-white transition-all shadow-lg">
-      <div className="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <header className="sticky top-0 z-20 bg-[#0B1511]/92 backdrop-blur-2xl border-b border-white/10 text-white transition-all shadow-lg">
+      <div className="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
         
-        {/* Left: Mobile Brand Logo & Desktop Contextual Breadcrumb */}
+        {/* Left: Mobile Logo & Desktop Breadcrumbs */}
         <div className="flex items-center gap-3">
-          {/* Mobile Brand Logo with Official Attached NSCET Emblem */}
+          {/* Mobile Brand Logo */}
           <Link to="/" className="flex lg:hidden items-center gap-2">
             <div className="h-9 px-2 py-0.5 rounded-lg bg-white shadow-sm border border-[#C49A55]/50 flex items-center shrink-0">
               <img
@@ -89,7 +106,7 @@ export const AppHeader: React.FC = () => {
           </Link>
 
           {/* Desktop Contextual Breadcrumb & Quick AI Search Bar */}
-          <div className="hidden lg:flex items-center gap-3.5">
+          <div className="hidden lg:flex items-center gap-3">
             <Link
               to={getDashboardRoot()}
               className="flex items-center gap-2 text-xs hover:opacity-90 transition-opacity"
@@ -100,16 +117,20 @@ export const AppHeader: React.FC = () => {
               <span className="font-bold text-white tracking-wide uppercase text-[11px] bg-white/10 px-2.5 py-0.5 rounded-lg border border-white/10 shadow-inner">
                 {role} Portal
               </span>
+              <span className="text-[#C49A55] font-bold">/</span>
+              <span className="text-xs font-semibold text-[#DCE7E1]">
+                {getPageTitle()}
+              </span>
             </Link>
 
-            {/* Quick Copilot Search Input Pill */}
-            <div className="flex items-center gap-1 bg-black/30 hover:bg-black/45 border border-white/15 focus-within:border-[#C49A55] rounded-xl px-3 py-1.5 transition-all shadow-inner w-72">
+            {/* Quick Copilot Command Palette Pill */}
+            <div className="flex items-center gap-1.5 bg-black/40 hover:bg-black/55 border border-white/15 focus-within:border-[#C49A55] focus-within:ring-1 focus-within:ring-[#C49A55]/40 rounded-xl px-3 py-1.5 transition-all shadow-inner w-72">
               <Search className="w-3.5 h-3.5 text-[#C49A55] shrink-0" />
               <button
                 onClick={() => openCopilot()}
                 className="flex-1 text-left text-[11px] text-white/70 hover:text-white truncate cursor-pointer"
               >
-                Ask CampusIQ Copilot...
+                Ask Copilot or search lectures...
               </button>
               <kbd className="hidden sm:inline-flex items-center gap-0.5 text-[9px] font-mono text-white/50 bg-white/10 px-1.5 py-0.5 rounded border border-white/10">
                 <span>⌘K</span>
@@ -125,14 +146,14 @@ export const AppHeader: React.FC = () => {
           </div>
         </div>
 
-        {/* Right: Actions, Languages, Copilot & Persona */}
+        {/* Right: Actions, Language Switcher, Notifications & Persona */}
         <div className="flex items-center gap-2 sm:gap-3">
           
-          {/* Language Selector */}
+          {/* Language Selector Pill */}
           <div className="relative">
             <button
               onClick={() => setLangOpen(!langOpen)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-black/25 hover:bg-white/10 text-xs font-medium border border-white/10 transition-colors cursor-pointer shadow-inner"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-black/30 hover:bg-white/10 text-xs font-medium border border-white/10 transition-colors cursor-pointer shadow-inner"
             >
               <Globe className="w-3.5 h-3.5 text-[#6FA9C9]" />
               <span className="hidden sm:inline">
@@ -142,7 +163,7 @@ export const AppHeader: React.FC = () => {
             </button>
 
             {langOpen && (
-              <div className="absolute right-0 mt-2 w-36 py-1 bg-[#101815] border border-white/20 rounded-2xl shadow-2xl z-50 animate-fade-in">
+              <div className="absolute right-0 mt-2 w-36 py-1 bg-[#101815] border border-white/20 rounded-2xl shadow-2xl z-50 animate-fadeIn">
                 {languages.map((l) => (
                   <button
                     key={l.code}
@@ -150,146 +171,160 @@ export const AppHeader: React.FC = () => {
                       setSelectedLanguage(l.code as 'en' | 'ta');
                       setLangOpen(false);
                     }}
-                    className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-white/10 cursor-pointer ${
-                      selectedLanguage === l.code ? 'text-[#6FA9C9] font-bold bg-white/5' : 'text-gray-300'
+                    className={`w-full px-3 py-2 text-left text-xs flex items-center justify-between hover:bg-white/10 cursor-pointer ${
+                      selectedLanguage === l.code ? 'text-[#C49A55] font-bold' : 'text-gray-300'
                     }`}
                   >
-                    <span>{l.label}</span>
-                    <span className="text-[11px] text-[#C49A55]">{l.native}</span>
+                    <span>{l.native}</span>
+                    {selectedLanguage === l.code && <CheckCircle2 className="w-3.5 h-3.5 text-[#C49A55]" />}
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Ask CampusIQ AI Trigger Button */}
-          <button
-            onClick={() => openCopilot()}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#6E7F45] to-[#285443] hover:from-[#7B8F4F] hover:to-[#316853] text-white text-xs font-bold shadow-md border border-white/15 hover:scale-105 transition-all cursor-pointer"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-[#C49A55] animate-pulse" />
-            <span className="hidden md:inline">Ask Copilot</span>
-          </button>
-
-          {/* Notifications Bell with Category Badges */}
+          {/* Notifications Dropdown */}
           <div className="relative">
             <button
               onClick={() => setNotifOpen(!notifOpen)}
-              className="relative p-2 rounded-xl bg-black/25 hover:bg-white/10 text-white/90 border border-white/10 transition-colors cursor-pointer shadow-inner"
+              className="relative p-2 rounded-xl bg-black/30 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white transition-colors cursor-pointer shadow-inner"
               title="Notifications"
             >
               <Bell className="w-4 h-4" />
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center animate-bounce">
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#C49A55] text-white text-[9px] font-black flex items-center justify-center shadow">
                   {unreadCount}
                 </span>
               )}
             </button>
 
             {notifOpen && (
-              <div className="absolute right-0 mt-2 w-80 sm:w-96 py-2 bg-[#101815] border border-white/20 rounded-2xl shadow-2xl z-50 animate-fade-in">
-                <div className="px-4 py-2 flex items-center justify-between border-b border-white/10">
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#C49A55]">
-                    Institutional Notices ({unreadCount} new)
-                  </span>
+              <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-[#101E17] border border-white/20 rounded-3xl shadow-2xl z-50 overflow-hidden animate-fadeIn">
+                <div className="p-3.5 border-b border-white/10 flex items-center justify-between bg-black/30">
+                  <div className="flex items-center gap-2">
+                    <Bell className="w-4 h-4 text-[#C49A55]" />
+                    <span className="text-xs font-bold text-white uppercase tracking-wider">
+                      Academic Alerts
+                    </span>
+                  </div>
                   {unreadCount > 0 && (
                     <button
-                      onClick={markAllAsRead}
-                      className="text-[11px] text-[#6FA9C9] hover:underline cursor-pointer"
+                      onClick={() => markAllAsRead()}
+                      className="text-[10px] text-[#C49A55] hover:underline font-semibold cursor-pointer"
                     >
                       Mark all read
                     </button>
                   )}
                 </div>
+
                 <div className="max-h-72 overflow-y-auto divide-y divide-white/5">
                   {notifications.length === 0 ? (
-                    <div className="p-6 text-center text-xs text-gray-500">
-                      No notifications at this time.
+                    <div className="p-6 text-center text-xs text-gray-400">
+                      No new academic notifications
                     </div>
                   ) : (
                     notifications.map((n) => (
                       <div
                         key={n.id}
                         onClick={() => markAsRead(n.id)}
-                        className={`p-3 text-xs transition-colors cursor-pointer ${
-                          n.read ? 'opacity-60 hover:opacity-90' : 'bg-white/5 hover:bg-white/10'
+                        className={`p-3 text-xs hover:bg-white/5 transition-colors cursor-pointer ${
+                          !n.read ? 'bg-white/5 border-l-2 border-[#C49A55]' : ''
                         }`}
                       >
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="font-semibold text-white">{n.title}</span>
-                          <span className="text-[10px] text-gray-400 font-mono">{n.timestamp}</span>
-                        </div>
-                        <p className="text-[11px] text-gray-300 line-clamp-2">{n.message}</p>
+                        <div className="font-semibold text-white leading-tight">{n.title}</div>
+                        <div className="text-[11px] text-gray-300 mt-0.5 leading-relaxed">{n.message}</div>
+                        <div className="text-[9px] text-[#A2B6AC] mt-1 font-mono">{n.timestamp}</div>
                       </div>
                     ))
                   )}
+                </div>
+
+                <div className="p-2 border-t border-white/10 bg-black/20 text-center">
+                  <Link
+                    to="/student/notifications"
+                    onClick={() => setNotifOpen(false)}
+                    className="text-[11px] text-[#C49A55] hover:underline font-semibold"
+                  >
+                    View All Notifications &rarr;
+                  </Link>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Persona Switcher Quick Pill */}
+          {/* Copilot Quick Launch Trigger */}
+          <button
+            onClick={() => openCopilot()}
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#C49A55] to-[#D97736] hover:brightness-110 text-white font-black text-xs uppercase tracking-wider shadow-md cursor-pointer transition-all active:scale-95"
+          >
+            <Sparkles className="w-3.5 h-3.5 fill-white" />
+            <span>Copilot</span>
+          </button>
+
+          {/* User Persona Capsule Trigger */}
           <div className="relative">
             <button
               onClick={() => setPersonaOpen(!personaOpen)}
-              className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-black/30 hover:bg-black/50 border border-white/15 text-xs text-white transition-all cursor-pointer shadow-inner"
+              className="flex items-center gap-2 p-1 sm:px-2.5 sm:py-1 rounded-xl bg-black/30 hover:bg-white/10 border border-white/10 transition-colors cursor-pointer shadow-inner"
             >
-              <div className="w-6 h-6 rounded-full overflow-hidden bg-white/10 border border-[#C49A55]/70 shrink-0">
+              <div className="w-7 h-7 rounded-lg overflow-hidden bg-white/10 border border-[#C49A55]/50 shrink-0">
                 {currentUser?.avatarUrl ? (
                   <img src={currentUser.avatarUrl} alt="" className="w-full h-full object-cover" />
                 ) : (
-                  <UserCheck className="w-4 h-4 m-1 text-[#C49A55]" />
+                  <User className="w-4 h-4 m-1.5 text-[#C49A55]" />
                 )}
               </div>
-              <div className="hidden sm:flex flex-col text-left">
-                <span className="text-xs font-bold text-white leading-tight truncate max-w-[120px]">
-                  {currentUser?.name}
-                </span>
-                <span className="text-[9px] text-[#A2B6AC] uppercase font-semibold">{role}</span>
-              </div>
+              <span className="hidden md:inline text-xs font-semibold text-white truncate max-w-[100px]">
+                {currentUser?.name?.split(' ')[0] || 'User'}
+              </span>
               <ChevronDown className="w-3 h-3 text-gray-400" />
             </button>
 
             {personaOpen && (
-              <div className="absolute right-0 mt-2 w-64 p-2 bg-[#101815] border border-white/20 rounded-2xl shadow-2xl z-50 animate-fade-in">
-                <div className="px-3 py-1.5 text-[10px] font-bold text-[#C49A55] uppercase tracking-wider border-b border-white/10 mb-1">
-                  1-Click Role Switcher
+              <div className="absolute right-0 mt-2 w-56 py-2 bg-[#101E17] border border-white/20 rounded-2xl shadow-2xl z-50 animate-fadeIn">
+                <div className="px-3 py-2 border-b border-white/10">
+                  <div className="text-xs font-bold text-white truncate">{currentUser?.name}</div>
+                  <div className="text-[10px] text-[#A2B6AC] truncate">{currentUser?.email}</div>
+                  <div className="text-[9px] font-mono text-[#C49A55] uppercase mt-0.5">{role} Portal</div>
                 </div>
-                {roles.map((r) => (
-                  <button
-                    key={r.role}
-                    onClick={() => {
-                      switchRole(r.role);
-                      setPersonaOpen(false);
-                    }}
-                    className={`w-full text-left p-2 rounded-xl text-xs flex items-center justify-between hover:bg-white/10 transition-colors cursor-pointer ${
-                      role === r.role ? 'bg-[#173B2F] text-white font-bold border border-[#6FA9C9]/40 shadow-sm' : 'text-gray-300'
-                    }`}
-                  >
-                    <div>
-                      <div className="font-bold text-white">{r.label}</div>
-                      <div className="text-[10px] text-gray-400">{r.name}</div>
-                    </div>
-                    {role === r.role && <CheckCircle2 className="w-4 h-4 text-[#C49A55] shrink-0" />}
-                  </button>
-                ))}
-                <div className="border-t border-white/10 mt-1.5 pt-1.5 space-y-1">
+
+                <div className="py-1">
+                  <div className="px-3 py-1 text-[9px] uppercase font-bold text-gray-400 tracking-wider">
+                    Quick Role Switch
+                  </div>
+                  {roles.map((r) => (
+                    <button
+                      key={r.role}
+                      onClick={() => {
+                        switchRole(r.role);
+                        setPersonaOpen(false);
+                      }}
+                      className={`w-full px-3 py-1.5 text-left text-xs flex items-center justify-between hover:bg-white/10 cursor-pointer ${
+                        role === r.role ? 'text-[#C49A55] font-bold' : 'text-gray-300'
+                      }`}
+                    >
+                      <span>{r.label}</span>
+                      {role === r.role && <CheckCircle2 className="w-3.5 h-3.5 text-[#C49A55]" />}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="border-t border-white/10 pt-1">
                   <Link
-                    to="/landing"
+                    to="/student/profile"
                     onClick={() => setPersonaOpen(false)}
-                    className="w-full px-3 py-2 text-xs text-gray-300 hover:bg-white/10 rounded-xl flex items-center gap-2"
+                    className="px-3 py-1.5 text-xs text-gray-300 hover:text-white hover:bg-white/10 flex items-center gap-2 cursor-pointer"
                   >
-                    <ExternalLink className="w-3.5 h-3.5 text-[#C49A55]" />
-                    <span>Campus Landing Page</span>
+                    <User className="w-3.5 h-3.5 text-[#C49A55]" />
+                    <span>Profile & Settings</span>
                   </Link>
 
                   <button
-                    type="button"
                     onClick={() => {
                       logout();
                       setPersonaOpen(false);
                     }}
-                    className="w-full px-3 py-2 text-xs text-rose-300 hover:bg-rose-500/10 rounded-xl flex items-center gap-2 cursor-pointer transition-colors"
+                    className="w-full px-3 py-1.5 text-left text-xs text-rose-300 hover:text-rose-200 hover:bg-rose-500/10 flex items-center gap-2 cursor-pointer"
                   >
                     <LogOut className="w-3.5 h-3.5 text-rose-400" />
                     <span>Sign Out</span>
@@ -300,17 +335,20 @@ export const AppHeader: React.FC = () => {
           </div>
 
         </div>
+
       </div>
 
-      {/* Voice Query Modal Integration */}
+      {/* Voice Query Modal Component */}
       <VoiceQueryModal
         isOpen={voiceOpen}
         onClose={() => setVoiceOpen(false)}
-        onSubmitQuery={(q) => sendMessage(q)}
-        selectedLanguage={selectedLanguage}
-        onSelectLanguage={setSelectedLanguage}
+        onSubmitQuery={(text) => {
+          setVoiceOpen(false);
+          openCopilot(text);
+        }}
+        selectedLanguage={selectedLanguage as 'en' | 'ta'}
+        onSelectLanguage={(lang) => setSelectedLanguage(lang)}
       />
     </header>
   );
 };
-
