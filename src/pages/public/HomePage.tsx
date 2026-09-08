@@ -12,7 +12,9 @@ import {
   TrendingUp,
   Award,
   Users,
-  Compass
+  Compass,
+  Zap,
+  GraduationCap
 } from 'lucide-react';
 import { MOCK_VIDEOS, MOCK_DEPARTMENTS } from '../../lib/mockDatabase';
 import { VideoCard } from '../../components/video/VideoCard';
@@ -20,7 +22,7 @@ import { GlassCard } from '../../components/common/GlassCard';
 
 export const HomePage: React.FC = () => {
   const { openCopilot } = useCopilot();
-  const { role } = useAuth();
+  const { currentUser, role } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
 
   const featuredVideos = MOCK_VIDEOS.slice(0, 3);
@@ -36,7 +38,7 @@ export const HomePage: React.FC = () => {
   const samplePrompts = [
     'Show me DBMS Unit 3 lectures',
     'What is the attendance requirement?',
-    'What are students saying about the computer lab?',
+    'Explain Operating Systems CPU scheduling',
     'How do I apply for a bonafide certificate?',
   ];
 
@@ -90,17 +92,26 @@ export const HomePage: React.FC = () => {
 
           {/* Supporting Statement */}
           <p className="max-w-2xl text-base sm:text-lg text-[#DCE7E1] font-normal leading-relaxed mb-8">
-            Learn from your college resources, discover knowledge, share your experience, and get trusted answers with <strong>CampusIQ</strong>.
+            Learn from your college resources, discover knowledge, master accredited courses, and get trusted answers with <strong>CampusIQ</strong>.
           </p>
 
-          {/* Primary & Secondary Call to Actions */}
+          {/* Primary & Secondary Call to Actions with "Get Started" */}
           <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
             <Link
-              to="/student/videos"
-              className="px-7 py-3.5 rounded-2xl bg-gradient-to-r from-[#C49A55] to-[#D97736] hover:brightness-110 text-white font-bold text-sm tracking-wide shadow-xl shadow-amber-950/40 flex items-center gap-2 transition-all cursor-pointer"
+              to="/student"
+              className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#C49A55] to-[#D97736] hover:brightness-110 text-white font-black text-sm tracking-wide shadow-xl shadow-amber-950/40 flex items-center gap-2.5 transition-all cursor-pointer hover:scale-105 active:scale-95 border border-white/20"
             >
-              <Video className="w-4 h-4" />
-              <span>Explore Learning</span>
+              <Zap className="w-4 h-4 fill-white" />
+              <span>Get Started</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+
+            <Link
+              to="/student/courses"
+              className="px-7 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm tracking-wide border border-white/30 backdrop-blur-md flex items-center gap-2 transition-all cursor-pointer"
+            >
+              <GraduationCap className="w-4 h-4 text-[#C49A55]" />
+              <span>Explore Courses</span>
             </Link>
 
             <button
@@ -183,7 +194,7 @@ export const HomePage: React.FC = () => {
             </h2>
 
             <p className="text-sm sm:text-base text-[#66736C] leading-relaxed">
-              CAMPUSIQ bridges the physical infrastructure of <strong>Nadar Saraswathi College of Engineering & Technology</strong> with an intelligent knowledge engine. Students find verified video lectures mapped to Anna University syllabi, interact with timestamped transcripts, and submit genuinely anonymous feedback protected by our PII sanitization engine.
+              CAMPUSIQ bridges the physical infrastructure of <strong>Nadar Saraswathi College of Engineering & Technology</strong> with an intelligent knowledge engine. Students find verified video lectures mapped to Anna University syllabi, interact with timestamped transcripts, and complete modular course certifications.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
@@ -209,11 +220,11 @@ export const HomePage: React.FC = () => {
 
               <div className="p-4 rounded-2xl bg-white border border-gray-200/80 shadow-sm">
                 <div className="w-9 h-9 rounded-xl bg-[#6E7F45]/10 text-[#6E7F45] flex items-center justify-center mb-2 font-bold">
-                  <ShieldCheck className="w-5 h-5" />
+                  <Award className="w-5 h-5" />
                 </div>
-                <h4 className="text-xs font-bold text-[#17201C]">Anonymous Voice</h4>
+                <h4 className="text-xs font-bold text-[#17201C]">Accredited Certificates</h4>
                 <p className="text-[11px] text-[#66736C] mt-1">
-                  Roll numbers and PII stripped before entering knowledge layer.
+                  Verifiable course certificates mapped to Anna University Regulation 2021.
                 </p>
               </div>
             </div>
@@ -327,18 +338,19 @@ export const HomePage: React.FC = () => {
             Ready to experience CampusIQ?
           </h2>
           <p className="text-sm sm:text-base text-[#DCE7E1] leading-relaxed">
-            Access your personalized student learning dashboard, ask questions to our institutional AI, or review department insights.
+            Access your personalized student learning dashboard, explore accredited courses, and get answers from our institutional AI.
           </p>
           <div className="pt-2 flex flex-wrap justify-center gap-4">
             <Link
               to="/student"
-              className="px-7 py-3 rounded-xl bg-white text-[#173B2F] hover:bg-[#F5F4EF] font-bold text-xs uppercase tracking-wider shadow-lg transition-all"
+              className="px-8 py-3.5 rounded-xl bg-white text-[#173B2F] hover:bg-[#F5F4EF] font-bold text-xs uppercase tracking-wider shadow-lg transition-all flex items-center gap-2 hover:scale-105"
             >
-              Enter Student Workspace
+              <Zap className="w-4 h-4 text-[#C49A55] fill-[#C49A55]" />
+              <span>Get Started &bull; Student Dashboard</span>
             </Link>
             <Link
               to="/login"
-              className="px-7 py-3 rounded-xl bg-black/40 hover:bg-black/60 text-white font-semibold text-xs uppercase tracking-wider border border-white/20 transition-all"
+              className="px-7 py-3.5 rounded-xl bg-black/40 hover:bg-black/60 text-white font-semibold text-xs uppercase tracking-wider border border-white/20 transition-all"
             >
               Staff & Admin Login
             </Link>
@@ -349,4 +361,3 @@ export const HomePage: React.FC = () => {
     </div>
   );
 };
-

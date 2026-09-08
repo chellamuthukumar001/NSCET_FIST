@@ -57,14 +57,12 @@ export const AppSidebar: React.FC = () => {
         return [
           { label: 'Department Overview', path: '/hod', icon: LayoutDashboard },
           { label: 'Department Analytics', path: '/hod/analytics', icon: TrendingUp },
-          { label: 'Student Feedback Stream', path: '/hod/feedback', icon: MessageSquareHeart },
           { label: 'AI Health Reports', path: '/hod/reports', icon: FileText },
         ];
       case 'ADMIN':
       case 'SUPER_ADMIN':
         return [
           { label: 'Campus Intelligence', path: '/admin', icon: LayoutDashboard },
-          { label: 'Feedback Moderation', path: '/admin/moderation', icon: ShieldAlert },
           { label: 'Closed-Loop Issues', path: '/admin/closed-loop', icon: CheckCircle2 },
           { label: 'Knowledge Base (RAG)', path: '/admin/knowledge', icon: Database },
           { label: 'YouTube Channel Sync', path: '/admin/videos', icon: Video },

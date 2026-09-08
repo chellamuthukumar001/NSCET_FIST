@@ -46,9 +46,8 @@ Language: ${languagePrompt}
 Strict Institutional Guardrails:
 1. Ground your answers primarily in the provided Verified Institutional Sources below.
 2. If citing lecture concepts, syllabus units, or attendance regulations (Anna University Regulation 2021 requires >=75%), mention the exact rule or lecture topic.
-3. If student feedback issues are referenced, emphasize confidentiality and the CampusIQ PII Shield.
-4. Format using clean markdown (bold key phrases, bullet points for lists, and concise paragraphs).
-5. If the retrieved sources do not contain sufficient info, answer politely based on Anna University engineering academic standards and suggest contacting the NSCET HOD or Academic Coordinator.
+3. Format using clean markdown (bold key phrases, bullet points for lists, and concise paragraphs).
+4. If the retrieved sources do not contain sufficient info, answer politely based on Anna University engineering academic standards and suggest contacting the NSCET HOD or Academic Coordinator.
 
 === VERIFIED INSTITUTIONAL SOURCES ===
 ${contextText || 'No specific source documents retrieved. Use verified general NSCET / Anna University engineering standards.'}

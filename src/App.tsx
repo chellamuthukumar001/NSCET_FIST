@@ -51,12 +51,10 @@ import { FacultyAssistantPage } from './pages/faculty/FacultyAssistantPage';
 // HOD Pages
 import { HodDashboard } from './pages/hod/HodDashboard';
 import { HodAnalyticsPage } from './pages/hod/HodAnalyticsPage';
-import { HodFeedbackPage } from './pages/hod/HodFeedbackPage';
 import { HodReportsPage } from './pages/hod/HodReportsPage';
 
 // Admin Pages
 import { AdminDashboard } from './pages/admin/AdminDashboard';
-import { AdminModerationPage } from './pages/admin/AdminModerationPage';
 import { AdminClosedLoopPage } from './pages/admin/AdminClosedLoopPage';
 import { AdminKnowledgePage } from './pages/admin/AdminKnowledgePage';
 import { AdminVideosPage } from './pages/admin/AdminVideosPage';
@@ -169,7 +167,6 @@ export function App() {
                 <Route path="/student/bookmarks" element={<BookmarksPage />} />
                 <Route path="/student/history" element={<WatchHistoryPage />} />
                 <Route path="/student/progress" element={<LearningProgressPage />} />
-                <Route path="/student/feedback" element={<Navigate to="/student" replace />} />
                 <Route path="/student/assistant" element={<StudentAssistantPage />} />
                 <Route path="/student/quiz" element={<StudentQuizPage />} />
                 <Route path="/student/notifications" element={<StudentNotificationsPage />} />
@@ -185,12 +182,10 @@ export function App() {
                 {/* HOD Routes */}
                 <Route path="/hod" element={<HodDashboard />} />
                 <Route path="/hod/analytics" element={<HodAnalyticsPage />} />
-                <Route path="/hod/feedback" element={<HodFeedbackPage />} />
                 <Route path="/hod/reports" element={<HodReportsPage />} />
 
                 {/* Admin Routes */}
                 <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/admin/moderation" element={<AdminModerationPage />} />
                 <Route path="/admin/closed-loop" element={<AdminClosedLoopPage />} />
                 <Route path="/admin/knowledge" element={<AdminKnowledgePage />} />
                 <Route path="/admin/videos" element={<AdminVideosPage />} />

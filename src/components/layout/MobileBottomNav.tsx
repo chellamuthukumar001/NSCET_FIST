@@ -22,16 +22,15 @@ export const MobileBottomNav: React.FC = () => {
         return [
           { label: 'Overview', path: '/hod', icon: LayoutDashboard },
           { label: 'Analytics', path: '/hod/analytics', icon: Video },
-          { label: 'Feedback', path: '/hod/feedback', icon: MessageSquareHeart },
           { label: 'Reports', path: '/hod/reports', icon: User },
         ];
       case 'ADMIN':
       case 'SUPER_ADMIN':
         return [
           { label: 'Overview', path: '/admin', icon: LayoutDashboard },
-          { label: 'Moderation', path: '/admin/moderation', icon: Video },
           { label: 'Tickets', path: '/admin/closed-loop', icon: MessageSquareHeart },
-          { label: 'Knowledge', path: '/admin/knowledge', icon: User },
+          { label: 'Knowledge', path: '/admin/knowledge', icon: Video },
+          { label: 'Users', path: '/admin/users', icon: User },
         ];
       default:
         return [

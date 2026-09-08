@@ -57,7 +57,7 @@ export const FacultyDashboard: React.FC = () => {
             <div>
               <h3 className="text-base font-bold text-[#17201C]">Faculty Copilot Assistant</h3>
               <p className="text-xs text-gray-500">
-                Draft semester quizzes, create lesson plans, or review anonymized class feedback.
+                Draft semester quizzes, create lesson plans, or generate syllabus guides.
               </p>
             </div>
           </div>
@@ -65,7 +65,7 @@ export const FacultyDashboard: React.FC = () => {
           <div className="flex flex-wrap gap-2 pt-2">
             {[
               'Generate 5 revision MCQs for CS3451 Unit 2',
-              'Summarize student feedback on Lab practicals',
+              'Draft Unit 3 Lecture Plan for DBMS CS3351',
               'Create lesson outline for Process Scheduling'
             ].map((prompt, i) => (
               <button

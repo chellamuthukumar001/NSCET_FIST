@@ -1,6 +1,6 @@
 // CAMPUSIQ Hybrid RAG Retrieval & Anti-Hallucination Engine
 import { Role, SourceCitation, ConfidenceScore, KnowledgeDomain } from '../types';
-import { MOCK_KNOWLEDGE_DOCUMENTS, MOCK_VIDEOS, MOCK_FEEDBACK } from './mockDatabase';
+import { MOCK_KNOWLEDGE_DOCUMENTS, MOCK_VIDEOS } from './mockDatabase';
 
 export interface RagResult {
   answer: string;
@@ -65,20 +65,6 @@ function buildUnifiedCorpus(): SearchDocument[] {
           allowedRoles: ['STUDENT', 'FACULTY', 'HOD', 'ADMIN', 'SUPER_ADMIN', 'APPLICANT'],
         });
       }
-    }
-  }
-
-  // 3. Approved Student Voice (Anonymized)
-  for (const fb of MOCK_FEEDBACK) {
-    if (fb.status === 'Approved') {
-      corpus.push({
-        id: fb.id,
-        title: `Student Feedback: ${fb.category} (${fb.anonymousToken})`,
-        text: fb.text,
-        sourceType: 'STUDENT_VOICE',
-        reference: `${fb.category} Feedback`,
-        allowedRoles: ['STUDENT', 'FACULTY', 'HOD', 'ADMIN', 'SUPER_ADMIN'],
-      });
     }
   }
 

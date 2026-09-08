@@ -12,9 +12,9 @@ export const FacultyAssistantPage: React.FC = () => {
       query: 'Generate 5 multiple choice questions with answers and detailed explanations for CS3351 Database Management Systems Unit 3 Normalization.'
     },
     {
-      title: 'Summarize Student Feedback',
-      desc: 'Review anonymized student feedback regarding Computer Lab 2 practicals.',
-      query: 'Summarize student feedback regarding Computer Lab 2 practicals and suggest actionable solutions.'
+      title: 'Analyze Curriculum Mapping',
+      desc: 'Verify Anna University Regulation 2021 course outcomes and prerequisite topics.',
+      query: 'Analyze CS3351 Database Management Systems prerequisite mapping and recommended lab experiments.'
     },
     {
       title: 'Draft Lesson Plan',
@@ -34,7 +34,7 @@ export const FacultyAssistantPage: React.FC = () => {
           Academic AI Workflows
         </h1>
         <p className="text-xs sm:text-sm text-[#66736C]">
-          Utilize CampusIQ RAG to draft quizzes, analyze curriculum bottlenecks, and review student sentiment.
+          Utilize CampusIQ RAG to draft quizzes, analyze curriculum bottlenecks, and prepare lesson outlines.
         </p>
       </div>
 
