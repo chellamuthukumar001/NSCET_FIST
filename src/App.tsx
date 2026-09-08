@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 
 // Providers
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { CopilotProvider } from './context/CopilotContext';
 import { NotificationProvider } from './context/NotificationContext';
 
@@ -16,6 +16,7 @@ import { MobileBottomNav } from './components/layout/MobileBottomNav';
 import { CopilotDrawer } from './components/copilot/CopilotDrawer';
 
 // Public Pages
+import { LandingPage } from './pages/public/LandingPage';
 import { HomePage } from './pages/public/HomePage';
 import { AboutPage } from './pages/public/AboutPage';
 import { DepartmentsPage } from './pages/public/DepartmentsPage';
@@ -76,7 +77,23 @@ const PublicLayout: React.FC = () => {
   );
 };
 
+// RootRedirect enforces the required initial entry flow: login page -> landing page
+const RootRedirect: React.FC = () => {
+  const { currentUser } = useAuth();
+  if (!currentUser) {
+    return <Navigate to="/login" replace />;
+  }
+  return <Navigate to="/landing" replace />;
+};
+
 const AuthenticatedLayout: React.FC = () => {
+  const { currentUser } = useAuth();
+
+  // If user is unauthenticated, redirect to login page first
+  if (!currentUser) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <div className="min-h-screen bg-[#F4F5F1] text-[#17201C] relative selection:bg-[#C49A55]/30">
       {/* Subtle Ambient Institutional Dashboard Background Canvas */}
@@ -126,12 +143,14 @@ export function App() {
             <Routes>
               {/* Public Portal Routes */}
               <Route element={<PublicLayout />}>
-                <Route path="/" element={<HomePage />} />
+                {/* Website Flow: login page -> landing page -> get started -> learning dashboard */}
+                <Route path="/" element={<RootRedirect />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/landing" element={<LandingPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/departments" element={<DepartmentsPage />} />
                 <Route path="/courses" element={<CoursesPage />} />
                 <Route path="/public-learning" element={<PublicLearningPage />} />
-                <Route path="/login" element={<LoginPage />} />
               </Route>
 
               {/* Authenticated Portal Routes */}

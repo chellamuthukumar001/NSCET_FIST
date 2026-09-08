@@ -273,15 +273,27 @@ export const AppHeader: React.FC = () => {
                     {role === r.role && <CheckCircle2 className="w-4 h-4 text-[#C49A55] shrink-0" />}
                   </button>
                 ))}
-                <div className="border-t border-white/10 mt-1.5 pt-1.5">
+                <div className="border-t border-white/10 mt-1.5 pt-1.5 space-y-1">
                   <Link
-                    to="/"
+                    to="/landing"
                     onClick={() => setPersonaOpen(false)}
                     className="w-full px-3 py-2 text-xs text-gray-300 hover:bg-white/10 rounded-xl flex items-center gap-2"
                   >
                     <ExternalLink className="w-3.5 h-3.5 text-[#C49A55]" />
-                    <span>Public Homepage</span>
+                    <span>Campus Landing Page</span>
                   </Link>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      logout();
+                      setPersonaOpen(false);
+                    }}
+                    className="w-full px-3 py-2 text-xs text-rose-300 hover:bg-rose-500/10 rounded-xl flex items-center gap-2 cursor-pointer transition-colors"
+                  >
+                    <LogOut className="w-3.5 h-3.5 text-rose-400" />
+                    <span>Sign Out</span>
+                  </button>
                 </div>
               </div>
             )}

@@ -11,12 +11,13 @@ import {
   Globe,
   ChevronDown,
   CheckCircle2,
-  GraduationCap
+  GraduationCap,
+  LogOut
 } from 'lucide-react';
 import { Role } from '../../types';
 
 export const PublicNavbar: React.FC = () => {
-  const { currentUser, role, switchRole } = useAuth();
+  const { currentUser, role, switchRole, logout } = useAuth();
   const { openCopilot, selectedLanguage, setSelectedLanguage } = useCopilot();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
@@ -32,7 +33,7 @@ export const PublicNavbar: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { label: 'Overview', path: '/' },
+    { label: 'Campus Home', path: '/landing' },
     { label: 'About College', path: '/about' },
     { label: 'Departments', path: '/departments' },
     { label: 'Academic Courses', path: '/courses' },
@@ -50,6 +51,7 @@ export const PublicNavbar: React.FC = () => {
   ];
 
   const getDashboardPath = () => {
+    if (!currentUser) return '/login';
     switch (role) {
       case 'ADMIN':
       case 'SUPER_ADMIN':
@@ -72,7 +74,7 @@ export const PublicNavbar: React.FC = () => {
         <div className={`flex items-center justify-between transition-all duration-300 ${scrolled ? 'h-16' : 'h-20'}`}>
           
           {/* Logo & College Identity with Official Attached NSCET Emblem */}
-          <Link to="/" className="flex items-center gap-3 group">
+          <Link to="/landing" className="flex items-center gap-3 group">
             <div className="h-11 sm:h-12 px-2.5 py-1 rounded-xl bg-white shadow-md border border-[#C49A55]/50 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
               <img
                 src="/assets/nscet-college-logo.jpg"
@@ -190,6 +192,19 @@ export const PublicNavbar: React.FC = () => {
                     {role === r.role && <CheckCircle2 className="w-4 h-4 text-[#C49A55] shrink-0" />}
                   </button>
                 ))}
+
+                {currentUser && (
+                  <div className="border-t border-white/10 mt-2 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => logout()}
+                      className="w-full text-left p-2 rounded-xl text-xs text-rose-300 hover:bg-rose-500/10 flex items-center gap-2 cursor-pointer transition-colors"
+                    >
+                      <LogOut className="w-3.5 h-3.5 text-rose-400" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -291,9 +306,23 @@ export const PublicNavbar: React.FC = () => {
               onClick={() => setMobileMenuOpen(false)}
               className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-[#C49A55] to-[#D97736] text-white font-black text-xs uppercase tracking-wider shadow-lg mt-2"
             >
-              <span>Launch {role} Dashboard</span>
+              <span>{currentUser ? `Launch ${role} Dashboard` : 'Sign In to Portal'}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
+
+            {currentUser && (
+              <button
+                type="button"
+                onClick={() => {
+                  logout();
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full flex items-center justify-center gap-2 py-2 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 font-bold text-xs hover:bg-rose-500/25 transition-colors mt-2"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>Sign Out</span>
+              </button>
+            )}
           </div>
         </div>
       )}

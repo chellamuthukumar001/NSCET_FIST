@@ -1,12 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, Role } from '../types';
 import { MOCK_USERS } from '../lib/mockDatabase';
+import { signInWithGoogle } from '../lib/firebase';
 
 interface AuthContextType {
   currentUser: User | null;
   role: Role;
   switchRole: (newRole: Role) => void;
   login: (email: string, role: Role) => void;
+  loginWithGoogle: (targetRole?: Role) => Promise<User>;
   logout: () => void;
   allDemoUsers: User[];
 }
@@ -24,8 +26,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       } catch (_) {}
     }
-    // Default to Student Vignesh
-    return MOCK_USERS[0];
+    // Return null when unauthenticated so user starts at login page
+    return null;
   });
 
   useEffect(() => {
@@ -53,6 +55,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setCurrentUser(matched);
   };
 
+  const loginWithGoogle = async (targetRole: Role = 'STUDENT'): Promise<User> => {
+    const cred = await signInWithGoogle();
+    const fbUser = cred.user;
+    const email = fbUser.email || 'student@nscet.org';
+    const name = fbUser.displayName || email.split('@')[0];
+
+    const newUser: User = {
+      id: `google_${fbUser.uid}`,
+      name,
+      email,
+      role: targetRole,
+      departmentId: 'dept_cse',
+      departmentName: 'Computer Science & Engineering',
+    };
+
+    setCurrentUser(newUser);
+    return newUser;
+  };
+
   const logout = () => {
     setCurrentUser(null);
   };
@@ -64,6 +85,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         role: currentUser ? currentUser.role : 'STUDENT',
         switchRole,
         login,
+        loginWithGoogle,
         logout,
         allDemoUsers: MOCK_USERS,
       }}
