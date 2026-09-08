@@ -791,26 +791,6 @@ export const MOCK_USERS: User[] = [
     avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80'
   },
   {
-    id: 'user_faculty_1',
-    name: 'Dr. M. Deepa',
-    email: 'deepa.cs@nscet.org',
-    role: 'FACULTY',
-    departmentId: 'dept_cse',
-    departmentName: 'Computer Science & Engineering',
-    facultyId: 'FAC_CSE_014',
-    avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80'
-  },
-  {
-    id: 'user_hod_1',
-    name: 'Dr. S. Karthik',
-    email: 'hod.cse@nscet.org',
-    role: 'HOD',
-    departmentId: 'dept_cse',
-    departmentName: 'Computer Science & Engineering',
-    facultyId: 'HOD_CSE_001',
-    avatarUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=120&auto=format&fit=crop&q=80'
-  },
-  {
     id: 'user_admin_1',
     name: 'Er. K. Anand',
     email: 'admin@nscet.org',

@@ -45,23 +45,16 @@ export const PublicNavbar: React.FC = () => {
   ];
 
   const roles: { role: Role; label: string; name: string; dept: string }[] = [
-    { role: 'STUDENT', label: 'Student Persona', name: 'Vignesh R.', dept: '3rd Year CSE' },
-    { role: 'FACULTY', label: 'Faculty Persona', name: 'Dr. M. Deepa', dept: 'AP / CSE' },
-    { role: 'HOD', label: 'HOD Persona', name: 'Dr. S. Karthik', dept: 'HOD CSE' },
-    { role: 'ADMIN', label: 'Admin Persona', name: 'Er. K. Anand', dept: 'Admin Office' },
+    { role: 'STUDENT', label: 'Student Portal', name: 'Vignesh R.', dept: '3rd Year CSE' },
+    { role: 'ADMIN', label: 'Admin Portal', name: 'Er. K. Anand', dept: 'Admin Office' },
   ];
 
   const getDashboardPath = () => {
     switch (role) {
-      case 'STUDENT':
-        return '/student';
-      case 'FACULTY':
-        return '/faculty';
-      case 'HOD':
-        return '/hod';
       case 'ADMIN':
       case 'SUPER_ADMIN':
         return '/admin';
+      case 'STUDENT':
       default:
         return '/student';
     }

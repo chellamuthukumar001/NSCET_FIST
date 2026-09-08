@@ -15,7 +15,7 @@ export const AdminUsersPage: React.FC = () => {
           Role-Based Access Control (RBAC)
         </h1>
         <p className="text-xs sm:text-sm text-[#66736C]">
-          Manage institutional roles across students, faculty, heads of department, and administrators.
+          Manage institutional roles across students and administrators.
         </p>
       </div>
 

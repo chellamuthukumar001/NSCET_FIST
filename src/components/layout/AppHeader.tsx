@@ -44,10 +44,8 @@ export const AppHeader: React.FC = () => {
   }, [openCopilot]);
 
   const roles: { role: Role; label: string; name: string }[] = [
-    { role: 'STUDENT', label: 'Student Persona', name: 'Vignesh R. (3rd Yr CSE)' },
-    { role: 'FACULTY', label: 'Faculty Persona', name: 'Dr. M. Deepa (AP / CSE)' },
-    { role: 'HOD', label: 'HOD Persona', name: 'Dr. S. Karthik (HOD CSE)' },
-    { role: 'ADMIN', label: 'Admin Persona', name: 'Er. K. Anand (Admin Office)' },
+    { role: 'STUDENT', label: 'Student Portal', name: 'Vignesh R. (3rd Yr CSE)' },
+    { role: 'ADMIN', label: 'Admin Portal', name: 'Er. K. Anand (Admin Office)' },
   ];
 
   const languages = [
@@ -57,11 +55,9 @@ export const AppHeader: React.FC = () => {
 
   const getDashboardRoot = () => {
     switch (role) {
-      case 'STUDENT': return '/student';
-      case 'FACULTY': return '/faculty';
-      case 'HOD': return '/hod';
       case 'ADMIN':
       case 'SUPER_ADMIN': return '/admin';
+      case 'STUDENT':
       default: return '/student';
     }
   };

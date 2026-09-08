@@ -17,7 +17,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
     const saved = localStorage.getItem('campusiq_user');
     if (saved) {
-      try { return JSON.parse(saved); } catch (_) {}
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed && (parsed.role === 'STUDENT' || parsed.role === 'ADMIN' || parsed.role === 'SUPER_ADMIN')) {
+          return parsed;
+        }
+      } catch (_) {}
     }
     // Default to Student Vignesh
     return MOCK_USERS[0];
