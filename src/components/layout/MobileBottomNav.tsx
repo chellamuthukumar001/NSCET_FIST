@@ -1,7 +1,15 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { LayoutDashboard, Video, MessageSquareHeart, User, GraduationCap } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Video,
+  User,
+  GraduationCap,
+  TrendingUp,
+  Database,
+  Users
+} from 'lucide-react';
 
 export const MobileBottomNav: React.FC = () => {
   const { role } = useAuth();
@@ -12,29 +20,30 @@ export const MobileBottomNav: React.FC = () => {
       case 'FACULTY':
         return [
           { label: 'Overview', path: '/faculty', icon: LayoutDashboard },
-          { label: 'Courses', path: '/faculty/courses', icon: Video },
-          { label: 'Sync Video', path: '/faculty/content', icon: MessageSquareHeart },
-          { label: 'Analytics', path: '/faculty/analytics', icon: User },
+          { label: 'Courses', path: '/faculty/courses', icon: GraduationCap },
+          { label: 'Video Sync', path: '/faculty/content', icon: Video },
+          { label: 'Analytics', path: '/faculty/analytics', icon: TrendingUp },
         ];
       case 'HOD':
         return [
           { label: 'Overview', path: '/hod', icon: LayoutDashboard },
-          { label: 'Analytics', path: '/hod/analytics', icon: Video },
-          { label: 'Courses', path: '/student/courses', icon: GraduationCap },
+          { label: 'Analytics', path: '/hod/analytics', icon: TrendingUp },
+          { label: '10 Courses', path: '/student/courses', icon: GraduationCap },
+          { label: 'Profile', path: '/student/profile', icon: User },
         ];
       case 'ADMIN':
       case 'SUPER_ADMIN':
         return [
-          { label: 'Overview', path: '/admin', icon: LayoutDashboard },
-          { label: 'Courses', path: '/student/courses', icon: GraduationCap },
-          { label: 'Knowledge', path: '/admin/knowledge', icon: Video },
-          { label: 'Users', path: '/admin/users', icon: User },
+          { label: 'Control', path: '/admin', icon: LayoutDashboard },
+          { label: '10 Courses', path: '/student/courses', icon: GraduationCap },
+          { label: 'Knowledge', path: '/admin/knowledge', icon: Database },
+          { label: 'Users', path: '/admin/users', icon: Users },
         ];
       default:
         return [
           { label: 'Dashboard', path: '/student', icon: LayoutDashboard },
-          { label: 'Courses', path: '/student/courses', icon: GraduationCap },
-          { label: 'Videos', path: '/student/videos', icon: Video },
+          { label: '10 Courses', path: '/student/courses', icon: GraduationCap },
+          { label: 'Video Hub', path: '/student/videos', icon: Video },
           { label: 'Profile', path: '/student/profile', icon: User },
         ];
     }
@@ -43,52 +52,26 @@ export const MobileBottomNav: React.FC = () => {
   const navItems = getRoleNavItems();
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#101815]/95 backdrop-blur-lg border-t border-white/10 px-2 py-1.5 flex items-center justify-around text-white">
-      {/* Item 1 */}
-      <Link
-        to={navItems[0].path}
-        className={`flex flex-col items-center py-1 px-2.5 rounded-xl text-[10px] ${
-          location.pathname === navItems[0].path ? 'text-[#C49A55] font-bold' : 'text-gray-400'
-        }`}
-      >
-        <LayoutDashboard className="w-4 h-4 mb-0.5" />
-        <span>{navItems[0].label}</span>
-      </Link>
-
-      {/* Item 2 */}
-      <Link
-        to={navItems[1].path}
-        className={`flex flex-col items-center py-1 px-2.5 rounded-xl text-[10px] ${
-          location.pathname === navItems[1].path ? 'text-[#6FA9C9] font-bold' : 'text-gray-400'
-        }`}
-      >
-        <Video className="w-4 h-4 mb-0.5" />
-        <span>{navItems[1].label}</span>
-      </Link>
-
-
-      {/* Item 3 */}
-      <Link
-        to={navItems[2].path}
-        className={`flex flex-col items-center py-1 px-2.5 rounded-xl text-[10px] ${
-          location.pathname === navItems[2].path ? 'text-[#6E7F45] font-bold' : 'text-gray-400'
-        }`}
-      >
-        <MessageSquareHeart className="w-4 h-4 mb-0.5" />
-        <span>{navItems[2].label}</span>
-      </Link>
-
-      {/* Item 4 */}
-      <Link
-        to={navItems[3].path}
-        className={`flex flex-col items-center py-1 px-2.5 rounded-xl text-[10px] ${
-          location.pathname === navItems[3].path ? 'text-[#C49A55] font-bold' : 'text-gray-400'
-        }`}
-      >
-        <User className="w-4 h-4 mb-0.5" />
-        <span>{navItems[3].label}</span>
-      </Link>
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0A120E]/95 backdrop-blur-2xl border-t border-white/10 px-3 pt-2 pb-3 flex items-center justify-around text-white shadow-[0_-10px_25px_rgba(0,0,0,0.6)]">
+      {navItems.map((item) => {
+        const Icon = item.icon;
+        const isActive = location.pathname === item.path;
+        return (
+          <Link
+            key={item.path}
+            to={item.path}
+            className={`flex flex-col items-center justify-center min-w-[56px] py-1 px-2 rounded-xl text-[10px] transition-all relative active:scale-95 ${
+              isActive ? 'text-[#C49A55] font-black' : 'text-gray-400 hover:text-gray-200'
+            }`}
+          >
+            <Icon className={`w-5 h-5 mb-0.5 transition-transform ${isActive ? 'scale-110 text-[#C49A55]' : ''}`} />
+            <span className="tracking-tight leading-tight">{item.label}</span>
+            {isActive && (
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C49A55] mt-0.5 shadow-sm shadow-[#C49A55]" />
+            )}
+          </Link>
+        );
+      })}
     </div>
   );
 };
-

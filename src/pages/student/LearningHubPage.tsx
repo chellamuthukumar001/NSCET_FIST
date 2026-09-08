@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { MOCK_VIDEOS, MOCK_DEPARTMENTS } from '../../lib/mockDatabase';
 import { VideoCard } from '../../components/video/VideoCard';
 import { ExamRevisionModal } from '../../components/video/ExamRevisionModal';
-import { SearchAndWatchSection } from '../../components/video/SearchAndWatchSection';
 import { Video } from '../../types';
 import {
   Search,
@@ -28,7 +27,6 @@ import {
 } from 'lucide-react';
 
 export const LearningHubPage: React.FC = () => {
-  const [hubMode, setHubMode] = useState<'syllabus' | 'search_and_watch'>('syllabus');
   const [videos, setVideos] = useState<Video[]>(MOCK_VIDEOS);
   const [search, setSearch] = useState('');
   const [selectedSubject, setSelectedSubject] = useState<string>('ALL');
@@ -202,51 +200,22 @@ export const LearningHubPage: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. Institutional Hub Mode Switcher Tabs */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-2 rounded-2xl bg-white border border-gray-200 shadow-sm">
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={() => setHubMode('syllabus')}
-            className={`px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 cursor-pointer transition-all ${
-              hubMode === 'syllabus'
-                ? 'bg-[#173B2F] text-white shadow-md'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-          >
-            <GraduationCap className="w-4 h-4" />
-            <span>Curriculum Syllabus Vault (16 Faculty Lectures)</span>
-          </button>
-
-          <button
-            onClick={() => setHubMode('search_and_watch')}
-            className={`px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 cursor-pointer transition-all ${
-              hubMode === 'search_and_watch'
-                ? 'bg-gradient-to-r from-[#C49A55] to-[#D97736] text-white shadow-md'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-          >
-            <Globe className="w-4 h-4" />
-            <span>Search & Watch Online (YouTube Education API)</span>
-            <span className={`px-1.5 py-0.5 rounded text-[9px] uppercase tracking-wider font-extrabold ${
-              hubMode === 'search_and_watch' ? 'bg-white/20 text-white' : 'bg-[#C49A55]/20 text-[#C49A55]'
-            }`}>
-              Live ✨
-            </span>
-          </button>
+      {/* 2. Institutional Syllabus Vault Header */}
+      <div className="flex flex-wrap items-center justify-between gap-4 p-3.5 rounded-2xl bg-white border border-gray-200 shadow-sm">
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-xl bg-[#173B2F]/10 text-[#173B2F] flex items-center justify-center font-bold">
+            <GraduationCap className="w-5 h-5 text-[#173B2F]" />
+          </div>
+          <div>
+            <h3 className="text-xs font-bold text-[#17201C]">Curriculum Syllabus Video Vault</h3>
+            <p className="text-[11px] text-gray-500">Unit 1–5 faculty lectures mapped to Anna University Regulation 2021</p>
+          </div>
         </div>
 
-        <div className="text-[11px] text-gray-500 font-medium hidden md:block">
-          {hubMode === 'syllabus' && (
-            <span>Unit 1-5 Lectures mapped to Anna University Regulation 2021</span>
-          )}
-        </div>
+        <span className="text-[11px] font-mono font-bold text-[#C49A55] bg-[#C49A55]/10 px-3 py-1 rounded-full border border-[#C49A55]/20">
+          16 Faculty Lectures Indexed
+        </span>
       </div>
-
-      {/* Search & Watch Online Mode */}
-      {hubMode === 'search_and_watch' ? (
-        <SearchAndWatchSection initialQuery="DBMS" />
-      ) : (
-        <>
           {/* 3. Spotlight "Continue Watching" Card */}
           {inProgressVideo && (
             <div className="rounded-3xl bg-white border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow">
@@ -757,9 +726,6 @@ export const LearningHubPage: React.FC = () => {
           })}
         </div>
       )}
-      </>
-      )}
-
       {/* 7. AI Exam Revision Modal */}
       {revisionModalVideo && (
         <ExamRevisionModal
