@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
   Lock,
   Mail,
   ArrowRight,
-  ShieldCheck,
   Eye,
   EyeOff,
   AlertCircle,
-  ArrowLeft,
   KeyRound,
   Sparkles
 } from 'lucide-react';
@@ -98,23 +96,7 @@ export const LoginPage: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-[#07110C]/90 via-[#0B1812]/80 to-[#050B08]/95 backdrop-blur-[2px]" />
       </div>
 
-      {/* 2. TOP DISCRETE NAVIGATION */}
-      <div className="relative z-10 w-full max-w-md mb-4 flex items-center justify-between">
-        <Link
-          to="/landing"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/80 hover:text-white bg-black/40 hover:bg-black/60 px-3 py-1.5 rounded-full backdrop-blur-md border border-white/15 transition-all shadow group cursor-pointer"
-        >
-          <ArrowLeft className="w-3.5 h-3.5 text-[#C49A55] group-hover:-translate-x-0.5 transition-transform" />
-          <span>Campus Home</span>
-        </Link>
-
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/40 border border-white/15 text-[10px] text-emerald-400 font-mono">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-          <span>Secure Gateway</span>
-        </div>
-      </div>
-
-      {/* 3. CENTERED CLEAN LOGIN CARD */}
+      {/* 2. CENTERED CLEAN LOGIN CARD */}
       <div className="relative z-10 w-full max-w-md">
         <div className="rounded-3xl bg-[#0E1B15]/95 backdrop-blur-2xl p-6 sm:p-8 border border-white/20 shadow-2xl shadow-black/80 text-white space-y-6">
           
@@ -250,8 +232,8 @@ export const LoginPage: React.FC = () => {
               )}
             </div>
 
-            {/* Remember & Security */}
-            <div className="flex items-center justify-between text-xs text-gray-300 pt-0.5">
+            {/* Remember */}
+            <div className="flex items-center text-xs text-gray-300 pt-0.5">
               <label className="flex items-center gap-2 cursor-pointer select-none">
                 <input
                   type="checkbox"
@@ -261,10 +243,6 @@ export const LoginPage: React.FC = () => {
                 />
                 <span>Remember me</span>
               </label>
-              <span className="text-[11px] text-emerald-400 flex items-center gap-1 font-mono">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>SSL Encrypted</span>
-              </span>
             </div>
 
             {/* Submit Button */}
@@ -278,17 +256,6 @@ export const LoginPage: React.FC = () => {
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
-
-          {/* Simple Clean Role Routing Notice */}
-          <div className="p-3 rounded-2xl bg-black/40 border border-white/10 text-[11px] text-gray-300 space-y-0.5">
-            <div className="flex items-center gap-1.5 text-[#C49A55] font-bold">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Role-Based Portal Redirection</span>
-            </div>
-            <p className="text-gray-400 leading-snug">
-              <span className="text-white font-mono font-semibold">admincampusiq@gmail.com</span> enters the Admin Portal. All student and other accounts enter the Student Learning Hub.
-            </p>
-          </div>
 
           {/* Clean Footer */}
           <div className="text-center text-[10px] text-gray-500 pt-1">
