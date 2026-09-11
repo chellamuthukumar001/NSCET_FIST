@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { handleRagQuery } from '../controllers/ragController';
-import { listVideos, getVideoById } from '../controllers/videoController';
+import { listVideos, getVideoById, createVideo } from '../controllers/videoController';
 import {
   searchEducationalVideos,
   getRelatedEducationalVideos,
@@ -23,6 +23,7 @@ router.get('/videos/related/:videoId', getRelatedEducationalVideos);
 router.get('/videos/analytics/top-searches', getTopSearchAnalytics);
 router.get('/videos', listVideos);
 router.get('/videos/:id', getVideoById);
+router.post('/videos', createVideo);
 
 // 5. Modular Curriculum & Learning Platform Routes (SWAYAM / Simplilearn Model)
 import {

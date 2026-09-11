@@ -1,11 +1,13 @@
 -- ==========================================================
--- CAMPUSIQ: Institutional PostgreSQL & pgvector Schema
--- Nadar Saraswathi College of Engineering & Technology (NSCET)
+-- CAMPUSIQ: Institutional MySQL Database Schema
+-- Nadar Saraswathi College of Engineering & Technology (NSCET Theni)
 -- ==========================================================
 
--- Enable pgvector & UUID extensions
-CREATE EXTENSION IF NOT EXISTS vector;
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE DATABASE IF NOT EXISTS campusiq_db 
+CHARACTER SET utf8mb4 
+COLLATE utf8mb4_unicode_ci;
+
+USE campusiq_db;
 
 -- 1. Departments Table
 CREATE TABLE IF NOT EXISTS departments (
@@ -15,307 +17,268 @@ CREATE TABLE IF NOT EXISTS departments (
     hod_name VARCHAR(255) NOT NULL,
     hod_email VARCHAR(255) NOT NULL,
     description TEXT,
-    student_count INTEGER DEFAULT 0,
-    faculty_count INTEGER DEFAULT 0,
-    satisfaction_score NUMERIC(5,2) DEFAULT 85.00,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
+    student_count INT DEFAULT 0,
+    faculty_count INT DEFAULT 0,
+    satisfaction_score DECIMAL(5,2) DEFAULT 85.00,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 2. Users Table (Role-Based Access Control)
 CREATE TABLE IF NOT EXISTS users (
     id VARCHAR(100) PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
-    role VARCHAR(50) NOT NULL CHECK (role IN ('STUDENT', 'FACULTY', 'HOD', 'ADMIN', 'SUPER_ADMIN', 'APPLICANT')),
-    department_id VARCHAR(50) REFERENCES departments(id) ON DELETE SET NULL,
+    role ENUM('STUDENT', 'FACULTY', 'HOD', 'ADMIN', 'SUPER_ADMIN', 'APPLICANT') NOT NULL DEFAULT 'STUDENT',
+    department_id VARCHAR(50),
     department_name VARCHAR(255),
-    student_id VARCHAR(50), -- Roll / Reg No (e.g. 921022104042)
+    student_id VARCHAR(50),
     faculty_id VARCHAR(50),
     program VARCHAR(255),
-    semester INTEGER,
+    semester INT,
     batch VARCHAR(50),
     avatar_url TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 3. Courses Table (Anna University Regulation 2021)
-CREATE TABLE IF NOT EXISTS courses (
-    id VARCHAR(50) PRIMARY KEY,
-    code VARCHAR(20) NOT NULL, -- e.g. CS3351
-    title VARCHAR(255) NOT NULL,
-    department_id VARCHAR(50) REFERENCES departments(id) ON DELETE CASCADE,
-    semester INTEGER NOT NULL,
-    credits INTEGER DEFAULT 3,
-    academic_year VARCHAR(20) DEFAULT '2026-27',
-    regulation VARCHAR(50) DEFAULT 'Regulation 2021',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
--- 4. Videos Table (Curated YouTube Lectures)
+-- 3. Videos Table (Manually Uploaded & Curated College Lectures)
 CREATE TABLE IF NOT EXISTS videos (
     id VARCHAR(50) PRIMARY KEY,
-    youtube_id VARCHAR(50) NOT NULL,
+    youtube_id VARCHAR(50) DEFAULT '',
+    local_video_path VARCHAR(500),
     title VARCHAR(255) NOT NULL,
-    description TEXT,
-    thumbnail_url TEXT,
-    duration_seconds INTEGER NOT NULL,
-    published_date DATE NOT NULL,
-    department_id VARCHAR(50) REFERENCES departments(id) ON DELETE CASCADE,
-    department_code VARCHAR(20) NOT NULL,
-    program VARCHAR(255) NOT NULL,
-    semester INTEGER NOT NULL,
-    academic_year VARCHAR(20) NOT NULL,
-    subject_code VARCHAR(20) NOT NULL,
-    subject_title VARCHAR(255) NOT NULL,
-    unit_number INTEGER NOT NULL CHECK (unit_number BETWEEN 1 AND 5),
     topic VARCHAR(255) NOT NULL,
     faculty_name VARCHAR(255) NOT NULL,
-    tags TEXT[] DEFAULT '{}',
-    view_count INTEGER DEFAULT 0,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
+    department_code VARCHAR(20) NOT NULL,
+    department_id VARCHAR(50),
+    program VARCHAR(50) DEFAULT 'B.E',
+    semester INT DEFAULT 1,
+    academic_year VARCHAR(20) NOT NULL,
+    subject_code VARCHAR(50) DEFAULT 'GEN',
+    subject_title VARCHAR(255) DEFAULT 'General Engineering',
+    unit_number INT DEFAULT 1,
+    thumbnail_url TEXT,
+    study_material_url TEXT,
+    description TEXT,
+    duration_seconds INT DEFAULT 120,
+    tags JSON,
+    view_count INT DEFAULT 0,
+    is_bookmarked BOOLEAN DEFAULT FALSE,
+    is_completed BOOLEAN DEFAULT FALSE,
+    published_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 5. Video Transcript Chunks with pgvector Embeddings
+-- 4. Video Transcript Chunks
 CREATE TABLE IF NOT EXISTS transcript_chunks (
     id VARCHAR(100) PRIMARY KEY,
-    video_id VARCHAR(50) REFERENCES videos(id) ON DELETE CASCADE,
-    chunk_index INTEGER NOT NULL,
-    start_time INTEGER NOT NULL, -- in seconds
-    end_time INTEGER NOT NULL,   -- in seconds
+    video_id VARCHAR(50) NOT NULL,
+    chunk_index INT NOT NULL,
+    start_time INT NOT NULL,
+    end_time INT NOT NULL,
     text TEXT NOT NULL,
     speaker VARCHAR(255),
-    embedding vector(1536),      -- OpenAI text-embedding-3 / Gemini embedding
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (video_id) REFERENCES videos(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- HNSW Vector Index for Sub-10ms Approximate Nearest Neighbor (ANN) search
-CREATE INDEX IF NOT EXISTS idx_transcript_chunks_embedding 
-ON transcript_chunks USING hnsw (embedding vector_cosine_ops)
-WITH (m = 16, ef_construction = 64);
-
--- 6. Anonymous Student Feedback Table (Cryptographically Shielded)
-CREATE TABLE IF NOT EXISTS feedback (
-    id VARCHAR(100) PRIMARY KEY,
-    anonymous_token VARCHAR(64) NOT NULL, -- SHA-256 one-way token
-    category VARCHAR(100) NOT NULL,
-    subcategory VARCHAR(100),
-    rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
-    text TEXT NOT NULL,
-    department_id VARCHAR(50) REFERENCES departments(id) ON DELETE SET NULL,
-    department_name VARCHAR(255),
-    semester INTEGER,
-    status VARCHAR(50) DEFAULT 'Pending' CHECK (status IN ('Pending', 'Approved', 'Rejected', 'Needs Review', 'Spam', 'Contains PII', 'Abusive')),
-    sentiment VARCHAR(20) CHECK (sentiment IN ('Positive', 'Neutral', 'Critical')),
-    sentiment_score NUMERIC(4,3) DEFAULT 0.000,
-    pii_detected BOOLEAN DEFAULT FALSE,
-    pii_flags TEXT[] DEFAULT '{}',
-    moderation_notes TEXT,
-    moderated_at TIMESTAMP WITH TIME ZONE,
-    moderated_by VARCHAR(100),
-    linked_issue_id VARCHAR(100),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE INDEX IF NOT EXISTS idx_feedback_category ON feedback(category);
-CREATE INDEX IF NOT EXISTS idx_feedback_status ON feedback(status);
-CREATE INDEX IF NOT EXISTS idx_feedback_anonymous_token ON feedback(anonymous_token);
-
--- 7. Closed-Loop Institutional Issues Table (7-Stage Remediation Tracker)
-CREATE TABLE IF NOT EXISTS closed_loop_issues (
-    id VARCHAR(100) PRIMARY KEY,
+-- 5. Courses Table (Anna University Regulation 2021)
+CREATE TABLE IF NOT EXISTS courses (
+    id VARCHAR(50) PRIMARY KEY,
+    code VARCHAR(20) NOT NULL,
     title VARCHAR(255) NOT NULL,
-    category VARCHAR(100) NOT NULL,
-    department_id VARCHAR(50) REFERENCES departments(id) ON DELETE SET NULL,
-    department_name VARCHAR(255) NOT NULL,
-    status VARCHAR(50) NOT NULL DEFAULT 'Identified' 
-        CHECK (status IN ('Identified', 'Acknowledged', 'Investigating', 'Action Planned', 'In Progress', 'Resolved', 'Closed')),
-    priority VARCHAR(20) DEFAULT 'Medium' CHECK (priority IN ('Low', 'Medium', 'High', 'Critical')),
-    affected_count INTEGER DEFAULT 1,
-    identified_date DATE NOT NULL,
-    target_resolution_date DATE NOT NULL,
-    resolved_date DATE,
-    assigned_person VARCHAR(255) NOT NULL,
-    description TEXT NOT NULL,
-    action_taken TEXT,
-    public_resolution_notice TEXT,
-    student_satisfaction_rating NUMERIC(3,2),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
+    description TEXT,
+    department_id VARCHAR(50),
+    semester INT NOT NULL,
+    credits INT DEFAULT 3,
+    academic_year VARCHAR(20) DEFAULT '2026-27',
+    regulation VARCHAR(50) DEFAULT 'Regulation 2021',
+    instructor VARCHAR(255) DEFAULT 'NSCET Faculty Team',
+    instructor_title VARCHAR(255) DEFAULT 'Associate Professor / CSE',
+    thumbnail_url TEXT,
+    difficulty_level ENUM('Beginner', 'Intermediate', 'Advanced') DEFAULT 'Intermediate',
+    total_duration_hours DECIMAL(4,1) DEFAULT 12.0,
+    prerequisites JSON,
+    learning_outcomes JSON,
+    is_published BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 8. Institutional Knowledge Documents Table (RAG Grounding)
-CREATE TABLE IF NOT EXISTS knowledge_documents (
-    id VARCHAR(100) PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    knowledge_type VARCHAR(50) NOT NULL CHECK (knowledge_type IN ('OFFICIAL', 'LEARNING', 'STUDENT_VOICE')),
-    visibility VARCHAR(50) NOT NULL DEFAULT 'STUDENT' CHECK (visibility IN ('PUBLIC', 'STUDENT', 'FACULTY', 'HOD', 'ADMIN', 'SUPER_ADMIN')),
-    category VARCHAR(100) NOT NULL,
-    content TEXT NOT NULL,
-    chunk_count INTEGER DEFAULT 1,
-    embedding vector(1536),
-    last_updated DATE NOT NULL DEFAULT CURRENT_DATE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE INDEX IF NOT EXISTS idx_knowledge_documents_embedding 
-ON knowledge_documents USING hnsw (embedding vector_cosine_ops)
-WITH (m = 16, ef_construction = 64);
-
--- 9. Tamper-Evident System Audit Logs
-CREATE TABLE IF NOT EXISTS audit_logs (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    action VARCHAR(100) NOT NULL,
-    actor_id VARCHAR(100) NOT NULL,
-    actor_name VARCHAR(255) NOT NULL,
-    role VARCHAR(50) NOT NULL,
-    resource_type VARCHAR(100) NOT NULL,
-    resource_id VARCHAR(100),
-    details JSONB DEFAULT '{}'::jsonb,
-    ip_address VARCHAR(45),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE INDEX IF NOT EXISTS idx_audit_logs_action ON audit_logs(action);
-CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON audit_logs(created_at DESC);
-
--- ==========================================================
--- 10. MODULAR LEARNING PLATFORM (SWAYAM / NPTEL MODEL)
--- Non-destructive additive migration
--- ==========================================================
-
--- Course Extensions
-ALTER TABLE courses ADD COLUMN IF NOT EXISTS description TEXT;
-ALTER TABLE courses ADD COLUMN IF NOT EXISTS instructor VARCHAR(255) DEFAULT 'NSCET Faculty Team';
-ALTER TABLE courses ADD COLUMN IF NOT EXISTS instructor_title VARCHAR(255) DEFAULT 'Associate Professor / CSE';
-ALTER TABLE courses ADD COLUMN IF NOT EXISTS thumbnail_url TEXT;
-ALTER TABLE courses ADD COLUMN IF NOT EXISTS difficulty_level VARCHAR(50) DEFAULT 'Intermediate';
-ALTER TABLE courses ADD COLUMN IF NOT EXISTS total_duration_hours NUMERIC(4,1) DEFAULT 12.0;
-ALTER TABLE courses ADD COLUMN IF NOT EXISTS prerequisites TEXT[] DEFAULT '{}';
-ALTER TABLE courses ADD COLUMN IF NOT EXISTS learning_outcomes TEXT[] DEFAULT '{}';
-ALTER TABLE courses ADD COLUMN IF NOT EXISTS is_published BOOLEAN DEFAULT TRUE;
-
--- 11. Modules Table (Ordered Units per Course)
+-- 6. Modules Table (Ordered Units per Course)
 CREATE TABLE IF NOT EXISTS modules (
     id VARCHAR(50) PRIMARY KEY,
-    course_id VARCHAR(50) NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+    course_id VARCHAR(50) NOT NULL,
     title VARCHAR(255) NOT NULL,
-    order_index INTEGER NOT NULL,
+    order_index INT NOT NULL,
     description TEXT,
-    estimated_minutes INTEGER DEFAULT 45,
+    estimated_minutes INT DEFAULT 45,
     is_published BOOLEAN DEFAULT TRUE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT uq_course_module_order UNIQUE (course_id, order_index)
-);
-CREATE INDEX IF NOT EXISTS idx_modules_course_id ON modules(course_id, order_index);
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_course_module_order (course_id, order_index),
+    FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 12. Content Items Table (Polymorphic Learning Assets)
--- Enforces: 1. introduction (first), 2. core_content (middle, ordered), 3. knowledge_check (last)
+-- 7. Content Items Table (Polymorphic Learning Assets)
 CREATE TABLE IF NOT EXISTS content_items (
     id VARCHAR(50) PRIMARY KEY,
-    module_id VARCHAR(50) NOT NULL REFERENCES modules(id) ON DELETE CASCADE,
+    module_id VARCHAR(50) NOT NULL,
     title VARCHAR(255) NOT NULL,
-    section_type VARCHAR(30) NOT NULL CHECK (section_type IN ('introduction', 'core_content', 'knowledge_check')),
-    type VARCHAR(20) NOT NULL CHECK (type IN ('video', 'doc', 'text')),
+    section_type ENUM('introduction', 'core_content', 'knowledge_check') NOT NULL,
+    type ENUM('video', 'doc', 'text') NOT NULL,
     url_or_path TEXT,
-    order_index INTEGER NOT NULL,
-    duration_seconds INTEGER DEFAULT 0,
+    order_index INT NOT NULL,
+    duration_seconds INT DEFAULT 0,
     summary TEXT,
-    document_pages INTEGER DEFAULT 1,
-    metadata_json JSONB DEFAULT '{}'::jsonb,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT uq_module_content_order UNIQUE (module_id, section_type, order_index)
-);
-CREATE INDEX IF NOT EXISTS idx_content_items_module ON content_items(module_id, section_type, order_index);
+    document_pages INT DEFAULT 1,
+    metadata_json JSON,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_module_content_order (module_id, section_type, order_index),
+    FOREIGN KEY (module_id) REFERENCES modules(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 13. Quizzes Table (Knowledge Checks & Final Assessments)
+-- 8. Quizzes Table (Knowledge Checks & Final Assessments)
 CREATE TABLE IF NOT EXISTS quizzes (
     id VARCHAR(50) PRIMARY KEY,
-    module_id VARCHAR(50) REFERENCES modules(id) ON DELETE CASCADE,
-    course_id VARCHAR(50) REFERENCES courses(id) ON DELETE CASCADE,
+    module_id VARCHAR(50),
+    course_id VARCHAR(50),
     title VARCHAR(255) NOT NULL,
-    passing_score NUMERIC(5,2) DEFAULT 70.00,
-    time_limit_minutes INTEGER DEFAULT 15,
+    passing_score DECIMAL(5,2) DEFAULT 70.00,
+    time_limit_minutes INT DEFAULT 15,
     is_final_assessment BOOLEAN DEFAULT FALSE,
-    max_attempts INTEGER DEFAULT 3,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT chk_quiz_parent CHECK (module_id IS NOT NULL OR course_id IS NOT NULL)
-);
-CREATE INDEX IF NOT EXISTS idx_quizzes_module ON quizzes(module_id);
-CREATE INDEX IF NOT EXISTS idx_quizzes_course ON quizzes(course_id);
+    max_attempts INT DEFAULT 3,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (module_id) REFERENCES modules(id) ON DELETE CASCADE,
+    FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 14. Quiz Questions Table
+-- 9. Quiz Questions Table
 CREATE TABLE IF NOT EXISTS quiz_questions (
     id VARCHAR(50) PRIMARY KEY,
-    quiz_id VARCHAR(50) NOT NULL REFERENCES quizzes(id) ON DELETE CASCADE,
+    quiz_id VARCHAR(50) NOT NULL,
     question TEXT NOT NULL,
-    question_type VARCHAR(20) DEFAULT 'mcq' CHECK (question_type IN ('mcq', 'true_false')),
-    options_json JSONB NOT NULL,
-    correct_answer INTEGER NOT NULL,
+    question_type ENUM('mcq', 'true_false') DEFAULT 'mcq',
+    options_json JSON NOT NULL,
+    correct_answer INT NOT NULL,
     explanation TEXT,
-    order_index INTEGER NOT NULL,
-    points INTEGER DEFAULT 1
-);
-CREATE INDEX IF NOT EXISTS idx_quiz_questions_quiz ON quiz_questions(quiz_id, order_index);
+    order_index INT NOT NULL,
+    points INT DEFAULT 1,
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 15. Student Course Enrollments Table
+-- 10. Student Course Enrollments Table
 CREATE TABLE IF NOT EXISTS enrollments (
     id VARCHAR(50) PRIMARY KEY,
-    student_id VARCHAR(100) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    course_id VARCHAR(50) NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
-    enrolled_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    status VARCHAR(30) DEFAULT 'active' CHECK (status IN ('active', 'completed', 'dropped')),
-    progress_percentage NUMERIC(5,2) DEFAULT 0.00,
-    completed_at TIMESTAMP WITH TIME ZONE,
-    current_module_id VARCHAR(50) REFERENCES modules(id),
-    CONSTRAINT uq_student_course_enrollment UNIQUE (student_id, course_id)
-);
-CREATE INDEX IF NOT EXISTS idx_enrollments_student ON enrollments(student_id);
-CREATE INDEX IF NOT EXISTS idx_enrollments_course ON enrollments(course_id);
+    student_id VARCHAR(100) NOT NULL,
+    course_id VARCHAR(50) NOT NULL,
+    enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('active', 'completed', 'dropped') DEFAULT 'active',
+    progress_percentage DECIMAL(5,2) DEFAULT 0.00,
+    completed_at TIMESTAMP NULL,
+    current_module_id VARCHAR(50),
+    UNIQUE KEY uq_student_course_enrollment (student_id, course_id),
+    FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 16. Content Item Progress Tracking Table
+-- 11. Content Item Progress Tracking Table
 CREATE TABLE IF NOT EXISTS progress (
     id VARCHAR(50) PRIMARY KEY,
-    student_id VARCHAR(100) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    content_item_id VARCHAR(50) NOT NULL REFERENCES content_items(id) ON DELETE CASCADE,
-    status VARCHAR(20) DEFAULT 'not_started' CHECK (status IN ('not_started', 'in_progress', 'completed')),
-    watch_percentage NUMERIC(5,2) DEFAULT 0.00,
-    scroll_percentage NUMERIC(5,2) DEFAULT 0.00,
-    time_spent_seconds INTEGER DEFAULT 0,
-    completed_at TIMESTAMP WITH TIME ZONE,
-    last_accessed_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT uq_student_content_progress UNIQUE (student_id, content_item_id)
-);
-CREATE INDEX IF NOT EXISTS idx_progress_student_item ON progress(student_id, content_item_id);
+    student_id VARCHAR(100) NOT NULL,
+    content_item_id VARCHAR(50) NOT NULL,
+    status ENUM('not_started', 'in_progress', 'completed') DEFAULT 'not_started',
+    watch_percentage DECIMAL(5,2) DEFAULT 0.00,
+    scroll_percentage DECIMAL(5,2) DEFAULT 0.00,
+    time_spent_seconds INT DEFAULT 0,
+    completed_at TIMESTAMP NULL,
+    last_accessed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_student_content_progress (student_id, content_item_id),
+    FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (content_item_id) REFERENCES content_items(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 17. Quiz Attempts Table (Student Assessment Submissions)
+-- 12. Quiz Attempts Table
 CREATE TABLE IF NOT EXISTS quiz_attempts (
     id VARCHAR(50) PRIMARY KEY,
-    student_id VARCHAR(100) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    quiz_id VARCHAR(50) NOT NULL REFERENCES quizzes(id) ON DELETE CASCADE,
-    score NUMERIC(5,2) NOT NULL,
-    total_questions INTEGER NOT NULL,
-    correct_count INTEGER NOT NULL,
+    student_id VARCHAR(100) NOT NULL,
+    quiz_id VARCHAR(50) NOT NULL,
+    score DECIMAL(5,2) NOT NULL,
+    total_questions INT NOT NULL,
+    correct_count INT NOT NULL,
     passed BOOLEAN NOT NULL,
-    attempt_number INTEGER DEFAULT 1,
-    answers_json JSONB DEFAULT '{}'::jsonb,
-    attempted_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-CREATE INDEX IF NOT EXISTS idx_quiz_attempts_student ON quiz_attempts(student_id, quiz_id);
+    attempt_number INT DEFAULT 1,
+    answers_json JSON,
+    attempted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 18. Verified Certificates Table
+-- 13. Verified Certificates Table
 CREATE TABLE IF NOT EXISTS certificates (
     id VARCHAR(50) PRIMARY KEY,
-    student_id VARCHAR(100) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    course_id VARCHAR(50) NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+    student_id VARCHAR(100) NOT NULL,
+    course_id VARCHAR(50) NOT NULL,
     verification_id VARCHAR(64) NOT NULL UNIQUE,
-    issued_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     certificate_url TEXT,
-    final_score NUMERIC(5,2) NOT NULL,
+    final_score DECIMAL(5,2) NOT NULL,
     student_name VARCHAR(255) NOT NULL,
     course_title VARCHAR(255) NOT NULL,
     instructor_name VARCHAR(255) NOT NULL,
     qr_code_payload TEXT,
-    CONSTRAINT uq_student_course_certificate UNIQUE (student_id, course_id)
-);
-CREATE INDEX IF NOT EXISTS idx_certificates_verification_id ON certificates(verification_id);
+    UNIQUE KEY uq_student_course_certificate (student_id, course_id),
+    FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- ==========================================================
+-- INITIAL SEED DATA
+-- ==========================================================
+
+-- Seed Department
+INSERT INTO departments (id, name, code, hod_name, hod_email, description, student_count, faculty_count)
+VALUES 
+('dept_cse', 'Computer Science and Engineering', 'CSE', 'Dr. S. Karthik', 'hod.cse@nscet.org', 'Department of Computer Science & Engineering, NSCET Theni', 240, 18)
+ON DUPLICATE KEY UPDATE name=VALUES(name);
+
+-- Seed Initial Local Videos Requested by User
+INSERT INTO videos (
+    id, local_video_path, title, topic, faculty_name, department_code, academic_year, 
+    thumbnail_url, description, duration_seconds, semester, subject_code, subject_title, unit_number, published_date
+) VALUES 
+(
+    'vid-local-01',
+    '/assets/videos/campusiq-01.mp4',
+    'federated learning',
+    'federated learning',
+    'asifa shereen CSE',
+    'CSE',
+    '2024-25',
+    'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop&q=60',
+    'Lecture on Federated Learning concepts, distributed machine learning architecture, and privacy-preserving model aggregation.',
+    1280,
+    5,
+    'CS3551',
+    'Distributed & Federated Systems',
+    3,
+    '2026-09-01'
+),
+(
+    'vid-local-02',
+    '/assets/videos/campusiq-02.mp4',
+    'web request',
+    'web request',
+    'asmath nabila CSE',
+    'CSE',
+    '2024-25',
+    'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=60',
+    'Comprehensive walkthrough of HTTP/HTTPS web requests, client-server communication lifecycle, REST protocols, and response headers.',
+    1450,
+    5,
+    'CS3452',
+    'Web Technology & Networks',
+    2,
+    '2026-09-02'
+)
+ON DUPLICATE KEY UPDATE title=VALUES(title);

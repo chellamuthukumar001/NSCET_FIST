@@ -1,47 +1,110 @@
 import { Request, Response } from 'express';
+import { pool, isDbConnected } from '../config/db';
 
-const videos = [
+// In-memory fallback matching the user's manual local videos
+let fallbackVideos = [
   {
-    id: 'vid_1',
-    youtubeId: 'kBdlM6hNDAE',
-    title: 'CS3351 DBMS: Relational Database Normalization (1NF to BCNF)',
-    description: 'Anna University Regulation 2021 Unit 3 masterclass on functional dependency theory and Boyce-Codd Normal Form.',
-    durationSeconds: 1460,
+    id: 'vid-local-01',
+    youtubeId: '',
+    localVideoPath: '/assets/videos/campusiq-01.mp4',
+    title: 'federated learning',
+    topic: 'federated learning',
+    facultyName: 'asifa shereen CSE',
     departmentCode: 'CSE',
+    academicYear: '2024-25',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop&q=60',
+    description: 'Lecture on Federated Learning concepts, distributed machine learning architecture, and privacy-preserving model aggregation.',
+    durationSeconds: 1280,
     semester: 5,
-    subjectCode: 'CS3351',
-    subjectTitle: 'Database Management Systems',
+    subjectCode: 'CS3551',
+    subjectTitle: 'Distributed & Federated Systems',
     unitNumber: 3,
-    facultyName: 'Dr. S. Karthik (HOD CSE)',
     viewCount: 1420,
-    transcript: [
-      { id: 'c1', startTime: 0, endTime: 180, text: 'Welcome students to Unit 3: Relational Database Design and Normalization.' },
-      { id: 'c2', startTime: 180, endTime: 480, text: 'What is a Functional Dependency? Given relation R, X determines Y if each X value is associated with precisely one Y value.' },
-      { id: 'c3', startTime: 480, endTime: 860, text: 'First Normal Form mandates attribute atomicity and no repeating groups.' },
-      { id: 'c4', startTime: 860, endTime: 1200, text: 'Second Normal Form eliminates partial functional dependencies on any candidate key.' },
-      { id: 'c5', startTime: 1200, endTime: 1460, text: 'Third Normal Form and BCNF: Every non-trivial dependency X -> Y must have X as a Superkey.' },
-    ],
+    publishedDate: '2026-09-01',
+    studyMaterialUrl: undefined as string | undefined,
   },
   {
-    id: 'vid_2',
-    youtubeId: '26QPDBe-NB8',
-    title: 'CS3451 Operating Systems: CPU Scheduling Algorithms',
-    description: 'Detailed analysis of FCFS, SJF, Priority, and Round Robin scheduling algorithms with Gantt chart calculations.',
-    durationSeconds: 1820,
+    id: 'vid-local-02',
+    youtubeId: '',
+    localVideoPath: '/assets/videos/campusiq-02.mp4',
+    title: 'web request',
+    topic: 'web request',
+    facultyName: 'asmath nabila CSE',
     departmentCode: 'CSE',
-    semester: 4,
-    subjectCode: 'CS3451',
-    subjectTitle: 'Operating Systems',
+    academicYear: '2024-25',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=60',
+    description: 'Comprehensive walkthrough of HTTP/HTTPS web requests, client-server communication lifecycle, REST protocols, and response headers.',
+    durationSeconds: 1450,
+    semester: 5,
+    subjectCode: 'CS3452',
+    subjectTitle: 'Web Technology & Networks',
     unitNumber: 2,
-    facultyName: 'Dr. M. Deepa (AP / CSE)',
     viewCount: 1890,
+    publishedDate: '2026-09-02',
+    studyMaterialUrl: undefined as string | undefined,
   },
 ];
 
 export const listVideos = async (req: Request, res: Response): Promise<void> => {
   const { department, semester, unit, search } = req.query;
 
-  let result = [...videos];
+  try {
+    if (isDbConnected) {
+      let queryStr = 'SELECT * FROM videos WHERE 1=1';
+      const params: any[] = [];
+
+      if (department && department !== 'ALL') {
+        queryStr += ' AND department_code = ?';
+        params.push(department);
+      }
+      if (semester && semester !== 'ALL') {
+        queryStr += ' AND semester = ?';
+        params.push(Number(semester));
+      }
+      if (unit && unit !== 'ALL') {
+        queryStr += ' AND unit_number = ?';
+        params.push(Number(unit));
+      }
+      if (search && typeof search === 'string') {
+        queryStr += ' AND (LOWER(title) LIKE ? OR LOWER(topic) LIKE ? OR LOWER(faculty_name) LIKE ?)';
+        const searchPattern = `%${search.toLowerCase()}%`;
+        params.push(searchPattern, searchPattern, searchPattern);
+      }
+
+      queryStr += ' ORDER BY created_at DESC';
+      const [rows]: any = await pool.query(queryStr, params);
+
+      if (Array.isArray(rows) && rows.length > 0) {
+        const formatted = rows.map((r: any) => ({
+          id: r.id,
+          youtubeId: r.youtube_id || '',
+          localVideoPath: r.local_video_path || undefined,
+          title: r.title,
+          topic: r.topic,
+          facultyName: r.faculty_name,
+          departmentCode: r.department_code,
+          academicYear: r.academic_year,
+          thumbnailUrl: r.thumbnail_url,
+          studyMaterialUrl: r.study_material_url || undefined,
+          description: r.description,
+          durationSeconds: r.duration_seconds || 120,
+          semester: r.semester,
+          subjectCode: r.subject_code,
+          subjectTitle: r.subject_title,
+          unitNumber: r.unit_number,
+          viewCount: r.view_count || 0,
+          publishedDate: r.published_date,
+        }));
+        res.json({ count: formatted.length, data: formatted });
+        return;
+      }
+    }
+  } catch (err) {
+    console.warn('[videoController] MySQL query failed, falling back to in-memory:', err);
+  }
+
+  // Fallback to in-memory store
+  let result = [...fallbackVideos];
   if (department && department !== 'ALL') {
     result = result.filter(v => v.departmentCode === department);
   }
@@ -65,8 +128,40 @@ export const listVideos = async (req: Request, res: Response): Promise<void> => 
 
 export const getVideoById = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
-  const video = videos.find(v => v.id === id);
 
+  try {
+    if (isDbConnected) {
+      const [rows]: any = await pool.query('SELECT * FROM videos WHERE id = ?', [id]);
+      if (Array.isArray(rows) && rows.length > 0) {
+        const r = rows[0];
+        res.json({
+          id: r.id,
+          youtubeId: r.youtube_id || '',
+          localVideoPath: r.local_video_path || undefined,
+          title: r.title,
+          topic: r.topic,
+          facultyName: r.faculty_name,
+          departmentCode: r.department_code,
+          academicYear: r.academic_year,
+          thumbnailUrl: r.thumbnail_url,
+          studyMaterialUrl: r.study_material_url || undefined,
+          description: r.description,
+          durationSeconds: r.duration_seconds || 120,
+          semester: r.semester,
+          subjectCode: r.subject_code,
+          subjectTitle: r.subject_title,
+          unitNumber: r.unit_number,
+          viewCount: r.view_count || 0,
+          publishedDate: r.published_date,
+        });
+        return;
+      }
+    }
+  } catch (err) {
+    console.warn('[videoController] MySQL getVideoById failed, falling back:', err);
+  }
+
+  const video = fallbackVideos.find(v => v.id === id);
   if (!video) {
     res.status(404).json({ error: 'Video lecture not found' });
     return;
@@ -74,4 +169,85 @@ export const getVideoById = async (req: Request, res: Response): Promise<void> =
 
   res.json(video);
 };
+
+export const createVideo = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const {
+      topicName,
+      presentedBy,
+      department,
+      year,
+      videoPath,
+      thumbnailUrl,
+      studyMaterialUrl,
+      description
+    } = req.body;
+
+    if (!topicName || !presentedBy || !department || !year) {
+      res.status(400).json({ error: 'Compulsory fields: topicName, presentedBy, department, year' });
+      return;
+    }
+
+    const newId = 'vid-' + Date.now().toString(36);
+    const newVideo = {
+      id: newId,
+      youtubeId: '',
+      localVideoPath: videoPath || '/assets/videos/campusiq-01.mp4',
+      title: topicName,
+      topic: topicName,
+      facultyName: presentedBy,
+      departmentCode: department,
+      academicYear: year,
+      thumbnailUrl: thumbnailUrl || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800',
+      studyMaterialUrl: studyMaterialUrl || undefined,
+      description: description || 'Manually uploaded video lecture.',
+      durationSeconds: 120,
+      semester: 1,
+      subjectCode: 'GEN',
+      subjectTitle: 'General Engineering',
+      unitNumber: 1,
+      viewCount: 0,
+      publishedDate: new Date().toISOString().split('T')[0],
+    };
+
+    // Save to MySQL if available
+    if (isDbConnected) {
+      await pool.query(`
+        INSERT INTO videos (
+          id, local_video_path, title, topic, faculty_name, department_code, academic_year,
+          thumbnail_url, study_material_url, description, duration_seconds, semester,
+          subject_code, subject_title, unit_number, view_count, published_date
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        newVideo.id,
+        newVideo.localVideoPath,
+        newVideo.title,
+        newVideo.topic,
+        newVideo.facultyName,
+        newVideo.departmentCode,
+        newVideo.academicYear,
+        newVideo.thumbnailUrl,
+        newVideo.studyMaterialUrl || null,
+        newVideo.description,
+        newVideo.durationSeconds,
+        newVideo.semester,
+        newVideo.subjectCode,
+        newVideo.subjectTitle,
+        newVideo.unitNumber,
+        newVideo.viewCount,
+        newVideo.publishedDate
+      ]);
+      console.log('✅ [MySQL] Inserted new video into MySQL:', newVideo.id);
+    }
+
+    // Also update in-memory fallback
+    fallbackVideos.unshift(newVideo);
+
+    res.status(201).json({ success: true, data: newVideo });
+  } catch (error: any) {
+    console.error('Error creating video:', error);
+    res.status(500).json({ error: 'Failed to create video', details: error.message });
+  }
+};
+
 

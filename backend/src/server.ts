@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import apiRouter from './routes/api';
+import { initDatabase, isDbConnected } from './config/db';
 
 dotenv.config();
 
@@ -23,7 +24,7 @@ app.get('/health', (req: Request, res: Response) => {
     service: 'CAMPUSIQ Institutional Backend',
     college: 'Nadar Saraswathi College of Engineering & Technology (NSCET Theni)',
     timestamp: new Date().toISOString(),
-    engine: 'Hybrid RAG + pgvector + PII Shield',
+    database: isDbConnected ? 'MySQL (Connected)' : 'MySQL (In-Memory Fallback)',
   });
 });
 
@@ -40,14 +41,18 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 // Start Server
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`=======================================================`);
   console.log(` CAMPUSIQ Backend Server Active`);
   console.log(` College: NSCET Theni District, Tamil Nadu`);
   console.log(` Port: ${PORT}`);
   console.log(` Health: http://localhost:${PORT}/health`);
   console.log(` API Base: http://localhost:${PORT}/api`);
+  console.log(` Database: MySQL`);
   console.log(`=======================================================`);
+  
+  // Test and initialize MySQL tables
+  await initDatabase();
 });
 
 export default app;
