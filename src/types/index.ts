@@ -59,6 +59,7 @@ export interface TranscriptChunk {
 export interface Video {
   id: string;
   youtubeId: string;
+  localVideoPath?: string;
   title: string;
   description: string;
   thumbnailUrl: string;

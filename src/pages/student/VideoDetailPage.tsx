@@ -66,6 +66,7 @@ export const VideoDetailPage: React.FC = () => {
   const [newNoteText, setNewNoteText] = useState('');
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
@@ -75,7 +76,10 @@ export const VideoDetailPage: React.FC = () => {
 
   const handleSeek = (seconds: number) => {
     setCurrentTimeSeconds(seconds);
-    if (iframeRef.current) {
+    if (video.localVideoPath && videoRef.current) {
+      videoRef.current.currentTime = seconds;
+      videoRef.current.play();
+    } else if (iframeRef.current) {
       iframeRef.current.src = `https://www.youtube-nocookie.com/embed/${video.youtubeId}?start=${seconds}&autoplay=1`;
     }
   };
@@ -164,16 +168,28 @@ export const VideoDetailPage: React.FC = () => {
         {/* Left Column (8 cols): Player, Chapter Navigator, Metadata, CO Details */}
         <div className="lg:col-span-7 xl:col-span-8 space-y-6">
           
-          {/* YouTube Video Player Embed */}
+          {/* Video Player Embed */}
           <div className="relative rounded-3xl overflow-hidden aspect-video bg-black shadow-2xl border border-gray-800">
-            <iframe
-              ref={iframeRef}
-              src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}?start=${initialTime}&enablejsapi=1`}
-              title={video.title}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full border-0"
-            />
+            {video.localVideoPath ? (
+              <video
+                ref={videoRef}
+                src={video.localVideoPath}
+                title={video.title}
+                controls
+                autoPlay
+                className="w-full h-full border-0 object-contain"
+                onTimeUpdate={(e) => setCurrentTimeSeconds(Math.floor(e.currentTarget.currentTime))}
+              />
+            ) : (
+              <iframe
+                ref={iframeRef}
+                src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}?start=${initialTime}&enablejsapi=1`}
+                title={video.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full border-0"
+              />
+            )}
           </div>
 
           {/* Active Timestamp Scrubber Bar */}
