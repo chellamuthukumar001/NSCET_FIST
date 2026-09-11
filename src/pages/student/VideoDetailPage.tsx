@@ -57,7 +57,7 @@ export const VideoDetailPage: React.FC = () => {
     academicYear: '2024-25',
     thumbnailUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800',
     description: 'Lecture on Federated Learning concepts.',
-    durationSeconds: 1280,
+    durationSeconds: 240,
     semester: 5,
     subjectCode: 'CS3551',
     subjectTitle: 'Distributed & Federated Systems',
@@ -70,6 +70,13 @@ export const VideoDetailPage: React.FC = () => {
 
   const initialTime = searchParams.get('t') ? Number(searchParams.get('t')) : (video.userProgressSeconds || 0);
   const [currentTimeSeconds, setCurrentTimeSeconds] = useState(initialTime);
+  const [activeDuration, setActiveDuration] = useState<number>(video.durationSeconds || 240);
+
+  useEffect(() => {
+    if (video.durationSeconds) {
+      setActiveDuration(video.durationSeconds);
+    }
+  }, [video.id, video.durationSeconds]);
   const [isBookmarked, setIsBookmarked] = useState(video.isBookmarked || false);
   const [isCompleted, setIsCompleted] = useState(video.isCompleted || false);
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
@@ -135,7 +142,7 @@ export const VideoDetailPage: React.FC = () => {
     setTimeout(() => setCopiedLink(false), 2000);
   };
 
-  const progressPct = Math.min(100, Math.round((currentTimeSeconds / video.durationSeconds) * 100));
+  const progressPct = Math.min(100, Math.round((currentTimeSeconds / (activeDuration || 1)) * 100));
 
   return (
     <div className="space-y-6 pb-20">
@@ -209,6 +216,9 @@ export const VideoDetailPage: React.FC = () => {
                 onTimeUpdate={(e) => setCurrentTimeSeconds(Math.floor(e.currentTarget.currentTime))}
                 onLoadedMetadata={(e) => {
                   e.currentTarget.currentTime = initialTime;
+                  if (e.currentTarget.duration && !isNaN(e.currentTarget.duration)) {
+                    setActiveDuration(Math.round(e.currentTarget.duration));
+                  }
                 }}
               >
                 <source src={video.localVideoPath} type="video/mp4" />
@@ -232,7 +242,7 @@ export const VideoDetailPage: React.FC = () => {
               <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></div>
               <span className="font-bold text-gray-800">Active Timestamp:</span>
               <span className="font-mono font-bold text-[#C49A55] bg-amber-50 px-2 py-0.5 rounded border border-amber-200 text-[11px]">
-                {formatTime(currentTimeSeconds)} / {formatTime(video.durationSeconds)} ({progressPct}%)
+                {formatTime(currentTimeSeconds)} / {formatTime(activeDuration)} ({progressPct}%)
               </span>
             </div>
 

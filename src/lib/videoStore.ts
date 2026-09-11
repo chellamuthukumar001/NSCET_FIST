@@ -20,7 +20,7 @@ export const DEFAULT_VIDEOS: Video[] = [
     unitNumber: 3,
     thumbnailUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop&q=60',
     description: 'Lecture on Federated Learning concepts, distributed machine learning architecture, and privacy-preserving model aggregation.',
-    durationSeconds: 1280,
+    durationSeconds: 240,
     tags: ['Machine Learning', 'Federated Learning', 'Distributed AI'],
     viewCount: 1420,
     publishedDate: '2026-09-01',
@@ -43,7 +43,7 @@ export const DEFAULT_VIDEOS: Video[] = [
     unitNumber: 2,
     thumbnailUrl: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=60',
     description: 'Comprehensive walkthrough of HTTP/HTTPS web requests, client-server communication lifecycle, REST protocols, and response headers.',
-    durationSeconds: 1450,
+    durationSeconds: 217,
     tags: ['Web Technology', 'HTTP', 'REST API', 'Computer Networks'],
     viewCount: 1890,
     publishedDate: '2026-09-02',
@@ -61,7 +61,23 @@ export const getLocalStoredVideos = (): Video[] => {
     }
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed) && parsed.length > 0) {
-      return parsed;
+      // Auto-correct duration for local videos if outdated
+      let modified = false;
+      const corrected = parsed.map((v: Video) => {
+        if (v.id === 'vid-local-01' && v.durationSeconds === 1280) {
+          modified = true;
+          return { ...v, durationSeconds: 240 };
+        }
+        if (v.id === 'vid-local-02' && v.durationSeconds === 1450) {
+          modified = true;
+          return { ...v, durationSeconds: 217 };
+        }
+        return v;
+      });
+      if (modified) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(corrected));
+      }
+      return corrected;
     }
   } catch (e) {
     console.error('Error reading localStorage videos:', e);
@@ -135,12 +151,16 @@ export const uploadAndPersistVideo = async (
     videoDataUrl?: string;
     studyMaterialDataUrl?: string;
     description?: string;
+    durationSeconds?: number;
   }
 ): Promise<Video> => {
   let createdVideo: Video | null = null;
 
   // 1. Attempt upload to backend Express & MySQL
   try {
+    if (metadata.durationSeconds && !formData.has('durationSeconds')) {
+      formData.append('durationSeconds', metadata.durationSeconds.toString());
+    }
     const res = await fetch('/api/videos/upload', {
       method: 'POST',
       body: formData,
@@ -176,7 +196,7 @@ export const uploadAndPersistVideo = async (
       thumbnailUrl: metadata.thumbnailDataUrl || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800',
       studyMaterialUrl: metadata.studyMaterialDataUrl,
       description: metadata.description || 'Manually uploaded video lecture.',
-      durationSeconds: 120,
+      durationSeconds: metadata.durationSeconds || 240,
       tags: [metadata.department, 'Lecture'],
       viewCount: 0,
       publishedDate: new Date().toISOString().split('T')[0],

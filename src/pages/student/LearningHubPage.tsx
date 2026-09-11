@@ -94,8 +94,6 @@ export const LearningHubPage: React.FC = () => {
             <VideoCard
               key={video.id}
               video={video}
-              onToggleBookmark={handleToggleBookmark}
-              onOpenRevisionKit={(v) => setRevisionModalVideo(v)}
             />
           ))}
         </div>

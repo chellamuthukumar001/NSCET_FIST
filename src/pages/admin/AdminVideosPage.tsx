@@ -63,6 +63,26 @@ export const AdminVideosPage: React.FC = () => {
         console.warn('Thumbnail base64 conversion skipped:', err);
       }
 
+      // Automatically calculate exact duration from video file
+      let durationSeconds = 240;
+      try {
+        durationSeconds = await new Promise<number>((resolve) => {
+          const tempVideo = document.createElement('video');
+          tempVideo.preload = 'metadata';
+          tempVideo.onloadedmetadata = () => {
+            window.URL.revokeObjectURL(tempVideo.src);
+            const secs = Math.round(tempVideo.duration);
+            resolve(secs && !isNaN(secs) && secs > 0 ? secs : 240);
+          };
+          tempVideo.onerror = () => resolve(240);
+          tempVideo.src = URL.createObjectURL(videoFile);
+        });
+      } catch (err) {
+        console.warn('Could not read duration, defaulting to 240s:', err);
+      }
+
+      formData.append('durationSeconds', durationSeconds.toString());
+
       await uploadAndPersistVideo(formData, {
         topicName,
         presentedBy,
@@ -70,6 +90,7 @@ export const AdminVideosPage: React.FC = () => {
         year,
         thumbnailDataUrl,
         videoDataUrl: URL.createObjectURL(videoFile),
+        durationSeconds,
       });
 
       // Update state immediately
