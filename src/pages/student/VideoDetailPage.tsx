@@ -268,6 +268,19 @@ export const VideoDetailPage: React.FC = () => {
 
             {/* Action Bar with Exam Revision Kit & Quiz Buttons */}
             <div className="pt-2 flex flex-wrap items-center gap-3">
+              {video.studyMaterialUrl && (
+                <a
+                  href={video.studyMaterialUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  download
+                  className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-md transition-all cursor-pointer"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span>Download Study Material</span>
+                </a>
+              )}
+
               <button
                 onClick={() => setIsRevisionModalOpen(true)}
                 className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#C49A55] to-[#D97736] hover:from-[#b08744] hover:to-[#c4682c] text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-md shadow-amber-950/20 transition-all cursor-pointer"

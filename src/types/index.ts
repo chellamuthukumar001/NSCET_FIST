@@ -82,6 +82,7 @@ export interface Video {
   isCompleted?: boolean;
   transcript?: TranscriptChunk[];
   category?: string;
+  studyMaterialUrl?: string;
 }
 
 export type FeedbackCategory =

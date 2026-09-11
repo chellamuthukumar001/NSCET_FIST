@@ -92,7 +92,6 @@ export const AppSidebar: React.FC = () => {
             items: [
               { label: 'Dashboard', path: '/student', icon: LayoutDashboard },
               { label: 'Curated Video Hub', path: '/student/videos', icon: Video, badge: 'Sync' },
-              { label: 'Subjects & Syllabi', path: '/student/subjects', icon: BookOpen },
             ]
           },
           {
