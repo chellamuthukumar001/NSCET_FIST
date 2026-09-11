@@ -16,18 +16,13 @@ import {
 import { Role } from '../../types';
 
 export const AppHeader: React.FC = () => {
-  const { currentUser, role, switchRole, logout } = useAuth();
+  const { currentUser, role, logout } = useAuth();
   const { selectedLanguage, setSelectedLanguage } = useCopilot();
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
 
   const [notifOpen, setNotifOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [personaOpen, setPersonaOpen] = useState(false);
-
-  const roles: { role: Role; label: string; name: string }[] = [
-    { role: 'STUDENT', label: 'Student Portal', name: 'Vignesh R. (3rd Yr CSE)' },
-    { role: 'ADMIN', label: 'Admin Portal', name: 'Er. K. Anand (Admin Office)' },
-  ];
 
   const languages = [
     { code: 'en', label: 'English', native: 'English' },
@@ -210,33 +205,43 @@ export const AppHeader: React.FC = () => {
             </button>
 
             {personaOpen && (
-              <div className="absolute right-0 mt-2 w-64 p-2 bg-[#101815] border border-white/20 rounded-2xl shadow-2xl z-50 animate-fade-in">
-                <div className="px-3 py-1.5 text-[10px] font-bold text-[#C49A55] uppercase tracking-wider border-b border-white/10 mb-1">
-                  1-Click Role Switcher
-                </div>
-                {roles.map((r) => (
-                  <button
-                    key={r.role}
-                    onClick={() => {
-                      switchRole(r.role);
-                      setPersonaOpen(false);
-                    }}
-                    className={`w-full text-left p-2 rounded-xl text-xs flex items-center justify-between hover:bg-white/10 transition-colors cursor-pointer ${
-                      role === r.role ? 'bg-[#173B2F] text-white font-bold border border-[#6FA9C9]/40 shadow-sm' : 'text-gray-300'
-                    }`}
-                  >
-                    <div>
-                      <div className="font-bold text-white">{r.label}</div>
-                      <div className="text-[10px] text-gray-400">{r.name}</div>
+              <div className="absolute right-0 mt-2 w-72 p-3 bg-[#101815] border border-white/20 rounded-2xl shadow-2xl z-50 animate-fade-in space-y-2">
+                <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-white truncate max-w-[170px]">
+                      {currentUser?.name || 'User'}
+                    </span>
+                    <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wider ${
+                      role === 'ADMIN'
+                        ? 'bg-[#C49A55] text-black'
+                        : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                    }`}>
+                      {role}
+                    </span>
+                  </div>
+                  {currentUser?.email && (
+                    <div className="text-[11px] text-gray-400 truncate font-mono">
+                      {currentUser.email}
                     </div>
-                    {role === r.role && <CheckCircle2 className="w-4 h-4 text-[#C49A55] shrink-0" />}
-                  </button>
-                ))}
-                <div className="border-t border-white/10 mt-1.5 pt-1.5 space-y-1">
+                  )}
+                </div>
+
+                <div className="space-y-1 pt-1 border-t border-white/10">
+                  {role === 'STUDENT' && (
+                    <Link
+                      to="/student/profile"
+                      onClick={() => setPersonaOpen(false)}
+                      className="w-full px-3 py-2 text-xs text-gray-200 hover:bg-white/10 rounded-xl flex items-center gap-2 transition-colors"
+                    >
+                      <GraduationCap className="w-3.5 h-3.5 text-[#C49A55]" />
+                      <span>Student Profile & Smart ID</span>
+                    </Link>
+                  )}
+
                   <Link
                     to="/landing"
                     onClick={() => setPersonaOpen(false)}
-                    className="w-full px-3 py-2 text-xs text-gray-300 hover:bg-white/10 rounded-xl flex items-center gap-2"
+                    className="w-full px-3 py-2 text-xs text-gray-300 hover:bg-white/10 rounded-xl flex items-center gap-2 transition-colors"
                   >
                     <ExternalLink className="w-3.5 h-3.5 text-[#C49A55]" />
                     <span>Campus Landing Page</span>

@@ -24,12 +24,11 @@ import {
 } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
-  const { login, loginWithGoogle, switchRole } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
 
-  const [selectedRole, setSelectedRole] = useState<'STUDENT' | 'ADMIN'>('STUDENT');
-  const [email, setEmail] = useState('vignesh.cs22@nscet.org');
-  const [password, setPassword] = useState('password123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -43,8 +42,12 @@ export const LoginPage: React.FC = () => {
     setIsGoogleLoading(true);
     setAuthError(null);
     try {
-      await loginWithGoogle('STUDENT');
-      navigate('/student');
+      const user = await loginWithGoogle();
+      if (user.role === 'ADMIN') {
+        navigate('/admin');
+      } else {
+        navigate('/student');
+      }
     } catch (err: any) {
       console.error('Google Sign-In Error:', err);
       if (err.code === 'auth/popup-closed-by-user') {
@@ -59,14 +62,6 @@ export const LoginPage: React.FC = () => {
     }
   };
 
-  const handleRoleSelect = (roleVal: 'STUDENT' | 'ADMIN', userEmail: string) => {
-    setSelectedRole(roleVal);
-    setEmail(userEmail);
-    setPassword('password123');
-    setAuthError(null);
-    switchRole(roleVal);
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.getModifierState && e.getModifierState('CapsLock')) {
       setCapsLockActive(true);
@@ -79,15 +74,16 @@ export const LoginPage: React.FC = () => {
     e.preventDefault();
     setAuthError(null);
 
-    if (!email.trim() || !password.trim()) {
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail || !password.trim()) {
       setAuthError('Please enter both your institutional email and password.');
       return;
     }
 
     setIsSubmitting(true);
     try {
-      login(email.trim(), selectedRole);
-      if (selectedRole === 'ADMIN') {
+      const user = await login(cleanEmail, password.trim());
+      if (user.role === 'ADMIN') {
         navigate('/admin');
       } else {
         navigate('/student');
@@ -322,65 +318,7 @@ export const LoginPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* 1. MODERN SLIDING SEGMENTED PORTAL SWITCHER */}
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between text-[11px] text-gray-300 px-1 font-semibold uppercase tracking-wider">
-                  <span>Select Portal</span>
-                  <span className="text-[#C49A55] text-[10px] font-medium">1-Click Role</span>
-                </div>
-
-                <div className="grid grid-cols-2 gap-1.5 p-1 rounded-2xl bg-black/50 border border-white/10">
-                  {/* Student Portal Option */}
-                  <button
-                    type="button"
-                    onClick={() => handleRoleSelect('STUDENT', 'vignesh.cs22@nscet.org')}
-                    className={`py-2 px-3 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between min-h-[44px] active:scale-95 ${
-                      selectedRole === 'STUDENT'
-                        ? 'bg-gradient-to-r from-[#173B2F] to-[#285443] border border-[#6FA9C9]/60 text-white shadow-lg ring-1 ring-[#6FA9C9]/40'
-                        : 'text-gray-400 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className={`p-1.5 rounded-lg ${selectedRole === 'STUDENT' ? 'bg-[#C49A55] text-white shadow' : 'bg-white/10 text-gray-400'}`}>
-                        <GraduationCap className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="truncate">
-                        <div className="text-xs font-bold leading-tight">Student</div>
-                        <div className="text-[10px] text-gray-300 leading-tight truncate">Vignesh R.</div>
-                      </div>
-                    </div>
-                    {selectedRole === 'STUDENT' && (
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0 ml-1" />
-                    )}
-                  </button>
-
-                  {/* Admin / Faculty Portal Option */}
-                  <button
-                    type="button"
-                    onClick={() => handleRoleSelect('ADMIN', 'admin@nscet.org')}
-                    className={`py-2 px-3 rounded-xl text-left transition-all cursor-pointer flex items-center justify-between min-h-[44px] active:scale-95 ${
-                      selectedRole === 'ADMIN'
-                        ? 'bg-gradient-to-r from-[#173B2F] to-[#285443] border border-[#6FA9C9]/60 text-white shadow-lg ring-1 ring-[#6FA9C9]/40'
-                        : 'text-gray-400 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className={`p-1.5 rounded-lg ${selectedRole === 'ADMIN' ? 'bg-[#C49A55] text-white shadow' : 'bg-white/10 text-gray-400'}`}>
-                        <Shield className="w-3.5 h-3.5" />
-                      </div>
-                      <div className="truncate">
-                        <div className="text-xs font-bold leading-tight">Admin</div>
-                        <div className="text-[10px] text-gray-300 leading-tight truncate">Er. Anand</div>
-                      </div>
-                    </div>
-                    {selectedRole === 'ADMIN' && (
-                      <span className="w-2 h-2 rounded-full bg-[#6FA9C9] animate-pulse shrink-0 ml-1" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* 2. GOOGLE SSO BUTTON (STUDENT DOMINANT UX) */}
+              {/* 1. GOOGLE SSO BUTTON (PRIMARY SSO METHOD) */}
               <div className="space-y-2">
                 <button
                   type="button"
@@ -407,21 +345,21 @@ export const LoginPage: React.FC = () => {
                     />
                   </svg>
                   <span className="truncate">
-                    {isGoogleLoading ? 'Connecting to Google...' : 'Sign in with Google (Student SSO)'}
+                    {isGoogleLoading ? 'Connecting to Google...' : 'Sign in with Google'}
                   </span>
                 </button>
 
                 {/* Divider */}
-                <div className="relative flex items-center justify-center my-2.5">
+                <div className="relative flex items-center justify-center my-3">
                   <div className="border-t border-white/10 w-full"></div>
                   <span className="bg-[#0E1B15] px-2.5 text-[10px] uppercase font-bold text-gray-400 tracking-wider whitespace-nowrap">
-                    or institutional password
+                    or institutional credentials
                   </span>
                   <div className="border-t border-white/10 w-full"></div>
                 </div>
               </div>
 
-              {/* 3. CREDENTIALS FORM */}
+              {/* 2. CREDENTIALS FORM */}
               <form onSubmit={handleSubmit} className="space-y-3.5">
                 
                 {/* Error Alert */}
@@ -432,13 +370,13 @@ export const LoginPage: React.FC = () => {
                   </div>
                 )}
 
-                {/* Email Field - 16px base font on mobile prevents iOS Safari auto-zoom */}
+                {/* Email Field */}
                 <div className="space-y-1">
                   <div className="flex items-center justify-between px-0.5">
                     <label className="block text-xs font-semibold text-gray-300">
-                      Institutional Email / ID
+                      Email Address / User ID
                     </label>
-                    <span className="text-[10px] text-gray-400 font-mono">@nscet.org</span>
+                    <span className="text-[10px] text-gray-400 font-mono">Original Credentials</span>
                   </div>
                   <div className="relative flex items-center">
                     <Mail className="w-4 h-4 text-gray-400 absolute left-3.5 pointer-events-none" />
@@ -448,7 +386,7 @@ export const LoginPage: React.FC = () => {
                       autoComplete="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="e.g. vignesh.cs22@nscet.org"
+                      placeholder="e.g. yourname@gmail.com or student@nscet.org"
                       required
                       className="w-full pl-10 pr-4 h-12 rounded-xl bg-black/40 border border-white/15 text-white placeholder-gray-500 text-base sm:text-xs focus:outline-none focus:border-[#C49A55] focus:ring-2 focus:ring-[#C49A55]/40 transition-all"
                     />
@@ -463,10 +401,10 @@ export const LoginPage: React.FC = () => {
                     </label>
                     <button
                       type="button"
-                      onClick={() => alert('Demo accounts have pre-filled password: password123')}
+                      onClick={() => setShowHelpModal(true)}
                       className="text-[11px] text-[#C49A55] hover:underline cursor-pointer"
                     >
-                      Forgot password?
+                      Need help?
                     </button>
                   </div>
                   <div className="relative flex items-center">
@@ -478,7 +416,7 @@ export const LoginPage: React.FC = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       onKeyDown={handleKeyDown}
                       onKeyUp={handleKeyDown}
-                      placeholder="Enter password"
+                      placeholder="Enter your password"
                       required
                       className="w-full pl-10 pr-12 h-12 rounded-xl bg-black/40 border border-white/15 text-white placeholder-gray-500 text-base sm:text-xs focus:outline-none focus:border-[#C49A55] focus:ring-2 focus:ring-[#C49A55]/40 transition-all font-mono"
                     />
@@ -514,7 +452,7 @@ export const LoginPage: React.FC = () => {
                   </label>
                   <span className="text-[11px] text-emerald-400 flex items-center gap-1 font-mono">
                     <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>SSL Active</span>
+                    <span>SSL Protected</span>
                   </span>
                 </div>
 
@@ -525,42 +463,20 @@ export const LoginPage: React.FC = () => {
                   className="w-full h-12 px-6 rounded-2xl bg-gradient-to-r from-[#C49A55] via-[#D97736] to-[#C49A55] bg-[length:200%_auto] hover:bg-right transition-all duration-500 text-white font-black text-xs sm:text-sm uppercase tracking-wider shadow-xl shadow-amber-950/40 flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.01] active:scale-[0.98] border border-white/20 mt-1 disabled:opacity-60 select-none"
                 >
                   <KeyRound className="w-4 h-4" />
-                  <span>{isSubmitting ? 'Authenticating...' : `Sign In as ${selectedRole}`}</span>
+                  <span>{isSubmitting ? 'Authenticating...' : 'Sign In to CampusIQ'}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </form>
 
-              {/* 4. ONE-CLICK DEMO AUTO-FILL CHIPS */}
-              <div className="pt-1">
-                <div className="text-[11px] text-gray-400 mb-1.5 flex items-center gap-1">
-                  <Sparkles className="w-3.5 h-3.5 text-[#C49A55]" />
-                  <span>Quick 1-Tap Demo Logins:</span>
+              {/* Strict Access Notice */}
+              <div className="p-3 rounded-2xl bg-black/40 border border-white/10 text-[11px] text-gray-300 space-y-1">
+                <div className="flex items-center gap-1.5 text-[#C49A55] font-bold">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Institutional RBAC Policy</span>
                 </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => handleRoleSelect('STUDENT', 'vignesh.cs22@nscet.org')}
-                    className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 active:bg-white/15 text-white text-[11px] font-semibold border border-white/10 hover:border-[#C49A55]/50 transition-all flex items-center gap-2 cursor-pointer active:scale-95"
-                  >
-                    <GraduationCap className="w-4 h-4 text-[#C49A55] shrink-0" />
-                    <div className="truncate text-left">
-                      <div className="text-white truncate">Vignesh R.</div>
-                      <div className="text-[9px] text-gray-400 truncate">Student &bull; CSE</div>
-                    </div>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleRoleSelect('ADMIN', 'admin@nscet.org')}
-                    className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 active:bg-white/15 text-white text-[11px] font-semibold border border-white/10 hover:border-[#6FA9C9]/50 transition-all flex items-center gap-2 cursor-pointer active:scale-95"
-                  >
-                    <Shield className="w-4 h-4 text-[#6FA9C9] shrink-0" />
-                    <div className="truncate text-left">
-                      <div className="text-white truncate">Er. K. Anand</div>
-                      <div className="text-[9px] text-gray-400 truncate">Admin &bull; Office</div>
-                    </div>
-                  </button>
-                </div>
+                <p className="text-gray-400 leading-snug">
+                  Only <span className="text-white font-mono font-semibold">campusiqadmin@gmail.com</span> is granted Admin Portal access. All other student and institutional accounts are automatically routed to the Student Portal.
+                </p>
               </div>
 
               {/* Institutional Footer Accreditations */}

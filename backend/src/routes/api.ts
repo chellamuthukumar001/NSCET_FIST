@@ -8,8 +8,13 @@ import {
 } from '../controllers/videoSearchController';
 import { searchRateLimiter } from '../middleware/rateLimiter';
 import { authenticate, requireRole } from '../middleware/auth';
+import { syncUser, getUserProfile } from '../controllers/userController';
 
 const router = Router();
+
+// User Authentication & Database Synchronization Routes
+router.post('/auth/sync-user', syncUser);
+router.get('/auth/user', getUserProfile);
 
 // Apply auth to all API routes
 router.use(authenticate);

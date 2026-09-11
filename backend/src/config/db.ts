@@ -48,6 +48,25 @@ export const initDatabase = async (): Promise<boolean> => {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `);
 
+    // Ensure users table exists
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id VARCHAR(100) PRIMARY KEY,
+        email VARCHAR(255) NOT NULL UNIQUE,
+        name VARCHAR(255) NOT NULL,
+        role ENUM('STUDENT','FACULTY','HOD','ADMIN','SUPER_ADMIN','APPLICANT') NOT NULL DEFAULT 'STUDENT',
+        department_id VARCHAR(50) DEFAULT 'dept_cse',
+        department_name VARCHAR(255) DEFAULT 'Computer Science & Engineering',
+        student_id VARCHAR(50) DEFAULT NULL,
+        faculty_id VARCHAR(50) DEFAULT NULL,
+        program VARCHAR(255) DEFAULT 'B.E. Computer Science & Engineering',
+        semester INT DEFAULT 5,
+        batch VARCHAR(50) DEFAULT '2022-2026',
+        avatar_url TEXT DEFAULT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    `);
+
     // Check if videos table has data, if not insert the 2 default videos
     const [rows]: any = await connection.query('SELECT COUNT(*) as cnt FROM videos');
     if (rows && rows[0]?.cnt === 0) {

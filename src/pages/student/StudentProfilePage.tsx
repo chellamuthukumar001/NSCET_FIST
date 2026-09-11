@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import {
   User,
@@ -32,7 +32,7 @@ import {
 import { Link } from 'react-router-dom';
 
 export const StudentProfilePage: React.FC = () => {
-  const { currentUser, role } = useAuth();
+  const { currentUser, role, updateUserProfile } = useAuth();
 
   // Active Profile Tab
   const [activeTab, setActiveTab] = useState<'courses' | 'ai_portfolio' | 'privacy_shield' | 'settings'>('courses');
@@ -41,9 +41,9 @@ export const StudentProfilePage: React.FC = () => {
   const [anonToken, setAnonToken] = useState('anon_9f82d1c44a');
   const [copiedToken, setCopiedToken] = useState(false);
 
-  // Editable Profile Settings State
-  const [fullName, setFullName] = useState(currentUser?.name || 'Vignesh R');
-  const [email, setEmail] = useState(currentUser?.email || 'vignesh.cse@nscet.org');
+  // Editable Profile Settings State - bound to authenticated Google / institutional account
+  const [fullName, setFullName] = useState(currentUser?.name || 'Student User');
+  const [email, setEmail] = useState(currentUser?.email || '');
   const [phone, setPhone] = useState('+91 98421 87654');
   const [studentType, setStudentType] = useState<'Day Scholar' | 'Hostel'>('Day Scholar');
   const [busRoute, setBusRoute] = useState('Route 4: Cumbum - Theni - NSCET');
@@ -58,17 +58,33 @@ export const StudentProfilePage: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
-  // Avatar Presets
+  // Avatar Presets - includes authenticated Google profile photo
   const [selectedAvatar, setSelectedAvatar] = useState(
     currentUser?.avatarUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80'
   );
 
-  const avatarPresets = [
-    'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=400&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=80',
-  ];
+  // Synchronize state when currentUser updates (e.g. on Google Sign-In)
+  useEffect(() => {
+    if (currentUser) {
+      if (currentUser.name) setFullName(currentUser.name);
+      if (currentUser.email) setEmail(currentUser.email);
+      if (currentUser.avatarUrl) setSelectedAvatar(currentUser.avatarUrl);
+    }
+  }, [currentUser]);
+
+  const avatarPresets = useMemo(() => {
+    const list: string[] = [];
+    if (currentUser?.avatarUrl) {
+      list.push(currentUser.avatarUrl);
+    }
+    list.push(
+      'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=400&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=80'
+    );
+    return Array.from(new Set(list));
+  }, [currentUser?.avatarUrl]);
 
   const handleCopyToken = () => {
     navigator.clipboard.writeText(anonToken);
@@ -81,14 +97,22 @@ export const StudentProfilePage: React.FC = () => {
     setAnonToken(newToken);
   };
 
-  const handleSaveSettings = (e: React.FormEvent) => {
+  const handleSaveSettings = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
-    setTimeout(() => {
+    try {
+      if (updateUserProfile) {
+        await updateUserProfile({
+          name: fullName,
+          avatarUrl: selectedAvatar,
+        });
+      }
       setIsSaving(false);
       setSavedSuccess(true);
       setTimeout(() => setSavedSuccess(false), 3000);
-    }, 600);
+    } catch {
+      setIsSaving(false);
+    }
   };
 
   // Enrolled Courses under Regulation 2021
@@ -206,6 +230,12 @@ export const StudentProfilePage: React.FC = () => {
                 <span className="px-2.5 py-0.5 rounded-full bg-[#C49A55] text-black text-[10px] font-black uppercase tracking-wider">
                   {role}
                 </span>
+                {currentUser?.email && (
+                  <span className="px-2 py-0.5 rounded-full bg-white/10 text-emerald-300 text-[10px] font-semibold border border-white/10 flex items-center gap-1">
+                    <BadgeCheck className="w-3 h-3 text-emerald-400" />
+                    <span>{currentUser.email}</span>
+                  </span>
+                )}
               </div>
 
               <p className="text-xs text-gray-300 font-medium">

@@ -16,7 +16,7 @@ import {
 import { Role } from '../../types';
 
 export const PublicNavbar: React.FC = () => {
-  const { currentUser, role, switchRole, logout } = useAuth();
+  const { currentUser, role, logout } = useAuth();
   const { selectedLanguage, setSelectedLanguage } = useCopilot();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
@@ -42,11 +42,6 @@ export const PublicNavbar: React.FC = () => {
   const languages = [
     { code: 'en', label: 'English', native: 'English' },
     { code: 'ta', label: 'Tamil', native: 'தமிழ்' },
-  ];
-
-  const roles: { role: Role; label: string; name: string; dept: string }[] = [
-    { role: 'STUDENT', label: 'Student Portal', name: 'Vignesh R.', dept: '3rd Year CSE' },
-    { role: 'ADMIN', label: 'Admin Portal', name: 'Er. K. Anand', dept: 'Admin Office' },
   ];
 
   const getDashboardPath = () => {
@@ -153,50 +148,51 @@ export const PublicNavbar: React.FC = () => {
               )}
             </div>
 
-            {/* Persona Switcher Dropdown */}
-            <div className="relative group">
-              <button className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/30 border border-white/15 text-xs text-white hover:border-white/30 transition-all cursor-pointer shadow-inner">
-                <UserCheck className="w-3.5 h-3.5 text-[#C49A55]" />
-                <span className="font-semibold text-white/90">
-                  <strong className="text-[#6FA9C9]">{role}</strong>
-                </span>
-                <ChevronDown className="w-3 h-3 text-gray-400" />
-              </button>
+            {/* Authenticated User Status or Sign In */}
+            {currentUser ? (
+              <div className="relative group">
+                <button className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/30 border border-white/15 text-xs text-white hover:border-white/30 transition-all cursor-pointer shadow-inner">
+                  {currentUser.avatarUrl ? (
+                    <img src={currentUser.avatarUrl} alt="" className="w-5 h-5 rounded-full object-cover border border-[#C49A55]" />
+                  ) : (
+                    <UserCheck className="w-3.5 h-3.5 text-[#C49A55]" />
+                  )}
+                  <span className="font-semibold text-white/90 truncate max-w-[100px]">
+                    {currentUser.name}
+                  </span>
+                  <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
+                    role === 'ADMIN' ? 'bg-[#C49A55] text-black' : 'bg-emerald-500/20 text-emerald-400'
+                  }`}>
+                    {role}
+                  </span>
+                  <ChevronDown className="w-3 h-3 text-gray-400" />
+                </button>
 
-              <div className="absolute right-0 mt-2 w-56 p-2 bg-[#101815] border border-white/20 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
-                <div className="px-3 py-1.5 text-[10px] uppercase font-black text-[#C49A55] tracking-wider border-b border-white/10 mb-1">
-                  1-Click Role Switcher
-                </div>
-                {roles.map((r) => (
-                  <button
-                    key={r.role}
-                    onClick={() => switchRole(r.role)}
-                    className={`w-full text-left p-2 rounded-xl text-xs flex items-center justify-between hover:bg-white/10 transition-colors cursor-pointer ${
-                      role === r.role ? 'bg-[#173B2F] text-white font-bold border border-[#6FA9C9]/40' : 'text-gray-300'
-                    }`}
-                  >
-                    <div>
-                      <div className="font-bold text-white leading-tight">{r.label}</div>
-                      <div className="text-[10px] text-gray-400 mt-0.5">{r.name} • {r.dept}</div>
-                    </div>
-                    {role === r.role && <CheckCircle2 className="w-4 h-4 text-[#C49A55] shrink-0" />}
-                  </button>
-                ))}
-
-                {currentUser && (
-                  <div className="border-t border-white/10 mt-2 pt-2">
-                    <button
-                      type="button"
-                      onClick={() => logout()}
-                      className="w-full text-left p-2 rounded-xl text-xs text-rose-300 hover:bg-rose-500/10 flex items-center gap-2 cursor-pointer transition-colors"
-                    >
-                      <LogOut className="w-3.5 h-3.5 text-rose-400" />
-                      <span>Sign Out</span>
-                    </button>
+                <div className="absolute right-0 mt-2 w-56 p-2 bg-[#101815] border border-white/20 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 space-y-1">
+                  <div className="px-3 py-1.5 border-b border-white/10">
+                    <div className="font-bold text-white text-xs truncate">{currentUser.name}</div>
+                    <div className="text-[10px] text-gray-400 font-mono truncate">{currentUser.email}</div>
                   </div>
-                )}
+
+                  <Link
+                    to={getDashboardPath()}
+                    className="w-full text-left p-2 rounded-xl text-xs text-gray-200 hover:bg-white/10 flex items-center gap-2 transition-colors"
+                  >
+                    <GraduationCap className="w-3.5 h-3.5 text-[#C49A55]" />
+                    <span>Go to {role === 'ADMIN' ? 'Admin' : 'Student'} Portal</span>
+                  </Link>
+
+                  <button
+                    type="button"
+                    onClick={() => logout()}
+                    className="w-full text-left p-2 rounded-xl text-xs text-rose-300 hover:bg-rose-500/10 flex items-center gap-2 cursor-pointer transition-colors"
+                  >
+                    <LogOut className="w-3.5 h-3.5 text-rose-400" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
               </div>
-            </div>
+            ) : null}
 
             {/* Dashboard Access Button */}
             <Link
@@ -259,30 +255,21 @@ export const PublicNavbar: React.FC = () => {
             ))}
           </div>
 
-          {/* Persona Switcher Grid */}
+          {/* User Account / Navigation Controls */}
           <div className="pt-2 border-t border-white/10 space-y-2">
-            <div className="text-[10px] uppercase font-bold text-[#C49A55] px-1">
-              Select Demo Persona
-            </div>
-            <div className="grid grid-cols-2 gap-1.5">
-              {roles.map((r) => (
-                <button
-                  key={r.role}
-                  onClick={() => {
-                    switchRole(r.role);
-                    setMobileMenuOpen(false);
-                  }}
-                  className={`p-2 rounded-xl text-xs text-left border transition-all ${
-                    role === r.role
-                      ? 'bg-[#173B2F] border-[#6FA9C9] text-white font-bold shadow-md'
-                      : 'bg-white/5 border-white/10 text-gray-300'
-                  }`}
-                >
-                  <div className="font-bold">{r.label}</div>
-                  <div className="text-[10px] text-gray-400">{r.name}</div>
-                </button>
-              ))}
-            </div>
+            {currentUser && (
+              <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+                <div className="truncate">
+                  <div className="font-bold text-white text-xs truncate">{currentUser.name}</div>
+                  <div className="text-[10px] text-gray-400 font-mono truncate">{currentUser.email}</div>
+                </div>
+                <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wider ${
+                  role === 'ADMIN' ? 'bg-[#C49A55] text-black' : 'bg-emerald-500/20 text-emerald-400'
+                }`}>
+                  {role}
+                </span>
+              </div>
+            )}
 
             <Link
               to={getDashboardPath()}
