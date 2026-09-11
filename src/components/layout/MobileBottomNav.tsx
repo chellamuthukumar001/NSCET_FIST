@@ -28,21 +28,18 @@ export const MobileBottomNav: React.FC = () => {
         return [
           { label: 'Overview', path: '/hod', icon: LayoutDashboard },
           { label: 'Analytics', path: '/hod/analytics', icon: TrendingUp },
-          { label: '10 Courses', path: '/student/courses', icon: GraduationCap },
           { label: 'Profile', path: '/student/profile', icon: User },
         ];
       case 'ADMIN':
       case 'SUPER_ADMIN':
         return [
           { label: 'Control', path: '/admin', icon: LayoutDashboard },
-          { label: '10 Courses', path: '/student/courses', icon: GraduationCap },
           { label: 'Knowledge', path: '/admin/knowledge', icon: Database },
           { label: 'Users', path: '/admin/users', icon: Users },
         ];
       default:
         return [
           { label: 'Dashboard', path: '/student', icon: LayoutDashboard },
-          { label: '10 Courses', path: '/student/courses', icon: GraduationCap },
           { label: 'Video Hub', path: '/student/videos', icon: Video },
           { label: 'Profile', path: '/student/profile', icon: User },
         ];

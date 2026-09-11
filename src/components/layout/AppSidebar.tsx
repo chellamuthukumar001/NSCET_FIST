@@ -64,7 +64,6 @@ export const AppSidebar: React.FC = () => {
             items: [
               { label: 'Overview', path: '/hod', icon: LayoutDashboard },
               { label: 'Mastery Analytics', path: '/hod/analytics', icon: TrendingUp },
-              { label: '10 Course Modules', path: '/student/courses', icon: GraduationCap, badge: 'AU' },
             ]
           }
         ];
@@ -75,7 +74,6 @@ export const AppSidebar: React.FC = () => {
             groupTitle: 'Academic Operations',
             items: [
               { label: 'Academic Control', path: '/admin', icon: LayoutDashboard },
-              { label: '10 Course Modules', path: '/student/courses', icon: GraduationCap, badge: '10 AU' },
               { label: 'Video Hub Sync', path: '/admin/videos', icon: Video },
             ]
           },
@@ -93,7 +91,6 @@ export const AppSidebar: React.FC = () => {
             groupTitle: 'Academic Core',
             items: [
               { label: 'Dashboard', path: '/student', icon: LayoutDashboard },
-              { label: '10 Course Modules', path: '/student/courses', icon: GraduationCap, badge: '10 AU' },
               { label: 'Curated Video Hub', path: '/student/videos', icon: Video, badge: 'Sync' },
               { label: 'Subjects & Syllabi', path: '/student/subjects', icon: BookOpen },
             ]
