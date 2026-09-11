@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { MOCK_VIDEOS } from '../../lib/mockDatabase';
+import { getLocalStoredVideos, fetchAllVideos } from '../../lib/videoStore';
 import { VideoCard } from '../../components/video/VideoCard';
 import { ExamRevisionModal } from '../../components/video/ExamRevisionModal';
 import { Video } from '../../types';
 import { Search, GraduationCap, Video as VideoIcon, Upload } from 'lucide-react';
 
 export const LearningHubPage: React.FC = () => {
-  const [videos, setVideos] = useState<Video[]>(MOCK_VIDEOS);
+  const [videos, setVideos] = useState<Video[]>(getLocalStoredVideos());
   const [search, setSearch] = useState('');
   const [revisionModalVideo, setRevisionModalVideo] = useState<Video | null>(null);
+
+  useEffect(() => {
+    fetchAllVideos().then((loaded) => {
+      setVideos(loaded);
+    });
+
+    const handleUpdate = () => {
+      setVideos(getLocalStoredVideos());
+    };
+    window.addEventListener('campusiq_videos_updated', handleUpdate);
+    return () => window.removeEventListener('campusiq_videos_updated', handleUpdate);
+  }, []);
 
   const handleToggleBookmark = (videoId: string) => {
     setVideos((prev) =>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 
 // Providers
@@ -16,43 +16,17 @@ import { MobileBottomNav } from './components/layout/MobileBottomNav';
 
 // Public Pages
 import { LandingPage } from './pages/public/LandingPage';
-import { HomePage } from './pages/public/HomePage';
-import { AboutPage } from './pages/public/AboutPage';
-import { DepartmentsPage } from './pages/public/DepartmentsPage';
-import { CoursesPage } from './pages/public/CoursesPage';
-import { PublicLearningPage } from './pages/public/PublicLearningPage';
 import { LoginPage } from './pages/public/LoginPage';
 
-// Student Pages
+// Core Student Pages
 import { StudentDashboard } from './pages/student/StudentDashboard';
 import { LearningHubPage } from './pages/student/LearningHubPage';
 import { VideoDetailPage } from './pages/student/VideoDetailPage';
-import { SubjectsPage } from './pages/student/SubjectsPage';
-import { WatchHistoryPage } from './pages/student/WatchHistoryPage';
-import { LearningProgressPage } from './pages/student/LearningProgressPage';
-import { StudentQuizPage } from './pages/student/StudentQuizPage';
-import { StudentNotificationsPage } from './pages/student/StudentNotificationsPage';
 import { StudentProfilePage } from './pages/student/StudentProfilePage';
-import { CourseCatalogPage } from './pages/student/CourseCatalogPage';
-import { CourseDetailPage } from './pages/student/CourseDetailPage';
-import { ModulePlayerPage } from './pages/student/ModulePlayerPage';
-import { CertificateVerificationPage } from './pages/student/CertificateVerificationPage';
 
-// Faculty Pages
-import { FacultyDashboard } from './pages/faculty/FacultyDashboard';
-import { FacultyCoursesPage } from './pages/faculty/FacultyCoursesPage';
-import { FacultyContentPage } from './pages/faculty/FacultyContentPage';
-import { FacultyAnalyticsPage } from './pages/faculty/FacultyAnalyticsPage';
-
-// HOD Pages
-import { HodDashboard } from './pages/hod/HodDashboard';
-import { HodAnalyticsPage } from './pages/hod/HodAnalyticsPage';
-
-// Admin Pages
+// Core Admin Pages
 import { AdminDashboard } from './pages/admin/AdminDashboard';
-import { AdminKnowledgePage } from './pages/admin/AdminKnowledgePage';
 import { AdminVideosPage } from './pages/admin/AdminVideosPage';
-import { AdminUsersPage } from './pages/admin/AdminUsersPage';
 
 // Layout Wrappers
 const PublicLayout: React.FC = () => {
@@ -67,7 +41,7 @@ const PublicLayout: React.FC = () => {
   );
 };
 
-// RootRedirect enforces the required initial entry flow: unauthenticated -> login page, authenticated -> role dashboard
+// RootRedirect enforces initial entry flow
 const RootRedirect: React.FC = () => {
   const { currentUser, role } = useAuth();
   if (!currentUser) {
@@ -77,16 +51,14 @@ const RootRedirect: React.FC = () => {
 };
 
 const AuthenticatedLayout: React.FC = () => {
-  const { currentUser, role } = useAuth();
+  const { currentUser } = useAuth();
 
-  // If user is unauthenticated, redirect to login page first
   if (!currentUser) {
     return <Navigate to="/login" replace />;
   }
 
   return (
     <div className="min-h-screen bg-[#F4F5F1] text-[#17201C] relative selection:bg-[#C49A55]/30">
-      {/* Subtle Ambient Institutional Dashboard Background Canvas */}
       <div
         className="fixed inset-0 pointer-events-none z-0"
         style={{
@@ -98,10 +70,10 @@ const AuthenticatedLayout: React.FC = () => {
         }}
       />
 
-      {/* Desktop Left Fixed Sidebar */}
+      {/* Desktop Sidebar */}
       <AppSidebar />
 
-      {/* Main Content Area - Flush with sidebar on desktop, eliminating the gap */}
+      {/* Main Content Area */}
       <div className="lg:pl-64 flex flex-col min-h-screen relative z-10 transition-all">
         <AppHeader />
         <main className="flex-1 p-4 sm:p-6 lg:p-8 w-full max-w-7xl">
@@ -130,53 +102,26 @@ export function App() {
             <Routes>
               {/* Public Portal Routes */}
               <Route element={<PublicLayout />}>
-                {/* Website Flow: login page -> landing page -> get started -> learning dashboard */}
                 <Route path="/" element={<RootRedirect />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/landing" element={<LandingPage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/departments" element={<DepartmentsPage />} />
-                <Route path="/courses" element={<CoursesPage />} />
-                <Route path="/public-learning" element={<PublicLearningPage />} />
               </Route>
 
               {/* Authenticated Portal Routes */}
               <Route element={<AuthenticatedLayout />}>
-                {/* Student Routes */}
+                {/* Student Video Learning Routes */}
                 <Route path="/student" element={<StudentDashboard />} />
-                <Route path="/student/courses" element={<CourseCatalogPage />} />
-                <Route path="/student/courses/:courseId" element={<CourseDetailPage />} />
-                <Route path="/student/courses/:courseId/modules/:moduleId" element={<ModulePlayerPage />} />
-                <Route path="/student/certificates" element={<Navigate to="/student" replace />} />
-                <Route path="/verify-certificate/:verificationId" element={<CertificateVerificationPage />} />
-                <Route path="/verify-certificate" element={<CertificateVerificationPage />} />
                 <Route path="/student/videos" element={<LearningHubPage />} />
                 <Route path="/student/videos/:videoId" element={<VideoDetailPage />} />
-                <Route path="/student/subjects" element={<SubjectsPage />} />
-                <Route path="/student/bookmarks" element={<Navigate to="/student" replace />} />
-                <Route path="/student/history" element={<WatchHistoryPage />} />
-                <Route path="/student/progress" element={<LearningProgressPage />} />
-                <Route path="/student/assistant" element={<Navigate to="/student" replace />} />
-                <Route path="/student/quiz" element={<StudentQuizPage />} />
-                <Route path="/student/notifications" element={<StudentNotificationsPage />} />
                 <Route path="/student/profile" element={<StudentProfilePage />} />
 
-                {/* Faculty Routes */}
-                <Route path="/faculty" element={<FacultyDashboard />} />
-                <Route path="/faculty/courses" element={<FacultyCoursesPage />} />
-                <Route path="/faculty/content" element={<FacultyContentPage />} />
-                <Route path="/faculty/analytics" element={<FacultyAnalyticsPage />} />
-                <Route path="/faculty/assistant" element={<Navigate to="/faculty" replace />} />
-
-                {/* HOD Routes */}
-                <Route path="/hod" element={<HodDashboard />} />
-                <Route path="/hod/analytics" element={<HodAnalyticsPage />} />
-
-                {/* Admin Routes */}
+                {/* Admin Video Upload & Management Routes */}
                 <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/admin/knowledge" element={<AdminKnowledgePage />} />
                 <Route path="/admin/videos" element={<AdminVideosPage />} />
-                <Route path="/admin/users" element={<AdminUsersPage />} />
+
+                {/* Legacy Role Fallbacks */}
+                <Route path="/faculty" element={<Navigate to="/admin/videos" replace />} />
+                <Route path="/hod" element={<Navigate to="/student" replace />} />
               </Route>
 
               {/* Catch-all redirect */}

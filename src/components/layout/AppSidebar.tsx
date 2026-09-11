@@ -40,75 +40,36 @@ export const AppSidebar: React.FC = () => {
 
   const getNavGroups = (): NavGroup[] => {
     switch (role) {
-      case 'FACULTY':
-        return [
-          {
-            groupTitle: 'Instruction Core',
-            items: [
-              { label: 'Faculty Overview', path: '/faculty', icon: LayoutDashboard },
-              { label: 'Assigned Courses', path: '/faculty/courses', icon: BookOpen },
-              { label: 'Video Lecture Sync', path: '/faculty/content', icon: Video },
-            ]
-          },
-          {
-            groupTitle: 'Performance & Analytics',
-            items: [
-              { label: 'Class Analytics', path: '/faculty/analytics', icon: TrendingUp },
-            ]
-          }
-        ];
-      case 'HOD':
-        return [
-          {
-            groupTitle: 'Department Leadership',
-            items: [
-              { label: 'Overview', path: '/hod', icon: LayoutDashboard },
-              { label: 'Mastery Analytics', path: '/hod/analytics', icon: TrendingUp },
-            ]
-          }
-        ];
       case 'ADMIN':
       case 'SUPER_ADMIN':
         return [
           {
-            groupTitle: 'Academic Operations',
+            groupTitle: 'Video Administration',
             items: [
-              { label: 'Academic Control', path: '/admin', icon: LayoutDashboard },
-              { label: 'Video Hub Sync', path: '/admin/videos', icon: Video },
+              { label: 'Admin Overview', path: '/admin', icon: LayoutDashboard },
+              { label: 'Upload & Manage Videos', path: '/admin/videos', icon: Video },
             ]
           },
           {
-            groupTitle: 'Institutional Governance',
+            groupTitle: 'Student Platform',
             items: [
-              { label: 'Academic Knowledge', path: '/admin/knowledge', icon: Database },
-              { label: 'Learners & Faculty', path: '/admin/users', icon: Users },
+              { label: 'Student Dashboard', path: '/student', icon: LayoutDashboard },
+              { label: 'Curated Video Hub', path: '/student/videos', icon: Video },
             ]
           }
         ];
-      default: // STUDENT
+      default: // STUDENT & ALL OTHER ROLES
         return [
           {
-            groupTitle: 'Academic Core',
+            groupTitle: 'Learning Core',
             items: [
-              { label: 'Dashboard', path: '/student', icon: LayoutDashboard },
+              { label: 'Video Dashboard', path: '/student', icon: LayoutDashboard },
               { label: 'Curated Video Hub', path: '/student/videos', icon: Video, badge: 'Sync' },
             ]
           },
           {
-            groupTitle: 'Learning Workspace',
+            groupTitle: 'Account',
             items: [
-              { label: 'Watch History', path: '/student/history', icon: History },
-            ]
-          },
-          {
-            groupTitle: 'Account & Notices',
-            items: [
-              {
-                label: 'Notifications',
-                path: '/student/notifications',
-                icon: Bell,
-                badge: unreadCount > 0 ? `${unreadCount}` : undefined
-              },
               { label: 'My Profile', path: '/student/profile', icon: User },
             ]
           }

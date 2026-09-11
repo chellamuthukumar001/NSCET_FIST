@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
-import { MOCK_VIDEOS } from '../../lib/mockDatabase';
-import { Video, Plus, Upload, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import {
+  fetchAllVideos,
+  getLocalStoredVideos,
+  uploadAndPersistVideo,
+  fileToDataUrl
+} from '../../lib/videoStore';
+import { Video, Plus, Upload, X, Trash2 } from 'lucide-react';
 import { Video as VideoType } from '../../types';
 
 export const AdminVideosPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [videos, setVideos] = useState<VideoType[]>(MOCK_VIDEOS);
+  const [videos, setVideos] = useState<VideoType[]>(getLocalStoredVideos());
+  const [isUploading, setIsUploading] = useState(false);
 
   // Form State
   const [topicName, setTopicName] = useState('');
@@ -16,41 +22,66 @@ export const AdminVideosPage: React.FC = () => {
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [studyMaterial, setStudyMaterial] = useState<File | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Load videos on mount and sync with backend
+  useEffect(() => {
+    fetchAllVideos().then((loaded) => {
+      setVideos(loaded);
+    });
+
+    const handleUpdate = () => {
+      setVideos(getLocalStoredVideos());
+    };
+    window.addEventListener('campusiq_videos_updated', handleUpdate);
+    return () => window.removeEventListener('campusiq_videos_updated', handleUpdate);
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!videoFile || !thumbnailFile || !topicName || !presentedBy || !department || !year) {
       alert("Please fill all compulsory fields.");
       return;
     }
 
-    const newVideo: VideoType = {
-      id: Math.random().toString(36).substr(2, 9),
-      youtubeId: '',
-      localVideoPath: URL.createObjectURL(videoFile),
-      title: topicName,
-      topic: topicName,
-      facultyName: presentedBy,
-      departmentCode: department,
-      departmentId: department,
-      academicYear: year,
-      thumbnailUrl: URL.createObjectURL(thumbnailFile),
-      studyMaterialUrl: studyMaterial ? URL.createObjectURL(studyMaterial) : undefined,
-      description: 'Manually uploaded video.',
-      durationSeconds: 120, // Mock duration
-      publishedDate: new Date().toISOString(),
-      program: 'B.E',
-      semester: 1,
-      subjectCode: 'GEN',
-      subjectTitle: 'General Subject',
-      unitNumber: 1,
-      tags: [],
-      viewCount: 0,
-    };
+    setIsUploading(true);
 
-    MOCK_VIDEOS.unshift(newVideo);
-    setVideos([...MOCK_VIDEOS]);
-    setIsModalOpen(false);
-    resetForm();
+    try {
+      const formData = new FormData();
+      formData.append('videoFile', videoFile);
+      formData.append('thumbnailFile', thumbnailFile);
+      if (studyMaterial) {
+        formData.append('studyMaterialFile', studyMaterial);
+      }
+      formData.append('topicName', topicName);
+      formData.append('presentedBy', presentedBy);
+      formData.append('department', department);
+      formData.append('year', year);
+
+      let thumbnailDataUrl: string | undefined;
+      try {
+        thumbnailDataUrl = await fileToDataUrl(thumbnailFile);
+      } catch (err) {
+        console.warn('Thumbnail base64 conversion skipped:', err);
+      }
+
+      await uploadAndPersistVideo(formData, {
+        topicName,
+        presentedBy,
+        department,
+        year,
+        thumbnailDataUrl,
+        videoDataUrl: URL.createObjectURL(videoFile),
+      });
+
+      // Update state immediately
+      setVideos(getLocalStoredVideos());
+      setIsModalOpen(false);
+      resetForm();
+    } catch (err: any) {
+      console.error('Upload error:', err);
+      alert('Upload failed: ' + (err.message || 'Unknown error'));
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const resetForm = () => {

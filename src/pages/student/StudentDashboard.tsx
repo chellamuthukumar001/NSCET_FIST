@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { MOCK_VIDEOS } from '../../lib/mockDatabase';
+import { getLocalStoredVideos, fetchAllVideos } from '../../lib/videoStore';
 import { VideoCard } from '../../components/video/VideoCard';
+import { Video as VideoType } from '../../types';
 import {
   Search,
   Video,
@@ -14,10 +15,23 @@ import { Link } from 'react-router-dom';
 export const StudentDashboard: React.FC = () => {
   const { currentUser } = useAuth();
   const [searchVal, setSearchVal] = useState('');
+  const [videos, setVideos] = useState<VideoType[]>(getLocalStoredVideos());
+
+  useEffect(() => {
+    fetchAllVideos().then((loaded) => {
+      setVideos(loaded);
+    });
+
+    const handleUpdate = () => {
+      setVideos(getLocalStoredVideos());
+    };
+    window.addEventListener('campusiq_videos_updated', handleUpdate);
+    return () => window.removeEventListener('campusiq_videos_updated', handleUpdate);
+  }, []);
 
   // Filtered Videos
   const filteredVideos = useMemo(() => {
-    return MOCK_VIDEOS.filter((v) => {
+    return videos.filter((v) => {
       if (!searchVal.trim()) return true;
       const q = searchVal.toLowerCase();
       return (
@@ -27,7 +41,7 @@ export const StudentDashboard: React.FC = () => {
         v.departmentCode.toLowerCase().includes(q)
       );
     });
-  }, [searchVal]);
+  }, [videos, searchVal]);
 
   return (
     <div className="space-y-8 pb-16">

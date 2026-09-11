@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
-import { MOCK_VIDEOS, MOCK_QUIZ_QUESTIONS } from '../../lib/mockDatabase';
+import { MOCK_QUIZ_QUESTIONS } from '../../lib/mockDatabase';
+import { getLocalStoredVideos } from '../../lib/videoStore';
 import { TranscriptViewer } from '../../components/video/TranscriptViewer';
 import { LectureQuizModal } from '../../components/video/LectureQuizModal';
 import { ExamRevisionModal } from '../../components/video/ExamRevisionModal';
@@ -36,8 +37,9 @@ export const VideoDetailPage: React.FC = () => {
   const { videoId } = useParams<{ videoId: string }>();
   const [searchParams] = useSearchParams();
 
-  const video = MOCK_VIDEOS.find((v) => v.id === videoId) || MOCK_VIDEOS[0];
-  const nextVideo = MOCK_VIDEOS.find((v) => v.id !== video.id) || MOCK_VIDEOS[1];
+  const allVideos = getLocalStoredVideos();
+  const video = allVideos.find((v) => v.id === videoId) || allVideos[0];
+  const nextVideo = allVideos.find((v) => v.id !== video.id) || allVideos[1];
 
   const initialTime = searchParams.get('t') ? Number(searchParams.get('t')) : (video.userProgressSeconds || 0);
   const [currentTimeSeconds, setCurrentTimeSeconds] = useState(initialTime);

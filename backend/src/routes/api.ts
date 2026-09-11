@@ -17,13 +17,16 @@ router.use(authenticate);
 // 1. Academic RAG & AI Copilot Routes
 router.post('/rag/query', handleRagQuery);
 
+import { uploadVideoFiles } from '../middleware/upload';
+
 // 2. Video Learning Hub Routes
 router.get('/videos/search', searchRateLimiter, searchEducationalVideos);
 router.get('/videos/related/:videoId', getRelatedEducationalVideos);
 router.get('/videos/analytics/top-searches', getTopSearchAnalytics);
 router.get('/videos', listVideos);
 router.get('/videos/:id', getVideoById);
-router.post('/videos', createVideo);
+router.post('/videos', uploadVideoFiles, createVideo);
+router.post('/videos/upload', uploadVideoFiles, createVideo);
 
 // 5. Modular Curriculum & Learning Platform Routes (SWAYAM / Simplilearn Model)
 import {

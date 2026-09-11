@@ -188,18 +188,35 @@ export const createVideo = async (req: Request, res: Response): Promise<void> =>
       return;
     }
 
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] } | undefined;
+    const videoFile = files?.['videoFile']?.[0];
+    const thumbnailFile = files?.['thumbnailFile']?.[0];
+    const studyMaterialFile = files?.['studyMaterialFile']?.[0];
+
+    const finalVideoPath = videoFile 
+      ? `/uploads/videos/${videoFile.filename}` 
+      : (videoPath || '/assets/videos/campusiq-01.mp4');
+
+    const finalThumbnailUrl = thumbnailFile 
+      ? `/uploads/thumbnails/${thumbnailFile.filename}` 
+      : (thumbnailUrl || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800');
+
+    const finalStudyMaterialUrl = studyMaterialFile 
+      ? `/uploads/materials/${studyMaterialFile.filename}` 
+      : (studyMaterialUrl || undefined);
+
     const newId = 'vid-' + Date.now().toString(36);
     const newVideo = {
       id: newId,
       youtubeId: '',
-      localVideoPath: videoPath || '/assets/videos/campusiq-01.mp4',
+      localVideoPath: finalVideoPath,
       title: topicName,
       topic: topicName,
       facultyName: presentedBy,
       departmentCode: department,
       academicYear: year,
-      thumbnailUrl: thumbnailUrl || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800',
-      studyMaterialUrl: studyMaterialUrl || undefined,
+      thumbnailUrl: finalThumbnailUrl,
+      studyMaterialUrl: finalStudyMaterialUrl,
       description: description || 'Manually uploaded video lecture.',
       durationSeconds: 120,
       semester: 1,
