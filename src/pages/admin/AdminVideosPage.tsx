@@ -64,29 +64,72 @@ export const AdminVideosPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 pb-16">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-[#C49A55]">
-            Video Repository Management
+    <div className="space-y-6 sm:space-y-8 pb-24 sm:pb-16">
+      
+      {/* Header with Mobile-Optimized Full-Width Action */}
+      <div className="p-5 sm:p-8 rounded-3xl bg-white border border-gray-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+        <div className="space-y-1">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#C49A55] flex items-center gap-1.5">
+            <Video className="w-3.5 h-3.5" />
+            <span>Video Repository Management</span>
           </span>
-          <h1 className="text-2xl sm:text-3xl font-black text-[#17201C] tracking-tight">
+          <h1 className="text-xl sm:text-3xl font-black text-[#17201C] tracking-tight">
             Curated College Video Catalog
           </h1>
           <p className="text-xs sm:text-sm text-[#66736C]">
-            Manage and upload manual video lectures and study materials.
+            Manage, upload and synchronize manual video lectures with optional study materials.
           </p>
         </div>
+
+        {/* Big Mobile-First Upload Button */}
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-[#173B2F] text-white rounded-xl font-bold text-xs shadow-md hover:bg-[#102a21] transition"
+          className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-3 sm:py-2.5 bg-gradient-to-r from-[#173B2F] to-[#285443] hover:from-[#112a21] hover:to-[#173b2f] text-white rounded-2xl sm:rounded-xl font-bold text-sm sm:text-xs shadow-lg shadow-emerald-950/20 transition cursor-pointer active:scale-95 shrink-0"
         >
-          <Upload className="w-4 h-4" />
-          <span>Upload Video</span>
+          <Upload className="w-4 h-4 text-[#C49A55]" />
+          <span>Upload New Video</span>
         </button>
       </div>
 
-      <div className="overflow-x-auto rounded-3xl bg-white border border-gray-200 shadow-sm">
+      {/* Mobile Card List (Visible on Phone Screens) */}
+      <div className="block sm:hidden space-y-4">
+        <div className="flex items-center justify-between text-xs font-bold text-gray-700 px-1">
+          <span>Uploaded Videos ({videos.length})</span>
+        </div>
+        {videos.map((v) => (
+          <div
+            key={v.id}
+            className="p-4 rounded-2xl bg-white border border-gray-200 shadow-sm space-y-3"
+          >
+            <div className="flex gap-3">
+              <div className="w-24 h-16 rounded-xl overflow-hidden bg-gray-900 shrink-0">
+                <img src={v.thumbnailUrl} alt={v.title} className="w-full h-full object-cover" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-sm font-bold text-gray-900 truncate">{v.title}</h3>
+                <p className="text-xs text-gray-500 truncate mt-0.5">{v.facultyName}</p>
+                <div className="flex items-center gap-1.5 mt-1.5">
+                  <span className="px-2 py-0.5 rounded bg-[#173B2F]/10 text-[#173B2F] font-bold text-[10px]">
+                    {v.departmentCode} • {v.academicYear}
+                  </span>
+                  {v.studyMaterialUrl ? (
+                    <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold text-[10px]">
+                      Study Material Available
+                    </span>
+                  ) : (
+                    <span className="px-2 py-0.5 rounded bg-gray-100 text-gray-500 font-bold text-[10px]">
+                      No Material
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop & Tablet Table (Hidden on Mobile) */}
+      <div className="hidden sm:block overflow-x-auto rounded-3xl bg-white border border-gray-200 shadow-sm">
         <table className="w-full text-left text-xs">
           <thead className="bg-gray-50 border-b border-gray-200 text-gray-500 font-bold uppercase tracking-wider text-[10px]">
             <tr>
@@ -123,17 +166,27 @@ export const AdminVideosPage: React.FC = () => {
         </table>
       </div>
 
+      {/* Mobile-Friendly Upload Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-xl max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between p-5 border-b border-gray-100 sticky top-0 bg-white">
-              <h2 className="text-lg font-bold text-gray-900">Upload New Video</h2>
-              <button onClick={() => setIsModalOpen(false)} className="p-1 hover:bg-gray-100 rounded-lg">
-                <X className="w-5 h-5 text-gray-500" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-xl max-h-[92vh] flex flex-col my-auto border border-gray-200 animate-in fade-in zoom-in-95 duration-150">
+            
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-4 sm:p-5 border-b border-gray-100 sticky top-0 bg-white z-10">
+              <div>
+                <h2 className="text-base sm:text-lg font-black text-gray-900">Upload New Video Lecture</h2>
+                <p className="text-[11px] text-gray-500">All uploaded videos appear instantly on the student dashboard</p>
+              </div>
+              <button 
+                onClick={() => setIsModalOpen(false)} 
+                className="p-1.5 hover:bg-gray-100 text-gray-400 hover:text-gray-700 rounded-xl transition cursor-pointer"
+              >
+                <X className="w-5 h-5" />
               </button>
             </div>
             
-            <form onSubmit={handleSubmit} className="p-5 space-y-4">
+            {/* Modal Form Body */}
+            <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 overflow-y-auto flex-1">
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1">Video Topic Name *</label>
                 <input
@@ -141,7 +194,7 @@ export const AdminVideosPage: React.FC = () => {
                   required
                   value={topicName}
                   onChange={(e) => setTopicName(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                  className="w-full p-2.5 border border-gray-200 rounded-xl text-xs bg-gray-50 focus:bg-white focus:border-[#173B2F] focus:outline-none transition"
                   placeholder="e.g. Introduction to Neural Networks"
                 />
               </div>
@@ -153,12 +206,12 @@ export const AdminVideosPage: React.FC = () => {
                   required
                   value={presentedBy}
                   onChange={(e) => setPresentedBy(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg text-sm"
-                  placeholder="e.g. Dr. A. Smith"
+                  className="w-full p-2.5 border border-gray-200 rounded-xl text-xs bg-gray-50 focus:bg-white focus:border-[#173B2F] focus:outline-none transition"
+                  placeholder="e.g. Dr. A. Smith CSE"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-bold text-gray-700 mb-1">Department *</label>
                   <input
@@ -166,7 +219,7 @@ export const AdminVideosPage: React.FC = () => {
                     required
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                    className="w-full p-2.5 border border-gray-200 rounded-xl text-xs bg-gray-50 focus:bg-white focus:border-[#173B2F] focus:outline-none transition"
                     placeholder="e.g. CSE"
                   />
                 </div>
@@ -177,8 +230,8 @@ export const AdminVideosPage: React.FC = () => {
                     required
                     value={year}
                     onChange={(e) => setYear(e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-lg text-sm"
-                    placeholder="e.g. 2024"
+                    className="w-full p-2.5 border border-gray-200 rounded-xl text-xs bg-gray-50 focus:bg-white focus:border-[#173B2F] focus:outline-none transition"
+                    placeholder="e.g. 2024-25"
                   />
                 </div>
               </div>
@@ -190,7 +243,7 @@ export const AdminVideosPage: React.FC = () => {
                   required
                   accept="video/*"
                   onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
-                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"
+                  className="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer"
                 />
               </div>
 
@@ -201,7 +254,7 @@ export const AdminVideosPage: React.FC = () => {
                   required
                   accept="image/*"
                   onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)}
-                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  className="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
                 />
               </div>
 
@@ -211,21 +264,22 @@ export const AdminVideosPage: React.FC = () => {
                   type="file"
                   accept=".pdf,.doc,.docx,.ppt,.pptx"
                   onChange={(e) => setStudyMaterial(e.target.files?.[0] || null)}
-                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+                  className="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer"
                 />
               </div>
 
-              <div className="pt-4 border-t border-gray-100 flex justify-end gap-3">
+              {/* Action Buttons */}
+              <div className="pt-4 border-t border-gray-100 flex items-center justify-end gap-2.5">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl"
+                  className="w-1/2 sm:w-auto px-4 py-2.5 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 text-xs font-bold bg-[#173B2F] text-white rounded-xl shadow hover:bg-[#102a21]"
+                  className="w-1/2 sm:w-auto px-6 py-2.5 text-xs font-bold bg-[#173B2F] hover:bg-[#102a21] text-white rounded-xl shadow-md transition cursor-pointer active:scale-95"
                 >
                   Upload
                 </button>

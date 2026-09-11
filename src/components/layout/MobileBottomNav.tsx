@@ -20,13 +20,14 @@ export const MobileBottomNav: React.FC = () => {
       case 'FACULTY':
         return [
           { label: 'Overview', path: '/faculty', icon: LayoutDashboard },
+          { label: 'Upload Video', path: '/admin/videos', icon: Video },
           { label: 'Courses', path: '/faculty/courses', icon: GraduationCap },
-          { label: 'Video Sync', path: '/faculty/content', icon: Video },
           { label: 'Analytics', path: '/faculty/analytics', icon: TrendingUp },
         ];
       case 'HOD':
         return [
           { label: 'Overview', path: '/hod', icon: LayoutDashboard },
+          { label: 'Upload Video', path: '/admin/videos', icon: Video },
           { label: 'Analytics', path: '/hod/analytics', icon: TrendingUp },
           { label: 'Profile', path: '/student/profile', icon: User },
         ];
@@ -34,6 +35,7 @@ export const MobileBottomNav: React.FC = () => {
       case 'SUPER_ADMIN':
         return [
           { label: 'Control', path: '/admin', icon: LayoutDashboard },
+          { label: 'Upload Video', path: '/admin/videos', icon: Video },
           { label: 'Knowledge', path: '/admin/knowledge', icon: Database },
           { label: 'Users', path: '/admin/users', icon: Users },
         ];

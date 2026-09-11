@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { MOCK_VIDEOS } from '../../lib/mockDatabase';
 import { VideoCard } from '../../components/video/VideoCard';
 import { ExamRevisionModal } from '../../components/video/ExamRevisionModal';
 import { Video } from '../../types';
-import { Search, GraduationCap, Video as VideoIcon } from 'lucide-react';
+import { Search, GraduationCap, Video as VideoIcon, Upload } from 'lucide-react';
 
 export const LearningHubPage: React.FC = () => {
   const [videos, setVideos] = useState<Video[]>(MOCK_VIDEOS);
@@ -34,7 +35,7 @@ export const LearningHubPage: React.FC = () => {
       <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#173B2F] via-[#1C483A] to-[#122A22] text-white p-6 sm:p-8 shadow-xl border border-white/10">
         <div className="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-[#C49A55]/15 blur-3xl pointer-events-none"></div>
         
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-[#C49A55]/40 text-xs font-bold uppercase tracking-wider text-[#C49A55]">
               <GraduationCap className="w-3.5 h-3.5" />
@@ -49,6 +50,14 @@ export const LearningHubPage: React.FC = () => {
               Explore the repository of your exclusively uploaded course videos.
             </p>
           </div>
+
+          <Link
+            to="/admin/videos"
+            className="self-start sm:self-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#C49A55] to-[#D97736] hover:from-[#b08744] hover:to-[#c2672b] text-white text-xs font-bold shadow-lg shadow-amber-950/20 transition-all shrink-0"
+          >
+            <Upload className="w-4 h-4" />
+            <span>Upload Video</span>
+          </Link>
         </div>
       </div>
 
