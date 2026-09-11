@@ -15,9 +15,9 @@ export const syncUser = async (req: Request, res: Response): Promise<void> => {
     const userId = id || ('usr_' + Date.now().toString(36));
 
     // STRICT ROLE ENFORCEMENT:
-    // Only campusiqadmin@gmail.com is granted ADMIN role.
+    // Only admincampusiq@gmail.com is granted ADMIN role.
     // All other accounts are strictly STUDENT.
-    const role = cleanEmail === 'campusiqadmin@gmail.com' ? 'ADMIN' : 'STUDENT';
+    const role = cleanEmail === 'admincampusiq@gmail.com' ? 'ADMIN' : 'STUDENT';
     const dept = departmentName || 'Computer Science & Engineering';
     const deptId = departmentId || 'dept_cse';
     const prog = program || (role === 'ADMIN' ? 'Administration' : 'B.E. Computer Science & Engineering');
@@ -109,7 +109,7 @@ export const getUserProfile = async (req: Request, res: Response): Promise<void>
     }
 
     // Default response if not in DB yet
-    const role = cleanEmail === 'campusiqadmin@gmail.com' ? 'ADMIN' : 'STUDENT';
+    const role = cleanEmail === 'admincampusiq@gmail.com' ? 'ADMIN' : 'STUDENT';
     res.json({
       success: true,
       data: {

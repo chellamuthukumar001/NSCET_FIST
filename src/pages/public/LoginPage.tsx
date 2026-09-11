@@ -475,7 +475,7 @@ export const LoginPage: React.FC = () => {
                   <span>Institutional RBAC Policy</span>
                 </div>
                 <p className="text-gray-400 leading-snug">
-                  Only <span className="text-white font-mono font-semibold">campusiqadmin@gmail.com</span> is granted Admin Portal access. All other student and institutional accounts are automatically routed to the Student Portal.
+                  Only <span className="text-white font-mono font-semibold">admincampusiq@gmail.com</span> is granted Admin Portal access. All other student and institutional accounts are automatically routed to the Student Portal.
                 </p>
               </div>
 

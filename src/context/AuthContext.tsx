@@ -23,9 +23,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         const parsed = JSON.parse(saved);
         if (parsed && parsed.email) {
-          // Strictly enforce role even from saved state: only campusiqadmin@gmail.com is ADMIN
+          // Strictly enforce role even from saved state: only admincampusiq@gmail.com is ADMIN
           const cleanEmail = parsed.email.toLowerCase().trim();
-          parsed.role = cleanEmail === 'campusiqadmin@gmail.com' ? 'ADMIN' : 'STUDENT';
+          parsed.role = cleanEmail === 'admincampusiq@gmail.com' ? 'ADMIN' : 'STUDENT';
           return parsed;
         }
       } catch (_) {}
@@ -54,8 +54,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               return {
                 ...prev,
                 ...data.data,
-                // Strict enforcement: only campusiqadmin@gmail.com is ADMIN
-                role: prev.email.toLowerCase().trim() === 'campusiqadmin@gmail.com' ? 'ADMIN' : 'STUDENT',
+                // Strict enforcement: only admincampusiq@gmail.com is ADMIN
+                role: prev.email.toLowerCase().trim() === 'admincampusiq@gmail.com' ? 'ADMIN' : 'STUDENT',
               };
             });
           }
@@ -68,9 +68,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, _password?: string): Promise<User> => {
     const cleanEmail = email.toLowerCase().trim();
-    // Strict role enforcement: Only campusiqadmin@gmail.com is ADMIN
-    const userRole: Role = cleanEmail === 'campusiqadmin@gmail.com' ? 'ADMIN' : 'STUDENT';
-    const name = cleanEmail === 'campusiqadmin@gmail.com' ? 'Administrator' : cleanEmail.split('@')[0];
+    // Strict role enforcement: Only admincampusiq@gmail.com is ADMIN
+    const userRole: Role = cleanEmail === 'admincampusiq@gmail.com' ? 'ADMIN' : 'STUDENT';
+    const name = cleanEmail === 'admincampusiq@gmail.com' ? 'Administrator' : cleanEmail.split('@')[0];
 
     const userData: User = {
       id: 'usr_' + cleanEmail.replace(/[^a-zA-Z0-9]/g, '_'),
@@ -125,8 +125,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const name = fbUser.displayName || cleanEmail.split('@')[0] || 'Student';
     const photo = fbUser.photoURL || undefined;
 
-    // Strict role enforcement: Only campusiqadmin@gmail.com is ADMIN
-    const userRole: Role = cleanEmail === 'campusiqadmin@gmail.com' ? 'ADMIN' : 'STUDENT';
+    // Strict role enforcement: Only admincampusiq@gmail.com is ADMIN
+    const userRole: Role = cleanEmail === 'admincampusiq@gmail.com' ? 'ADMIN' : 'STUDENT';
 
     const userData: User = {
       id: `usr_${fbUser.uid}`,
@@ -178,7 +178,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       ...currentUser,
       ...updates,
       // Strictly enforce role cannot be spoofed
-      role: currentUser.email.toLowerCase().trim() === 'campusiqadmin@gmail.com' ? 'ADMIN' : 'STUDENT',
+      role: currentUser.email.toLowerCase().trim() === 'admincampusiq@gmail.com' ? 'ADMIN' : 'STUDENT',
     };
 
     setCurrentUser(updatedUser);
