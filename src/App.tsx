@@ -108,10 +108,12 @@ export function App() {
 
           <BrowserRouter>
             <Routes>
+              {/* Standalone Login Route - Navbar and Footer completely hidden */}
+              <Route path="/login" element={<LoginPage />} />
+
               {/* Public Portal Routes */}
               <Route element={<PublicLayout />}>
                 <Route path="/" element={<RootRedirect />} />
-                <Route path="/login" element={<LoginPage />} />
                 <Route path="/landing" element={<LandingPage />} />
               </Route>
 
