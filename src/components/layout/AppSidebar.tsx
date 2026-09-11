@@ -98,9 +98,7 @@ export const AppSidebar: React.FC = () => {
           {
             groupTitle: 'Learning Workspace',
             items: [
-              { label: 'Practice Quiz', path: '/student/quiz', icon: BookOpen },
               { label: 'Watch History', path: '/student/history', icon: History },
-              { label: 'Progress Analytics', path: '/student/progress', icon: TrendingUp },
             ]
           },
           {
