@@ -22,6 +22,7 @@ let fallbackVideos = [
     viewCount: 1420,
     publishedDate: '2026-09-01',
     studyMaterialUrl: undefined as string | undefined,
+    tags: ['Machine Learning', 'Federated Learning'],
   },
   {
     id: 'vid-local-02',
@@ -42,6 +43,7 @@ let fallbackVideos = [
     viewCount: 1890,
     publishedDate: '2026-09-02',
     studyMaterialUrl: undefined as string | undefined,
+    tags: ['Web Technology', 'HTTP', 'REST API'],
   },
 ];
 
@@ -94,6 +96,7 @@ export const listVideos = async (req: Request, res: Response): Promise<void> => 
           unitNumber: r.unit_number,
           viewCount: r.view_count || 0,
           publishedDate: r.published_date,
+          tags: r.tags ? (typeof r.tags === 'string' ? JSON.parse(r.tags) : r.tags) : ['Engineering', 'Lecture'],
         }));
         res.json({ count: formatted.length, data: formatted });
         return;
@@ -153,6 +156,7 @@ export const getVideoById = async (req: Request, res: Response): Promise<void> =
           unitNumber: r.unit_number,
           viewCount: r.view_count || 0,
           publishedDate: r.published_date,
+          tags: r.tags ? (typeof r.tags === 'string' ? JSON.parse(r.tags) : r.tags) : ['Engineering', 'Lecture'],
         });
         return;
       }
@@ -225,6 +229,7 @@ export const createVideo = async (req: Request, res: Response): Promise<void> =>
       unitNumber: 1,
       viewCount: 0,
       publishedDate: new Date().toISOString().split('T')[0],
+      tags: [department || 'Engineering', 'Lecture'],
     };
 
     // Save to MySQL if available

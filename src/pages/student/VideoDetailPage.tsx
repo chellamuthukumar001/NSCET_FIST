@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { MOCK_QUIZ_QUESTIONS } from '../../lib/mockDatabase';
-import { getLocalStoredVideos } from '../../lib/videoStore';
+import { getLocalStoredVideos, fetchAllVideos } from '../../lib/videoStore';
 import { TranscriptViewer } from '../../components/video/TranscriptViewer';
 import { LectureQuizModal } from '../../components/video/LectureQuizModal';
 import { ExamRevisionModal } from '../../components/video/ExamRevisionModal';
@@ -37,9 +37,36 @@ export const VideoDetailPage: React.FC = () => {
   const { videoId } = useParams<{ videoId: string }>();
   const [searchParams] = useSearchParams();
 
-  const allVideos = getLocalStoredVideos();
-  const video = allVideos.find((v) => v.id === videoId) || allVideos[0];
-  const nextVideo = allVideos.find((v) => v.id !== video.id) || allVideos[1];
+  const [videos, setVideos] = useState<any[]>(getLocalStoredVideos());
+
+  useEffect(() => {
+    fetchAllVideos().then((list) => {
+      if (Array.isArray(list) && list.length > 0) {
+        setVideos(list);
+      }
+    });
+  }, [videoId]);
+
+  const video = videos.find((v) => v.id === videoId) || videos[0] || {
+    id: 'vid-local-01',
+    localVideoPath: '/assets/videos/campusiq-01.mp4',
+    title: 'federated learning',
+    topic: 'federated learning',
+    facultyName: 'asifa shereen CSE',
+    departmentCode: 'CSE',
+    academicYear: '2024-25',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800',
+    description: 'Lecture on Federated Learning concepts.',
+    durationSeconds: 1280,
+    semester: 5,
+    subjectCode: 'CS3551',
+    subjectTitle: 'Distributed & Federated Systems',
+    unitNumber: 3,
+    viewCount: 0,
+    tags: ['Machine Learning', 'Federated Learning'],
+  };
+
+  const nextVideo = videos.find((v) => v.id !== video.id) || videos[1];
 
   const initialTime = searchParams.get('t') ? Number(searchParams.get('t')) : (video.userProgressSeconds || 0);
   const [currentTimeSeconds, setCurrentTimeSeconds] = useState(initialTime);
@@ -174,6 +201,7 @@ export const VideoDetailPage: React.FC = () => {
           <div className="relative rounded-3xl overflow-hidden aspect-video bg-black shadow-2xl border border-gray-800">
             {video.localVideoPath ? (
               <video
+                key={video.id}
                 ref={videoRef}
                 controls
                 autoPlay
@@ -211,20 +239,24 @@ export const VideoDetailPage: React.FC = () => {
             {/* Quick Speed / Jump Chips */}
             <div className="flex items-center gap-1.5 text-[11px] overflow-x-auto">
               <span className="text-gray-400 font-semibold mr-1">Chapters:</span>
-              {video.transcript?.slice(0, 4).map((chunk, idx) => (
-                <button
-                  key={chunk.id}
-                  onClick={() => handleSeek(chunk.startTime)}
-                  className={`px-2 py-1 rounded-lg font-mono text-[10px] font-bold transition-all cursor-pointer whitespace-nowrap ${
-                    currentTimeSeconds >= chunk.startTime && currentTimeSeconds <= chunk.endTime
-                      ? 'bg-[#173B2F] text-white shadow-sm'
-                      : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-                  }`}
-                  title={chunk.text}
-                >
-                  {formatTime(chunk.startTime)}
-                </button>
-              ))}
+              {Array.isArray(video.transcript) && video.transcript.length > 0 ? (
+                video.transcript.slice(0, 4).map((chunk: any) => (
+                  <button
+                    key={chunk.id}
+                    onClick={() => handleSeek(chunk.startTime)}
+                    className={`px-2 py-1 rounded-lg font-mono text-[10px] font-bold transition-all cursor-pointer whitespace-nowrap ${
+                      currentTimeSeconds >= chunk.startTime && currentTimeSeconds <= chunk.endTime
+                        ? 'bg-[#173B2F] text-white shadow-sm'
+                        : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                    }`}
+                    title={chunk.text}
+                  >
+                    {formatTime(chunk.startTime)}
+                  </button>
+                ))
+              ) : (
+                <span className="text-gray-400 text-[10px] italic">Full lecture</span>
+              )}
             </div>
           </div>
 
@@ -312,7 +344,12 @@ export const VideoDetailPage: React.FC = () => {
 
             {/* Tags */}
             <div className="flex flex-wrap gap-1.5 pt-2">
-              {video.tags.map((tag) => (
+              {(Array.isArray(video.tags)
+                ? video.tags
+                : typeof video.tags === 'string'
+                ? JSON.parse(video.tags)
+                : ['Engineering', 'Lecture']
+              ).map((tag: string) => (
                 <span
                   key={tag}
                   className="px-2 py-0.5 rounded-md bg-gray-100 text-gray-600 text-[10px] font-mono"
