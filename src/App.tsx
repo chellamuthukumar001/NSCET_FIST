@@ -87,6 +87,14 @@ const AuthenticatedLayout: React.FC = () => {
   );
 };
 
+const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { role } = useAuth();
+  if (role !== 'ADMIN' && role !== 'SUPER_ADMIN') {
+    return <Navigate to="/student" replace />;
+  }
+  return <>{children}</>;
+};
+
 export function App() {
   const [showLoading, setShowLoading] = useState(true);
 
@@ -115,9 +123,23 @@ export function App() {
                 <Route path="/student/videos/:videoId" element={<VideoDetailPage />} />
                 <Route path="/student/profile" element={<StudentProfilePage />} />
 
-                {/* Admin Video Upload & Management Routes */}
-                <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/admin/videos" element={<AdminVideosPage />} />
+                {/* Admin Video Upload & Management Routes (Protected) */}
+                <Route
+                  path="/admin"
+                  element={
+                    <AdminRoute>
+                      <AdminDashboard />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/admin/videos"
+                  element={
+                    <AdminRoute>
+                      <AdminVideosPage />
+                    </AdminRoute>
+                  }
+                />
 
                 {/* Legacy Role Fallbacks */}
                 <Route path="/faculty" element={<Navigate to="/admin/videos" replace />} />

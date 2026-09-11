@@ -7,8 +7,7 @@ import {
   Search,
   Video,
   ShieldCheck,
-  ChevronRight,
-  Upload
+  ChevronRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -51,20 +50,9 @@ export const StudentDashboard: React.FC = () => {
         <div className="absolute -right-10 -bottom-10 w-80 h-80 rounded-full bg-[#C49A55]/15 blur-3xl pointer-events-none" />
         
         <div className="relative z-10 max-w-3xl space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-semibold text-[#C49A55] uppercase tracking-wider">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Learning Portal • Semester {currentUser?.semester || 5}</span>
-            </div>
-            
-            {/* Quick Upload action on mobile/desktop header */}
-            <Link
-              to="/admin/videos"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C49A55] hover:bg-[#b08744] text-white text-xs font-bold shadow-md transition"
-            >
-              <Upload className="w-3 h-3" />
-              <span>Upload Video</span>
-            </Link>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-semibold text-[#C49A55] uppercase tracking-wider">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Learning Portal • Semester {currentUser?.semester || 5}</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
@@ -114,13 +102,6 @@ export const StudentDashboard: React.FC = () => {
             </h2>
           </div>
           <div className="flex items-center gap-2">
-            <Link
-              to="/admin/videos"
-              className="px-3 py-1.5 rounded-xl bg-[#173B2F] hover:bg-[#102a21] text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition"
-            >
-              <Upload className="w-3.5 h-3.5 text-[#C49A55]" />
-              <span>Upload Video</span>
-            </Link>
             <Link
               to="/student/videos"
               className="text-xs font-semibold text-[#173B2F] hover:underline flex items-center gap-1"

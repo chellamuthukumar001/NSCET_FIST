@@ -4,7 +4,7 @@ import { getLocalStoredVideos, fetchAllVideos } from '../../lib/videoStore';
 import { VideoCard } from '../../components/video/VideoCard';
 import { ExamRevisionModal } from '../../components/video/ExamRevisionModal';
 import { Video } from '../../types';
-import { Search, GraduationCap, Video as VideoIcon, Upload } from 'lucide-react';
+import { Search, GraduationCap, Video as VideoIcon } from 'lucide-react';
 
 export const LearningHubPage: React.FC = () => {
   const [videos, setVideos] = useState<Video[]>(getLocalStoredVideos());
@@ -62,14 +62,6 @@ export const LearningHubPage: React.FC = () => {
               Explore the repository of your exclusively uploaded course videos.
             </p>
           </div>
-
-          <Link
-            to="/admin/videos"
-            className="self-start sm:self-auto inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#C49A55] to-[#D97736] hover:from-[#b08744] hover:to-[#c2672b] text-white text-xs font-bold shadow-lg shadow-amber-950/20 transition-all shrink-0"
-          >
-            <Upload className="w-4 h-4" />
-            <span>Upload Video</span>
-          </Link>
         </div>
       </div>
 
