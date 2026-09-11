@@ -173,13 +173,17 @@ export const VideoDetailPage: React.FC = () => {
             {video.localVideoPath ? (
               <video
                 ref={videoRef}
-                src={video.localVideoPath}
-                title={video.title}
                 controls
                 autoPlay
                 className="w-full h-full border-0 object-contain"
                 onTimeUpdate={(e) => setCurrentTimeSeconds(Math.floor(e.currentTarget.currentTime))}
-              />
+                onLoadedMetadata={(e) => {
+                  e.currentTarget.currentTime = initialTime;
+                }}
+              >
+                <source src={video.localVideoPath} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             ) : (
               <iframe
                 ref={iframeRef}
