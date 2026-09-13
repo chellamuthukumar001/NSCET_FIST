@@ -1,83 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import {
-  ShieldCheck,
-  BookOpen,
+  User,
+  Mail,
+  Phone,
+  Building2,
   GraduationCap,
-  Award,
-  Bell,
   CheckCircle,
-  Clock,
-  Printer,
-  QrCode,
-  Sparkles,
-  TrendingUp,
-  KeyRound,
-  RefreshCw,
-  Sliders,
-  Check,
   Save,
+  RefreshCw,
   BadgeCheck,
-  Zap
+  Lock,
+  Calendar,
+  Layers,
+  Sparkles,
+  Camera,
+  Bus,
+  Home
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 export const StudentProfilePage: React.FC = () => {
   const { currentUser, role, updateUserProfile } = useAuth();
 
-  // Active Profile Tab
-  const [activeTab, setActiveTab] = useState<'courses' | 'ai_portfolio' | 'privacy_shield' | 'settings'>('courses');
-
-  // Dynamic Token State (derived from current user, not hardcoded mock string)
-  const [anonToken, setAnonToken] = useState(() => {
-    if (currentUser?.id) {
-      return 'NSCET-' + currentUser.id.replace('usr_', '').substring(0, 10).toUpperCase();
-    }
-    return 'NSCET-STD-' + Math.random().toString(36).substring(2, 8).toUpperCase();
-  });
-  const [copiedToken, setCopiedToken] = useState(false);
-
-  // Editable Profile Settings State - bound to authenticated Google / institutional account
+  // Form State bound to authenticated user
   const [fullName, setFullName] = useState(currentUser?.name || '');
   const [email, setEmail] = useState(currentUser?.email || '');
-  const [phone, setPhone] = useState(currentUser?.phone || '');
   const [studentId, setStudentId] = useState(currentUser?.studentId || '');
+  const [phone, setPhone] = useState(currentUser?.phone || '');
   const [departmentName, setDepartmentName] = useState(currentUser?.departmentName || 'Computer Science & Engineering');
   const [program, setProgram] = useState(currentUser?.program || 'B.E. Computer Science & Engineering');
   const [semester, setSemester] = useState(currentUser?.semester || 5);
   const [batch, setBatch] = useState(currentUser?.batch || '2022-2026');
   const [studentType, setStudentType] = useState<'Day Scholar' | 'Hostel'>((currentUser?.studentType as any) || 'Day Scholar');
   const [busRoute, setBusRoute] = useState(currentUser?.busRoute || '');
-  const [selectedAvatar, setSelectedAvatar] = useState(currentUser?.avatarUrl || '');
+  const [avatarUrl, setAvatarUrl] = useState(currentUser?.avatarUrl || '');
 
-  const [preferredLang, setPreferredLang] = useState<'en' | 'ta'>('en');
-  const [dailyGoal, setDailyGoal] = useState(45);
-  const [notifyCertificates, setNotifyCertificates] = useState(true);
-  const [notifyLectures, setNotifyLectures] = useState(true);
-  const [notifyPlacement, setNotifyPlacement] = useState(true);
-  const [notifyHallTicket, setNotifyHallTicket] = useState(true);
-
-  // Save changes state
   const [isSaving, setIsSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
-  // Synchronize state when currentUser updates (e.g. on Google Sign-In or DB reload)
+  // Sync state when currentUser updates (e.g., on login or backend fetch)
   useEffect(() => {
     if (currentUser) {
       setFullName(currentUser.name || '');
       setEmail(currentUser.email || '');
-      setPhone(currentUser.phone || '');
       setStudentId(currentUser.studentId || '');
+      setPhone(currentUser.phone || '');
       setDepartmentName(currentUser.departmentName || 'Computer Science & Engineering');
       setProgram(currentUser.program || 'B.E. Computer Science & Engineering');
       setSemester(currentUser.semester || 5);
       setBatch(currentUser.batch || '2022-2026');
       setStudentType((currentUser.studentType as any) || 'Day Scholar');
       setBusRoute(currentUser.busRoute || '');
-      setSelectedAvatar(currentUser.avatarUrl || '');
-      if (currentUser.id) {
-        setAnonToken('NSCET-' + currentUser.id.replace('usr_', '').substring(0, 10).toUpperCase());
-      }
+      setAvatarUrl(currentUser.avatarUrl || '');
     }
   }, [currentUser]);
 
@@ -88,822 +62,375 @@ export const StudentProfilePage: React.FC = () => {
     return nameStr.substring(0, 2).toUpperCase();
   };
 
-  const handleCopyToken = () => {
-    navigator.clipboard.writeText(anonToken);
-    setCopiedToken(true);
-    setTimeout(() => setCopiedToken(false), 2000);
-  };
-
-  const handleRegenerateToken = () => {
-    const prefix = currentUser?.id ? currentUser.id.replace('usr_', '').substring(0, 6).toUpperCase() : 'NSCET';
-    const newToken = prefix + '-' + Math.random().toString(36).substring(2, 8).toUpperCase();
-    setAnonToken(newToken);
-  };
-
-  const handleSaveSettings = async (e: React.FormEvent) => {
+  const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
     try {
       if (updateUserProfile) {
         await updateUserProfile({
-          name: fullName,
+          name: fullName.trim() || currentUser?.name,
           studentId: studentId.trim() || undefined,
           phone: phone.trim() || undefined,
           departmentName,
-          program,
+          program: program.trim() || undefined,
           semester: Number(semester) || 5,
-          batch,
+          batch: batch.trim() || undefined,
           studentType,
-          busRoute: studentType === 'Day Scholar' ? busRoute : undefined,
-          avatarUrl: selectedAvatar.trim() || undefined,
+          busRoute: studentType === 'Day Scholar' ? busRoute.trim() : undefined,
+          avatarUrl: avatarUrl.trim() || undefined,
         });
       }
       setIsSaving(false);
       setSavedSuccess(true);
-      setTimeout(() => setSavedSuccess(false), 3000);
+      setTimeout(() => setSavedSuccess(false), 3500);
     } catch {
       setIsSaving(false);
     }
   };
 
-  // Enrolled Courses under Regulation 2021
-  const enrolledCourses = [
-    { code: 'CS3351', title: 'Database Management Systems', credits: 3, faculty: 'Dr. S. Karthik', ia1: '46/50', ia2: '48/50', model: '92/100', attendance: 92 },
-    { code: 'CS3451', title: 'Operating Systems', credits: 3, faculty: 'Dr. M. Deepa', ia1: '44/50', ia2: '45/50', model: '88/100', attendance: 88 },
-    { code: 'CS3491', title: 'Cryptography & Cyber Security', credits: 3, faculty: 'Dr. S. Karthik', ia1: '47/50', ia2: '49/50', model: '95/100', attendance: 94 },
-    { code: 'CS3452', title: 'Theory of Computation', credits: 3, faculty: 'Prof. P. Ramasamy', ia1: '42/50', ia2: '46/50', model: '86/100', attendance: 85 },
-    { code: 'CS3391', title: 'Object Oriented Programming', credits: 3, faculty: 'Dr. M. Deepa', ia1: '48/50', ia2: '47/50', model: '94/100', attendance: 90 },
-    { code: 'CS3591', title: 'Computer Networks', credits: 3, faculty: 'Prof. K. Sundar', ia1: '45/50', ia2: '44/50', model: '89/100', attendance: 87 },
-  ];
-
   return (
-    <div className="space-y-8 pb-24 max-w-6xl mx-auto">
+    <div className="space-y-8 pb-20 max-w-4xl mx-auto">
       
       {/* 1. Header Banner */}
-      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#173B2F] via-[#1C483A] to-[#122A22] text-white p-6 sm:p-8 shadow-xl border border-white/10">
-        <div className="absolute -right-16 -top-16 w-72 h-72 rounded-full bg-[#C49A55]/15 blur-3xl pointer-events-none" />
-        <div className="absolute -left-16 -bottom-16 w-72 h-72 rounded-full bg-[#6FA9C9]/15 blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-[#C49A55]/40 text-xs font-bold uppercase tracking-wider text-[#C49A55]">
-              <GraduationCap className="w-3.5 h-3.5" />
-              <span>NSCET Theni • Directorate of Student Affairs & Academic Records</span>
-            </div>
-
-            <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white">
-              Student Academic Profile & Smart ID
-            </h1>
-
-            <p className="text-xs sm:text-sm text-[#DCE7E1] leading-relaxed">
-              Official institutional credentials, continuous assessment records (Internal 40% / External 60%), and verified digital biometric identity under Anna University Regulation 2021.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-2.5 pt-2 text-[11px] font-medium text-white/80">
-              <span className="px-2.5 py-1 rounded-lg bg-black/30 border border-white/10 flex items-center gap-1.5">
-                <BadgeCheck className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Anna University Enrolled</span>
-              </span>
-              <span className="px-2.5 py-1 rounded-lg bg-black/30 border border-white/10 flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#C49A55]" />
-                <span>PII Privacy Shield Active</span>
-              </span>
-              <span className="px-2.5 py-1 rounded-lg bg-black/30 border border-white/10 flex items-center gap-1.5">
-                <Zap className="w-3.5 h-3.5 text-amber-300" />
-                <span>Academic Records Synchronized</span>
-              </span>
-            </div>
-          </div>
-
-          {/* Quick Action Button */}
-          <button
-            onClick={() => window.print()}
-            className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 flex items-center justify-center gap-2 transition-all cursor-pointer shrink-0 self-start md:self-auto shadow"
-          >
-            <Printer className="w-4 h-4 text-[#C49A55]" />
-            <span>Print Student Credential</span>
-          </button>
-        </div>
-      </div>
-
-      {/* 2. Interactive NSCET Biometric Smart ID Card */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#122A22] via-[#173B2F] to-[#0A1A14] border-2 border-[#C49A55]/40 text-white p-6 sm:p-8 shadow-2xl">
-        {/* Hologram Light Streak Effect */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-b from-white/10 to-transparent rotate-45 pointer-events-none transform -translate-y-24 translate-x-24" />
-
-        <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
-          
-          {/* Card Left: Institutional Details */}
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
-            {/* Student Photo or Monogram */}
-            <div className="space-y-2 shrink-0 flex flex-col items-center">
-              <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-[#C49A55] shadow-xl bg-black/40 flex items-center justify-center">
-                {selectedAvatar ? (
-                  <img
-                    src={selectedAvatar}
-                    alt={fullName || 'Student'}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLElement).style.display = 'none';
-                    }}
-                  />
-                ) : null}
-                {!selectedAvatar && (
-                  <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#173B2F] via-[#20493B] to-[#C49A55]/40 text-[#C49A55] font-black text-2xl">
-                    <span>{getInitials(fullName || currentUser?.email || 'Student')}</span>
-                    <span className="text-[9px] uppercase tracking-widest text-emerald-300 font-mono mt-0.5">NSCET</span>
-                  </div>
-                )}
-                <span className="absolute bottom-1 right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-[#101815]" title="Verified Active Student" />
-              </div>
-              <span className="text-[10px] text-gray-400 font-medium">
-                {selectedAvatar ? 'Verified Photo' : 'Institutional Badge'}
-              </span>
-            </div>
-
-            {/* Credential Attributes */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-center sm:justify-start gap-2.5">
-                <div className="w-7 h-7 rounded-full overflow-hidden border border-[#C49A55] shrink-0">
-                  <img src="/assets/nscet-college-logo.jpg" alt="NSCET" className="w-full h-full object-cover" />
-                </div>
-                <span className="text-[11px] font-mono uppercase tracking-widest text-[#C49A55] font-bold">
-                  Nadar Saraswathi College of Engineering & Technology
-                </span>
-              </div>
-
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
-                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                  {fullName || currentUser?.name || 'Student User'}
-                </h2>
-                <span className="px-2.5 py-0.5 rounded-full bg-[#C49A55] text-black text-[10px] font-black uppercase tracking-wider">
-                  {role}
-                </span>
-                {currentUser?.email && (
-                  <span className="px-2 py-0.5 rounded-full bg-white/10 text-emerald-300 text-[10px] font-semibold border border-white/10 flex items-center gap-1">
-                    <BadgeCheck className="w-3 h-3 text-emerald-400" />
-                    <span>{currentUser.email}</span>
-                  </span>
-                )}
-              </div>
-
-              <p className="text-xs text-gray-300 font-medium">
-                {currentUser?.program || program || 'B.E. Computer Science & Engineering'} • {currentUser?.departmentName || departmentName || 'Computer Science & Engineering'}
-              </p>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-[11px]">
-                <div>
-                  <span className="text-gray-400 block text-[9px] uppercase font-bold">Anna Univ Reg No.</span>
-                  <span className="font-mono font-bold text-white text-xs">
-                    {currentUser?.studentId || studentId || (
-                      <span className="text-amber-400 italic text-[10px]">Not Assigned</span>
-                    )}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-gray-400 block text-[9px] uppercase font-bold">Semester / Batch</span>
-                  <span className="font-bold text-white text-xs">
-                    Sem {currentUser?.semester || semester || 5} • {currentUser?.batch || batch || '2022 - 2026'}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-gray-400 block text-[9px] uppercase font-bold">Mobile Phone</span>
-                  <span className="font-bold text-white text-xs">
-                    {currentUser?.phone || phone || <span className="text-gray-400 text-[10px]">Not Set</span>}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-gray-400 block text-[9px] uppercase font-bold">Residence Mode</span>
-                  <span className="font-bold text-emerald-300 text-xs">
-                    {currentUser?.studentType || studentType}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Card Right: Smart RFID Chip Graphic & Digital QR Verification */}
-          <div className="flex sm:flex-row lg:flex-col items-center justify-between gap-4 p-4 rounded-2xl bg-black/40 border border-white/15 backdrop-blur-md shrink-0 w-full lg:w-auto">
-            {/* Smart Chip SVG Graphic */}
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-9 rounded-lg bg-gradient-to-r from-amber-400 to-amber-200 border border-amber-500 shadow-inner flex flex-col justify-around p-1">
-                <div className="w-full h-0.5 bg-amber-700/40 rounded"></div>
-                <div className="w-full h-0.5 bg-amber-700/40 rounded"></div>
-                <div className="w-full h-0.5 bg-amber-700/40 rounded"></div>
-              </div>
-              <div className="text-left">
-                <span className="text-[9px] uppercase font-mono text-gray-400 block font-bold">Smart NFC Pass</span>
-                <span className="text-[11px] font-mono text-[#C49A55] font-bold">
-                  {currentUser?.studentId ? `NSCET-${currentUser.studentId}` : 'NSCET-PASS'}
-                </span>
-              </div>
-            </div>
-
-            {/* Stylized QR Verification Box */}
-            <div className="text-center space-y-1">
-              <div className="w-16 h-16 bg-white p-1 rounded-xl shadow-md mx-auto flex items-center justify-center">
-                <QrCode className="w-14 h-14 text-black" />
-              </div>
-              <span className="text-[8px] font-mono text-gray-400 uppercase tracking-wider block">
-                Scan to Verify Exam Identity
-              </span>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      {/* 3. Academic Standing Metrics Bar */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#173B2F] via-[#1E4D3E] to-[#122A22] text-white p-6 sm:p-8 shadow-xl border border-white/10">
+        <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-[#C49A55]/15 blur-3xl pointer-events-none" />
         
-        {/* Metric 1: CGPA */}
-        <div className="p-5 rounded-3xl bg-white border border-gray-200 shadow-sm space-y-1 hover:border-[#173B2F]/40 transition-all">
-          <div className="flex items-center justify-between text-xs text-gray-500">
-            <span className="font-bold text-[10px] uppercase">Cumulative GPA</span>
-            <Award className="w-4 h-4 text-[#C49A55]" />
+        <div className="relative z-10 space-y-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-[#C49A55]/40 text-xs font-bold uppercase tracking-wider text-[#C49A55]">
+            <GraduationCap className="w-3.5 h-3.5" />
+            <span>Nadar Saraswathi College of Engineering & Technology</span>
           </div>
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-2xl sm:text-3xl font-black text-gray-900">8.74</span>
-            <span className="text-xs font-bold text-gray-400">/ 10.0</span>
-          </div>
-          <span className="text-[10px] font-semibold text-emerald-600 flex items-center gap-1">
-            <TrendingUp className="w-3 h-3" />
-            First Class with Distinction
-          </span>
-        </div>
 
-        {/* Metric 2: Attendance */}
-        <div className="p-5 rounded-3xl bg-white border border-gray-200 shadow-sm space-y-1 hover:border-[#173B2F]/40 transition-all">
-          <div className="flex items-center justify-between text-xs text-gray-500">
-            <span className="font-bold text-[10px] uppercase">Attendance Ratio</span>
-            <Clock className="w-4 h-4 text-emerald-600" />
-          </div>
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-2xl sm:text-3xl font-black text-emerald-700">89.2%</span>
-          </div>
-          <span className="text-[10px] font-semibold text-gray-500">
-            Min 75% Required (Reg. 2021 Compliant)
-          </span>
-        </div>
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+            Student Profile
+          </h1>
 
-        {/* Metric 3: Earned Credits */}
-        <div className="p-5 rounded-3xl bg-white border border-gray-200 shadow-sm space-y-1 hover:border-[#173B2F]/40 transition-all">
-          <div className="flex items-center justify-between text-xs text-gray-500">
-            <span className="font-bold text-[10px] uppercase">Degree Credits</span>
-            <BookOpen className="w-4 h-4 text-[#6FA9C9]" />
-          </div>
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-2xl sm:text-3xl font-black text-gray-900">114</span>
-            <span className="text-xs font-bold text-gray-400">/ 165</span>
-          </div>
-          <span className="text-[10px] font-semibold text-gray-500">
-            69% Curriculum Completed
-          </span>
+          <p className="text-xs sm:text-sm text-[#DCE7E1]">
+            View and manage your student account, official identity, and contact preferences.
+          </p>
         </div>
-
-        {/* Metric 4: Exam Clearance */}
-        <div className="p-5 rounded-3xl bg-white border border-gray-200 shadow-sm space-y-1 hover:border-[#173B2F]/40 transition-all">
-          <div className="flex items-center justify-between text-xs text-gray-500">
-            <span className="font-bold text-[10px] uppercase">Hall Ticket Status</span>
-            <CheckCircle className="w-4 h-4 text-emerald-600" />
-          </div>
-          <div className="text-sm font-black text-emerald-700 flex items-center gap-1.5 mt-1">
-            <BadgeCheck className="w-4 h-4" />
-            <span>Eligible & Cleared</span>
-          </div>
-          <span className="text-[10px] font-semibold text-gray-500">
-            Nov / Dec 2026 Anna Univ. Exams
-          </span>
-        </div>
-
       </div>
 
-      {/* 4. Interactive Profile Tabs Navigation */}
-      <div className="flex items-center gap-2 border-b border-gray-200 overflow-x-auto scrollbar-none pb-1">
-        <button
-          onClick={() => setActiveTab('courses')}
-          className={`px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2 whitespace-nowrap cursor-pointer transition-all ${
-            activeTab === 'courses'
-              ? 'bg-[#173B2F] text-white shadow-md'
-              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-          }`}
-        >
-          <BookOpen className="w-4 h-4" />
-          <span>Enrolled Courses & Internals</span>
-        </button>
+      {/* 2. Authentic Student Profile Card (Name & Email) */}
+      <div className="rounded-3xl bg-[#122A22] text-white p-6 sm:p-8 border border-[#C49A55]/30 shadow-xl relative overflow-hidden">
+        <div className="absolute -right-10 -bottom-10 w-48 h-48 rounded-full bg-emerald-500/10 blur-2xl pointer-events-none" />
 
-        <button
-          onClick={() => setActiveTab('ai_portfolio')}
-          className={`px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2 whitespace-nowrap cursor-pointer transition-all ${
-            activeTab === 'ai_portfolio'
-              ? 'bg-[#173B2F] text-white shadow-md'
-              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-          }`}
-        >
-          <Sparkles className="w-4 h-4 text-[#C49A55]" />
-          <span>AI Learning & Quiz Portfolio</span>
-        </button>
+        <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
+          
+          {/* Avatar Photo / Initials */}
+          <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-[#C49A55] shadow-xl bg-black/40 flex items-center justify-center shrink-0">
+            {avatarUrl ? (
+              <img
+                src={avatarUrl}
+                alt={fullName || 'Student'}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLElement).style.display = 'none';
+                }}
+              />
+            ) : null}
+            {!avatarUrl && (
+              <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#173B2F] via-[#20493B] to-[#C49A55]/30 text-[#C49A55] font-black text-2xl">
+                <span>{getInitials(fullName || currentUser?.name || currentUser?.email || 'Student')}</span>
+                <span className="text-[9px] uppercase tracking-widest text-emerald-300 font-mono mt-0.5">NSCET</span>
+              </div>
+            )}
+            <span className="absolute bottom-1 right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-[#122A22]" title="Active Student" />
+          </div>
 
-        <button
-          onClick={() => setActiveTab('privacy_shield')}
-          className={`px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2 whitespace-nowrap cursor-pointer transition-all ${
-            activeTab === 'privacy_shield'
-              ? 'bg-[#173B2F] text-white shadow-md'
-              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-          }`}
-        >
-          <ShieldCheck className="w-4 h-4 text-emerald-400" />
-          <span>Privacy & Security Token</span>
-        </button>
+          {/* Core Identity Details */}
+          <div className="space-y-2 flex-1">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
+              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                {fullName || currentUser?.name || 'Student User'}
+              </h2>
+              <span className="px-2.5 py-0.5 rounded-full bg-[#C49A55] text-black text-[10px] font-black uppercase tracking-wider">
+                {role}
+              </span>
+            </div>
 
-        <button
-          onClick={() => setActiveTab('settings')}
-          className={`px-4 py-2.5 rounded-2xl text-xs font-bold flex items-center gap-2 whitespace-nowrap cursor-pointer transition-all ${
-            activeTab === 'settings'
-              ? 'bg-[#173B2F] text-white shadow-md'
-              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-          }`}
-        >
-          <Sliders className="w-4 h-4" />
-          <span>Profile & Registry Settings</span>
-        </button>
+            {/* Email */}
+            <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-emerald-300">
+              <Mail className="w-4 h-4 text-emerald-400 shrink-0" />
+              <span className="font-semibold">{email || currentUser?.email}</span>
+              <span className="inline-flex items-center gap-1 text-[10px] text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-full">
+                <BadgeCheck className="w-3 h-3" />
+                <span>Verified</span>
+              </span>
+            </div>
+
+            {/* Program & Department */}
+            <p className="text-xs text-gray-300 font-medium pt-1">
+              {program} • {departmentName}
+            </p>
+
+            {/* Quick Metadata Badges */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-3 text-[11px] border-t border-white/10 mt-3">
+              <div>
+                <span className="text-gray-400 block text-[9px] uppercase font-bold">Register No.</span>
+                <span className="font-mono font-bold text-white text-xs">
+                  {studentId || <span className="text-amber-400 italic text-[10px]">Not set</span>}
+                </span>
+              </div>
+              <div>
+                <span className="text-gray-400 block text-[9px] uppercase font-bold">Semester / Batch</span>
+                <span className="font-bold text-white text-xs">
+                  Sem {semester} • {batch}
+                </span>
+              </div>
+              <div>
+                <span className="text-gray-400 block text-[9px] uppercase font-bold">Mobile Phone</span>
+                <span className="font-bold text-white text-xs">
+                  {phone || <span className="text-gray-400 text-[10px]">Not set</span>}
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
 
-      {/* 5. TAB 1: Enrolled Courses & Continuous Assessment Table */}
-      {activeTab === 'courses' && (
-        <div className="p-6 rounded-3xl bg-white border border-gray-200 shadow-sm space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-100 pb-3">
-            <div>
-              <h3 className="text-base font-bold text-gray-900">
-                Semester {currentUser?.semester || semester || 5} Continuous Internal Assessment (CIA) Records
-              </h3>
-              <p className="text-xs text-gray-500">
-                Anna University Regulation 2021 Clause 12.1: Internal Assessments contribute 40% towards overall course grading.
-              </p>
-            </div>
-            <span className="text-xs font-mono font-bold text-[#173B2F] bg-emerald-50 px-2.5 py-1 rounded-full self-start sm:self-auto">
-              6 Theory Courses • 18 Credits
-            </span>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead>
-                <tr className="border-b border-gray-200 bg-gray-50 text-[11px] font-bold text-gray-500 uppercase">
-                  <th className="p-3">Course Code & Subject</th>
-                  <th className="p-3">Credits</th>
-                  <th className="p-3">Faculty In-Charge</th>
-                  <th className="p-3 text-center">IA 1 (50)</th>
-                  <th className="p-3 text-center">IA 2 (50)</th>
-                  <th className="p-3 text-center">Model Exam</th>
-                  <th className="p-3 text-right">Attendance</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 font-medium">
-                {enrolledCourses.map((c) => (
-                  <tr key={c.code} className="hover:bg-gray-50/80 transition-colors">
-                    <td className="p-3">
-                      <div className="font-bold text-gray-900">{c.code}</div>
-                      <div className="text-[11px] text-gray-500 truncate max-w-xs">{c.title}</div>
-                    </td>
-                    <td className="p-3 font-mono font-bold text-[#173B2F]">{c.credits}</td>
-                    <td className="p-3 text-gray-600">{c.faculty}</td>
-                    <td className="p-3 text-center font-mono font-semibold text-emerald-700">{c.ia1}</td>
-                    <td className="p-3 text-center font-mono font-semibold text-emerald-700">{c.ia2}</td>
-                    <td className="p-3 text-center font-mono font-bold text-gray-900">{c.model}</td>
-                    <td className="p-3 text-right">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                        c.attendance >= 85 ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
-                      }`}>
-                        {c.attendance}%
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-
-      {/* 6. TAB 2: AI Learning & Practice Quiz Portfolio */}
-      {activeTab === 'ai_portfolio' && (
-        <div className="p-6 rounded-3xl bg-white border border-gray-200 shadow-sm space-y-6">
-          <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-            <div>
-              <h3 className="text-base font-bold text-gray-900">
-                AI Knowledge Mastery & Exam Readiness
-              </h3>
-              <p className="text-xs text-gray-500">
-                Self-assessment analytics tracked across lecture modules and Groq AI practice drills.
-              </p>
-            </div>
-            <Link
-              to="/student/quiz"
-              className="px-3 py-1.5 rounded-xl bg-[#173B2F] hover:bg-[#285443] text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#C49A55]" />
-              <span>Launch Quiz Studio</span>
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200 space-y-2">
-              <span className="text-[10px] font-bold uppercase text-emerald-800 block">Lecture Modules Studied</span>
-              <div className="text-2xl font-black text-emerald-950">14 / 16</div>
-              <p className="text-[11px] text-emerald-700">Active learning time logged across academic modules</p>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200 space-y-2">
-              <span className="text-[10px] font-bold uppercase text-amber-800 block">AI Practice Drills Attempted</span>
-              <div className="text-2xl font-black text-amber-950">18 Quizzes</div>
-              <p className="text-[11px] text-amber-700">88.5% Average Score across Part-A & Part-B questions</p>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-sky-50/60 border border-sky-200 space-y-2">
-              <span className="text-[10px] font-bold uppercase text-sky-800 block">Distinction Badges Earned</span>
-              <div className="text-2xl font-black text-sky-950">5 Badges</div>
-              <p className="text-[11px] text-sky-700">Scored 80%+ on Core Anna University Syllabus Drills</p>
-            </div>
-          </div>
-
-          {/* Badges Ribbon */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700">
-              Verified Concept Distinction Badges
-            </h4>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-              <div className="p-3 rounded-2xl bg-gray-50 border border-gray-200 flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-700 flex items-center justify-center font-bold text-sm">🏆</div>
-                <div>
-                  <div className="font-bold text-gray-900">CS3351 DBMS</div>
-                  <div className="text-[10px] text-gray-500">Normalization 100%</div>
-                </div>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-gray-50 border border-gray-200 flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-700 flex items-center justify-center font-bold text-sm">🏆</div>
-                <div>
-                  <div className="font-bold text-gray-900">CS3451 OS</div>
-                  <div className="text-[10px] text-gray-500">Scheduling 100%</div>
-                </div>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-gray-50 border border-gray-200 flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-700 flex items-center justify-center font-bold text-sm">🏆</div>
-                <div>
-                  <div className="font-bold text-gray-900">CS3491 Crypto</div>
-                  <div className="text-[10px] text-gray-500">RSA Algorithm 90%</div>
-                </div>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-gray-50 border border-gray-200 flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-700 flex items-center justify-center font-bold text-sm">🏆</div>
-                <div>
-                  <div className="font-bold text-gray-900">CS3452 TOC</div>
-                  <div className="text-[10px] text-gray-500">DFA Automata 85%</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 7. TAB 3: Privacy & Anonymous Security Shield */}
-      {activeTab === 'privacy_shield' && (
-        <div className="p-6 rounded-3xl bg-white border border-gray-200 shadow-sm space-y-6">
-          <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-            <div>
-              <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-emerald-600" />
-                <span>Zero-Identity Retaliation Privacy Shield</span>
-              </h3>
-              <p className="text-xs text-gray-500">
-                Guaranteed by NSCET Autonomous Privacy & PII Sanitization.
-              </p>
-            </div>
-          </div>
-
-          <div className="p-5 rounded-2xl bg-gray-50 border border-gray-200 space-y-3">
-            <span className="text-[10px] font-bold uppercase text-gray-500 block">
-              Your Academic Verification & Security Token
-            </span>
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-              <div className="px-4 py-2.5 rounded-xl bg-white border border-gray-200 font-mono text-sm font-bold text-[#173B2F] flex-1">
-                {anonToken}
-              </div>
-              <button
-                onClick={handleCopyToken}
-                className="px-4 py-2.5 rounded-xl bg-[#173B2F] text-white text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow"
-              >
-                {copiedToken ? <Check className="w-3.5 h-3.5" /> : <KeyRound className="w-3.5 h-3.5" />}
-                <span>{copiedToken ? 'Copied' : 'Copy Token'}</span>
-              </button>
-              <button
-                onClick={handleRegenerateToken}
-                className="px-4 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
-                title="Cycles token for this session"
-              >
-                <RefreshCw className="w-3.5 h-3.5" />
-                <span>Cycle Token</span>
-              </button>
-            </div>
-            <p className="text-[11px] text-gray-500">
-              This cryptographic token validates your academic identity, module completion records, and certificate issuance credentials securely across Anna University systems.
+      {/* 3. Editable Profile Form */}
+      <form onSubmit={handleSaveProfile} className="rounded-3xl bg-white border border-gray-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-100 pb-4">
+          <div>
+            <h3 className="text-lg font-bold text-gray-900">
+              Edit Profile Details
+            </h3>
+            <p className="text-xs text-gray-500">
+              Update your personal credentials and academic registry details. Changes save directly to the system.
             </p>
           </div>
-
-          {/* Privacy Demonstration Box */}
-          <div className="space-y-2">
-            <span className="text-xs font-bold uppercase text-gray-700 block">
-              Autonomous PII Sanitization Demonstration
-            </span>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
-              <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-900 space-y-1">
-                <span className="text-[10px] font-bold uppercase text-rose-600 block">Raw Input (Before Submission)</span>
-                <p className="text-[11px]">"{fullName || 'Student'} (Reg: {currentUser?.studentId || studentId || 'Reg No.'}): Lab 2 monitors frequently flicker."</p>
-              </div>
-              <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-1">
-                <span className="text-[10px] font-bold uppercase text-emerald-600 block">Stored Record (After PII Scrubber)</span>
-                <p className="text-[11px]">"[{anonToken}]: Lab 2 monitors frequently flicker."</p>
-              </div>
-            </div>
-          </div>
         </div>
-      )}
 
-      {/* 8. TAB 4: Profile & Registry Settings Form */}
-      {activeTab === 'settings' && (
-        <form onSubmit={handleSaveSettings} className="p-6 rounded-3xl bg-white border border-gray-200 shadow-sm space-y-6">
-          <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-            <div>
-              <h3 className="text-base font-bold text-gray-900">
-                Personal Information & Academic Registry
-              </h3>
-              <p className="text-xs text-gray-500">
-                Update your official credentials, contact details, academic department, and transit preferences.
-              </p>
-            </div>
+        {/* Success Alert */}
+        {savedSuccess && (
+          <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2.5 animate-fadeIn">
+            <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>Profile successfully updated and synchronized!</span>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-xs">
+          
+          {/* Full Name */}
+          <div className="space-y-1.5">
+            <label className="font-bold text-gray-700 flex items-center gap-1.5">
+              <User className="w-3.5 h-3.5 text-gray-500" />
+              <span>Full Name:</span>
+            </label>
+            <input
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              placeholder="Enter student name"
+              required
+              className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white transition-all"
+            />
           </div>
 
-          {savedSuccess && (
-            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-emerald-600" />
-              <span>Profile credentials successfully saved and synchronized with NSCET database!</span>
+          {/* Email Address (Read-only verified) */}
+          <div className="space-y-1.5">
+            <label className="font-bold text-gray-700 flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <Mail className="w-3.5 h-3.5 text-gray-500" />
+                <span>Account Email:</span>
+              </span>
+              <span className="text-[10px] text-emerald-600 font-mono flex items-center gap-1">
+                <Lock className="w-3 h-3" /> Login Identifier
+              </span>
+            </label>
+            <input
+              type="email"
+              value={email}
+              disabled
+              className="w-full p-2.5 rounded-xl bg-gray-100 border border-gray-200 font-semibold text-gray-600 cursor-not-allowed"
+            />
+          </div>
+
+          {/* Anna University Register Number */}
+          <div className="space-y-1.5">
+            <label className="font-bold text-gray-700 flex items-center gap-1.5">
+              <GraduationCap className="w-3.5 h-3.5 text-gray-500" />
+              <span>Register Number / Roll No:</span>
+            </label>
+            <input
+              type="text"
+              value={studentId}
+              onChange={(e) => setStudentId(e.target.value)}
+              placeholder="e.g. 921022104001"
+              className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white font-mono transition-all"
+            />
+          </div>
+
+          {/* Mobile Phone Number */}
+          <div className="space-y-1.5">
+            <label className="font-bold text-gray-700 flex items-center gap-1.5">
+              <Phone className="w-3.5 h-3.5 text-gray-500" />
+              <span>Mobile Phone Number:</span>
+            </label>
+            <input
+              type="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="e.g. +91 98765 43210"
+              className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white transition-all"
+            />
+          </div>
+
+          {/* Department */}
+          <div className="space-y-1.5">
+            <label className="font-bold text-gray-700 flex items-center gap-1.5">
+              <Building2 className="w-3.5 h-3.5 text-gray-500" />
+              <span>Department:</span>
+            </label>
+            <select
+              value={departmentName}
+              onChange={(e) => setDepartmentName(e.target.value)}
+              className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white transition-all"
+            >
+              <option value="Computer Science & Engineering">Computer Science & Engineering (CSE)</option>
+              <option value="Information Technology">Information Technology (IT)</option>
+              <option value="Artificial Intelligence & Data Science">Artificial Intelligence & Data Science (AI&DS)</option>
+              <option value="Electronics & Communication Engineering">Electronics & Communication Engineering (ECE)</option>
+              <option value="Electrical & Electronics Engineering">Electrical & Electronics Engineering (EEE)</option>
+              <option value="Mechanical Engineering">Mechanical Engineering (MECH)</option>
+              <option value="Civil Engineering">Civil Engineering (CIVIL)</option>
+            </select>
+          </div>
+
+          {/* Degree Program */}
+          <div className="space-y-1.5">
+            <label className="font-bold text-gray-700 flex items-center gap-1.5">
+              <Layers className="w-3.5 h-3.5 text-gray-500" />
+              <span>Degree Program:</span>
+            </label>
+            <input
+              type="text"
+              value={program}
+              onChange={(e) => setProgram(e.target.value)}
+              placeholder="e.g. B.E. Computer Science & Engineering"
+              className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white transition-all"
+            />
+          </div>
+
+          {/* Current Semester */}
+          <div className="space-y-1.5">
+            <label className="font-bold text-gray-700 flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-gray-500" />
+              <span>Semester:</span>
+            </label>
+            <select
+              value={semester}
+              onChange={(e) => setSemester(Number(e.target.value))}
+              className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white transition-all"
+            >
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((s) => (
+                <option key={s} value={s}>Semester {s}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Batch */}
+          <div className="space-y-1.5">
+            <label className="font-bold text-gray-700 flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-gray-500" />
+              <span>Batch:</span>
+            </label>
+            <input
+              type="text"
+              value={batch}
+              onChange={(e) => setBatch(e.target.value)}
+              placeholder="e.g. 2022-2026"
+              className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white transition-all"
+            />
+          </div>
+
+          {/* Residence Mode */}
+          <div className="space-y-1.5">
+            <label className="font-bold text-gray-700 flex items-center gap-1.5">
+              <Home className="w-3.5 h-3.5 text-gray-500" />
+              <span>Residence Mode:</span>
+            </label>
+            <select
+              value={studentType}
+              onChange={(e: any) => setStudentType(e.target.value)}
+              className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white transition-all"
+            >
+              <option value="Day Scholar">Day Scholar (College Bus Transit)</option>
+              <option value="Hostel">Hostel Resident (Campus Block)</option>
+            </select>
+          </div>
+
+          {/* Bus Route (if Day Scholar) */}
+          {studentType === 'Day Scholar' && (
+            <div className="space-y-1.5">
+              <label className="font-bold text-gray-700 flex items-center gap-1.5">
+                <Bus className="w-3.5 h-3.5 text-gray-500" />
+                <span>Bus Transit Route:</span>
+              </label>
+              <input
+                type="text"
+                value={busRoute}
+                onChange={(e) => setBusRoute(e.target.value)}
+                placeholder="e.g. Route 4: Cumbum - Theni - NSCET"
+                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white transition-all"
+              />
             </div>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-            <div className="space-y-1.5">
-              <label className="font-bold text-gray-700">Full Student Name:</label>
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Student Name"
-                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="font-bold text-gray-700 flex items-center justify-between">
-                <span>Official Email:</span>
-                <span className="text-[10px] text-emerald-600 font-mono flex items-center gap-1">
-                  <BadgeCheck className="w-3 h-3" /> Verified Account
-                </span>
-              </label>
-              <input
-                type="email"
-                value={email}
-                disabled
-                className="w-full p-2.5 rounded-xl bg-gray-100 border border-gray-200 font-semibold text-gray-600 cursor-not-allowed"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="font-bold text-gray-700">Anna University Register Number:</label>
-              <input
-                type="text"
-                value={studentId}
-                onChange={(e) => setStudentId(e.target.value)}
-                placeholder="e.g. 921022104001"
-                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white font-mono"
-              />
-              <span className="text-[10px] text-gray-400">12-digit university examination registration number</span>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="font-bold text-gray-700">Mobile Phone Number:</label>
-              <input
-                type="text"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="e.g. +91 98765 43210"
-                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
-              />
-              <span className="text-[10px] text-gray-400">For SMS notices and exam alerts</span>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="font-bold text-gray-700">Department:</label>
-              <select
-                value={departmentName}
-                onChange={(e) => setDepartmentName(e.target.value)}
-                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
-              >
-                <option value="Computer Science & Engineering">Computer Science & Engineering (CSE)</option>
-                <option value="Information Technology">Information Technology (IT)</option>
-                <option value="Artificial Intelligence & Data Science">Artificial Intelligence & Data Science (AI&DS)</option>
-                <option value="Electronics & Communication Engineering">Electronics & Communication Engineering (ECE)</option>
-                <option value="Electrical & Electronics Engineering">Electrical & Electronics Engineering (EEE)</option>
-                <option value="Mechanical Engineering">Mechanical Engineering (MECH)</option>
-                <option value="Civil Engineering">Civil Engineering (CIVIL)</option>
-              </select>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="font-bold text-gray-700">Degree Program:</label>
-              <input
-                type="text"
-                value={program}
-                onChange={(e) => setProgram(e.target.value)}
-                placeholder="e.g. B.E. Computer Science & Engineering"
-                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="font-bold text-gray-700">Current Semester:</label>
-              <select
-                value={semester}
-                onChange={(e) => setSemester(Number(e.target.value))}
-                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
-              >
-                {[1, 2, 3, 4, 5, 6, 7, 8].map((s) => (
-                  <option key={s} value={s}>Semester {s}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="font-bold text-gray-700">Academic Batch:</label>
-              <input
-                type="text"
-                value={batch}
-                onChange={(e) => setBatch(e.target.value)}
-                placeholder="e.g. 2022-2026"
-                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="font-bold text-gray-700">Residence & Transit Mode:</label>
-              <select
-                value={studentType}
-                onChange={(e: any) => setStudentType(e.target.value)}
-                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
-              >
-                <option value="Day Scholar">Day Scholar (College Bus Transit)</option>
-                <option value="Hostel">Hostel Resident (Campus Resident)</option>
-              </select>
-            </div>
-
-            {studentType === 'Day Scholar' && (
-              <div className="space-y-1.5">
-                <label className="font-bold text-gray-700">College Bus Transit Route:</label>
-                <input
-                  type="text"
-                  value={busRoute}
-                  onChange={(e) => setBusRoute(e.target.value)}
-                  placeholder="e.g. Route 4: Cumbum - Theni - NSCET"
-                  className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
-                />
-              </div>
-            )}
-
-            <div className="space-y-1.5 sm:col-span-2">
-              <label className="font-bold text-gray-700 flex items-center justify-between">
-                <span>Profile Avatar URL:</span>
-                {currentUser?.avatarUrl && (
-                  <button
-                    type="button"
-                    onClick={() => setSelectedAvatar(currentUser.avatarUrl || '')}
-                    className="text-[10px] text-[#C49A55] hover:underline font-semibold cursor-pointer"
-                  >
-                    Reset to Google Profile Photo
-                  </button>
-                )}
-              </label>
-              <input
-                type="text"
-                value={selectedAvatar}
-                onChange={(e) => setSelectedAvatar(e.target.value)}
-                placeholder="https://..."
-                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
-              />
-              <span className="text-[10px] text-gray-400">
-                Automatically synced from your Google account. You can also paste an image URL or leave blank for official monogram.
+          {/* Avatar URL */}
+          <div className="space-y-1.5 sm:col-span-2">
+            <label className="font-bold text-gray-700 flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <Camera className="w-3.5 h-3.5 text-gray-500" />
+                <span>Profile Photo URL:</span>
               </span>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="font-bold text-gray-700">Preferred Portal Language:</label>
-              <select
-                value={preferredLang}
-                onChange={(e: any) => setPreferredLang(e.target.value)}
-                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
-              >
-                <option value="en">English</option>
-                <option value="ta">தமிழ் (Tamil)</option>
-              </select>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="font-bold text-gray-700">Daily Study Target (Minutes):</label>
-              <select
-                value={dailyGoal}
-                onChange={(e) => setDailyGoal(Number(e.target.value))}
-                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
-              >
-                <option value={30}>30 mins / day</option>
-                <option value={45}>45 mins / day (Recommended)</option>
-                <option value={60}>60 mins / day</option>
-                <option value={90}>90 mins / day</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Notification Checkboxes */}
-          <div className="pt-4 border-t border-gray-100 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700 flex items-center gap-1.5">
-              <Bell className="w-3.5 h-3.5 text-[#C49A55]" />
-              <span>Campus Notification & Alert Channels</span>
-            </h4>
-
-            <div className="space-y-2 text-xs">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={notifyCertificates}
-                  onChange={(e) => setNotifyCertificates(e.target.checked)}
-                  className="rounded text-[#173B2F]"
-                />
-                <span>Instant alert when a module certificate reaches <strong>Verified & Issued</strong></span>
-              </label>
-
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={notifyLectures}
-                  onChange={(e) => setNotifyLectures(e.target.checked)}
-                  className="rounded text-[#173B2F]"
-                />
-                <span>Notify when new Anna University Unit video lectures are uploaded</span>
-              </label>
-
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={notifyPlacement}
-                  onChange={(e) => setNotifyPlacement(e.target.checked)}
-                  className="rounded text-[#173B2F]"
-                />
-                <span>Receive campus placement drive and internship notifications</span>
-              </label>
-
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={notifyHallTicket}
-                  onChange={(e) => setNotifyHallTicket(e.target.checked)}
-                  className="rounded text-[#173B2F]"
-                />
-                <span>Receive Anna University Semester Examination Hall Ticket releases</span>
-              </label>
-            </div>
-          </div>
-
-          <div className="pt-2 flex justify-end">
-            <button
-              type="submit"
-              disabled={isSaving}
-              className="px-6 py-2.5 rounded-xl bg-[#173B2F] hover:bg-[#285443] disabled:opacity-50 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-md cursor-pointer transition-all"
-            >
-              {isSaving ? (
-                <>
-                  <RefreshCw className="w-4 h-4 animate-spin text-[#C49A55]" />
-                  <span>Saving to Database...</span>
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4 text-[#C49A55]" />
-                  <span>Save Profile Preferences</span>
-                </>
+              {currentUser?.avatarUrl && (
+                <button
+                  type="button"
+                  onClick={() => setAvatarUrl(currentUser.avatarUrl || '')}
+                  className="text-[10px] text-[#C49A55] hover:underline font-semibold cursor-pointer"
+                >
+                  Reset to Google Account Photo
+                </button>
               )}
-            </button>
+            </label>
+            <input
+              type="text"
+              value={avatarUrl}
+              onChange={(e) => setAvatarUrl(e.target.value)}
+              placeholder="https://..."
+              className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white transition-all"
+            />
+            <span className="text-[10px] text-gray-400">
+              Synced from your Google account. You can also paste an image URL or leave blank.
+            </span>
           </div>
-        </form>
-      )}
+
+        </div>
+
+        {/* Submit Button */}
+        <div className="pt-4 border-t border-gray-100 flex justify-end">
+          <button
+            type="submit"
+            disabled={isSaving}
+            className="px-6 py-2.5 rounded-xl bg-[#173B2F] hover:bg-[#285443] disabled:opacity-50 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-md cursor-pointer transition-all"
+          >
+            {isSaving ? (
+              <>
+                <RefreshCw className="w-4 h-4 animate-spin text-[#C49A55]" />
+                <span>Saving...</span>
+              </>
+            ) : (
+              <>
+                <Save className="w-4 h-4 text-[#C49A55]" />
+                <span>Save Profile Details</span>
+              </>
+            )}
+          </button>
+        </div>
+      </form>
 
     </div>
   );
