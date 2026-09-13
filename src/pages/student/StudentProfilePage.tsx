@@ -9,7 +9,9 @@ import {
   RefreshCw,
   BadgeCheck,
   ShieldCheck,
-  Sparkles
+  Sparkles,
+  Edit3,
+  X
 } from 'lucide-react';
 
 export const StudentProfilePage: React.FC = () => {
@@ -20,6 +22,8 @@ export const StudentProfilePage: React.FC = () => {
   const [email, setEmail] = useState(currentUser?.email || '');
   const [avatarUrl, setAvatarUrl] = useState(currentUser?.avatarUrl || '');
 
+  // Edit Mode state - edit form is hidden by default and hidden after saving
+  const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
@@ -49,11 +53,17 @@ export const StudentProfilePage: React.FC = () => {
         });
       }
       setIsSaving(false);
+      setIsEditing(false); // Hide the edit section immediately after saving
       setSavedSuccess(true);
-      setTimeout(() => setSavedSuccess(false), 3000);
+      setTimeout(() => setSavedSuccess(false), 4000);
     } catch {
       setIsSaving(false);
     }
+  };
+
+  const handleCancelEdit = () => {
+    setFullName(currentUser?.name || '');
+    setIsEditing(false);
   };
 
   return (
@@ -63,21 +73,44 @@ export const StudentProfilePage: React.FC = () => {
       <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#173B2F] via-[#1E4D3E] to-[#122A22] text-white p-6 sm:p-8 shadow-xl border border-white/10">
         <div className="absolute -right-16 -top-16 w-60 h-60 rounded-full bg-[#C49A55]/15 blur-3xl pointer-events-none" />
         
-        <div className="relative z-10 space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-[#C49A55]/40 text-xs font-bold uppercase tracking-wider text-[#C49A55]">
-            <GraduationCap className="w-3.5 h-3.5" />
-            <span>Nadar Saraswathi College of Engineering & Technology</span>
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-[#C49A55]/40 text-xs font-bold uppercase tracking-wider text-[#C49A55]">
+              <GraduationCap className="w-3.5 h-3.5" />
+              <span>Nadar Saraswathi College of Engineering & Technology</span>
+            </div>
+
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+              Student Profile
+            </h1>
+
+            <p className="text-xs sm:text-sm text-[#DCE7E1]">
+              Verified credentials synchronized directly from your Google Account.
+            </p>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-            Student Profile
-          </h1>
-
-          <p className="text-xs sm:text-sm text-[#DCE7E1]">
-            Verified credentials synchronized directly from your Google Account.
-          </p>
+          {!isEditing && (
+            <button
+              onClick={() => setIsEditing(true)}
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl bg-[#C49A55] hover:bg-[#b08744] text-black text-xs font-bold shadow-lg transition-all cursor-pointer shrink-0 self-start sm:self-auto"
+            >
+              <Edit3 className="w-4 h-4" />
+              <span>Edit Profile</span>
+            </button>
+          )}
         </div>
       </div>
+
+      {/* Success Alert */}
+      {savedSuccess && (
+        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center justify-between gap-2.5 shadow-sm animate-fadeIn">
+          <div className="flex items-center gap-2.5">
+            <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>Profile details successfully updated and saved!</span>
+          </div>
+          <span className="text-[10px] text-emerald-600 font-mono">Synchronized</span>
+        </div>
+      )}
 
       {/* 2. Google Details Profile Card */}
       <div className="rounded-3xl bg-[#122A22] text-white p-6 sm:p-8 border border-[#C49A55]/30 shadow-xl relative overflow-hidden">
@@ -143,86 +176,102 @@ export const StudentProfilePage: React.FC = () => {
         </div>
       </div>
 
-      {/* 3. Edit Name & Account Details Form */}
-      <form onSubmit={handleSaveProfile} className="rounded-3xl bg-white border border-gray-200 shadow-sm p-6 sm:p-8 space-y-5">
-        <div className="border-b border-gray-100 pb-3">
-          <h3 className="text-base font-bold text-gray-900">
-            Edit Profile Details
-          </h3>
-          <p className="text-xs text-gray-500">
-            Your profile details are retrieved from your Google Account. You can update your display name below.
-          </p>
-        </div>
+      {/* 3. Edit Form (Hidden by default, shown when user clicks Edit, hidden immediately after save) */}
+      {isEditing && (
+        <form onSubmit={handleSaveProfile} className="rounded-3xl bg-white border border-gray-200 shadow-sm p-6 sm:p-8 space-y-5 animate-fadeIn">
+          <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+            <div>
+              <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
+                <Edit3 className="w-4 h-4 text-[#C49A55]" />
+                <span>Edit Profile Details</span>
+              </h3>
+              <p className="text-xs text-gray-500">
+                Update your display name. Once saved, this edit form will be hidden.
+              </p>
+            </div>
 
-        {/* Success Alert */}
-        {savedSuccess && (
-          <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2.5 animate-fadeIn">
-            <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>Profile name updated successfully!</span>
-          </div>
-        )}
-
-        <div className="space-y-4 text-xs">
-          {/* Full Name */}
-          <div className="space-y-1.5">
-            <label className="font-bold text-gray-700 flex items-center gap-1.5">
-              <User className="w-3.5 h-3.5 text-gray-500" />
-              <span>Full Name (from Google):</span>
-            </label>
-            <input
-              type="text"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              placeholder="Your name"
-              required
-              className="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white transition-all text-sm"
-            />
+            <button
+              type="button"
+              onClick={handleCancelEdit}
+              className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 cursor-pointer transition-all"
+              title="Close edit form"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
 
-          {/* Email Address (Read-only Google Email) */}
-          <div className="space-y-1.5">
-            <label className="font-bold text-gray-700 flex items-center justify-between">
-              <span className="flex items-center gap-1.5">
-                <Mail className="w-3.5 h-3.5 text-gray-500" />
-                <span>Google Account Email:</span>
+          <div className="space-y-4 text-xs">
+            {/* Full Name */}
+            <div className="space-y-1.5">
+              <label className="font-bold text-gray-700 flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5 text-gray-500" />
+                <span>Full Name (from Google):</span>
+              </label>
+              <input
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder="Your name"
+                required
+                autoFocus
+                className="w-full p-3 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white transition-all text-sm"
+              />
+            </div>
+
+            {/* Email Address (Read-only Google Email) */}
+            <div className="space-y-1.5">
+              <label className="font-bold text-gray-700 flex items-center justify-between">
+                <span className="flex items-center gap-1.5">
+                  <Mail className="w-3.5 h-3.5 text-gray-500" />
+                  <span>Google Account Email:</span>
+                </span>
+                <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
+                  <BadgeCheck className="w-3 h-3" /> Managed by Google
+                </span>
+              </label>
+              <input
+                type="email"
+                value={email}
+                disabled
+                className="w-full p-3 rounded-xl bg-gray-100 border border-gray-200 font-semibold text-gray-600 cursor-not-allowed text-sm font-mono"
+              />
+              <span className="text-[10px] text-gray-400 block pt-0.5">
+                This email is authenticated via Google SSO and cannot be modified here.
               </span>
-              <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
-                <BadgeCheck className="w-3 h-3" /> Managed by Google
-              </span>
-            </label>
-            <input
-              type="email"
-              value={email}
-              disabled
-              className="w-full p-3 rounded-xl bg-gray-100 border border-gray-200 font-semibold text-gray-600 cursor-not-allowed text-sm font-mono"
-            />
-            <span className="text-[10px] text-gray-400 block pt-0.5">
-              This email is authenticated via Google SSO and cannot be modified here.
-            </span>
+            </div>
           </div>
-        </div>
 
-        {/* Save Button */}
-        <div className="pt-3 border-t border-gray-100 flex justify-end">
-          <button
-            type="submit"
-            disabled={isSaving}
-            className="px-6 py-2.5 rounded-xl bg-[#173B2F] hover:bg-[#285443] disabled:opacity-50 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-md cursor-pointer transition-all"
-          >
-            {isSaving ? (
-              <>
-                <RefreshCw className="w-4 h-4 animate-spin text-[#C49A55]" />
-                <span>Saving...</span>
-              </>
-            ) : (
-              <>
-                <Save className="w-4 h-4 text-[#C49A55]" />
-                <span>Save Profile Changes</span>
-              </>
-            )}
-          </button>
-        </div>
-      </form>
+          {/* Actions: Cancel & Save */}
+          <div className="pt-3 border-t border-gray-100 flex items-center justify-end gap-2.5">
+            <button
+              type="button"
+              onClick={handleCancelEdit}
+              disabled={isSaving}
+              className="px-4 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold cursor-pointer transition-all"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="submit"
+              disabled={isSaving}
+              className="px-6 py-2.5 rounded-xl bg-[#173B2F] hover:bg-[#285443] disabled:opacity-50 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-md cursor-pointer transition-all"
+            >
+              {isSaving ? (
+                <>
+                  <RefreshCw className="w-4 h-4 animate-spin text-[#C49A55]" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4 text-[#C49A55]" />
+                  <span>Save Profile Changes</span>
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+      )}
 
     </div>
   );
