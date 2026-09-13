@@ -81,7 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       departmentName: 'Computer Science & Engineering',
       program: userRole === 'ADMIN' ? 'Administration' : 'B.E. Computer Science & Engineering',
       semester: userRole === 'ADMIN' ? 0 : 5,
-      studentId: userRole === 'ADMIN' ? undefined : '921022104042',
+      studentId: undefined,
       batch: '2022-2026',
     };
 
@@ -100,8 +100,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           departmentId: userData.departmentId,
           program: userData.program,
           semester: userData.semester,
-          studentId: userData.studentId,
+          studentId: userData.studentId || null,
           batch: userData.batch,
+          phone: userData.phone || null,
+          studentType: userData.studentType || 'Day Scholar',
+          busRoute: userData.busRoute || null,
         }),
       });
       const data = await res.json();
@@ -109,6 +112,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         userData.role = data.data.role;
         if (data.data.avatarUrl) userData.avatarUrl = data.data.avatarUrl;
         if (data.data.studentId) userData.studentId = data.data.studentId;
+        if (data.data.phone) userData.phone = data.data.phone;
+        if (data.data.studentType) userData.studentType = data.data.studentType;
+        if (data.data.busRoute) userData.busRoute = data.data.busRoute;
       }
     } catch (err) {
       console.warn('Could not sync user to MySQL DB:', err);
@@ -138,7 +144,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       departmentName: 'Computer Science & Engineering',
       program: userRole === 'ADMIN' ? 'Administration' : 'B.E. Computer Science & Engineering',
       semester: userRole === 'ADMIN' ? 0 : 5,
-      studentId: userRole === 'ADMIN' ? undefined : (fbUser.uid ? fbUser.uid.slice(-8).toUpperCase() : '921022104042'),
+      studentId: userRole === 'ADMIN' ? undefined : (fbUser.uid ? fbUser.uid.slice(-8).toUpperCase() : undefined),
       batch: '2022-2026',
     };
 
@@ -156,13 +162,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           departmentId: userData.departmentId,
           program: userData.program,
           semester: userData.semester,
-          studentId: userData.studentId,
+          studentId: userData.studentId || null,
           batch: userData.batch,
+          phone: userData.phone || null,
+          studentType: userData.studentType || 'Day Scholar',
+          busRoute: userData.busRoute || null,
         }),
       });
       const data = await res.json();
       if (data.success && data.data) {
         userData.role = data.data.role;
+        if (data.data.studentId) userData.studentId = data.data.studentId;
+        if (data.data.phone) userData.phone = data.data.phone;
+        if (data.data.studentType) userData.studentType = data.data.studentType;
+        if (data.data.busRoute) userData.busRoute = data.data.busRoute;
       }
     } catch (err) {
       console.warn('Could not sync user to MySQL DB:', err);
@@ -196,8 +209,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           departmentId: updatedUser.departmentId,
           program: updatedUser.program,
           semester: updatedUser.semester,
-          studentId: updatedUser.studentId,
+          studentId: updatedUser.studentId || null,
           batch: updatedUser.batch,
+          phone: updatedUser.phone || null,
+          studentType: updatedUser.studentType || 'Day Scholar',
+          busRoute: updatedUser.busRoute || null,
         }),
       });
     } catch (err) {

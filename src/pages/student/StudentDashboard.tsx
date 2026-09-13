@@ -60,7 +60,7 @@ export const StudentDashboard: React.FC = () => {
           </h1>
 
           <p className="text-xs sm:text-sm text-[#DCE7E1] leading-relaxed">
-            Welcome, <strong>{currentUser?.name || 'Vignesh R.'}</strong>. Access your manually uploaded lecture videos and academic materials here.
+            Welcome, <strong>{currentUser?.name || 'Student'}</strong>. Access your manually uploaded lecture videos and academic materials here.
           </p>
 
           {/* Search */}

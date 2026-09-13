@@ -63,6 +63,9 @@ export const initDatabase = async (): Promise<boolean> => {
         semester INT DEFAULT 5,
         batch VARCHAR(50) DEFAULT '2022-2026',
         avatar_url TEXT DEFAULT NULL,
+        phone VARCHAR(50) DEFAULT NULL,
+        student_type VARCHAR(50) DEFAULT 'Day Scholar',
+        bus_route VARCHAR(255) DEFAULT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `);

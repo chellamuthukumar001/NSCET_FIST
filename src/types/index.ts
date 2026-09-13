@@ -10,11 +10,14 @@ export interface User {
   departmentId: string;
   departmentName: string;
   avatarUrl?: string;
-  studentId?: string; // Roll number, e.g. 921022104042
+  studentId?: string; // Anna University Register number
   facultyId?: string;
   semester?: number;
   batch?: string;
   program?: string;
+  phone?: string;
+  studentType?: 'Day Scholar' | 'Hostel';
+  busRoute?: string;
 }
 
 export interface Department {

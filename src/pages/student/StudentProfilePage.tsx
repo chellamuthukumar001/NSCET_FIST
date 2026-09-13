@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import {
-  User,
   ShieldCheck,
-  Mail,
   BookOpen,
   GraduationCap,
   Award,
@@ -13,19 +11,12 @@ import {
   Printer,
   QrCode,
   Sparkles,
-  Phone,
-  Building2,
-  Calendar,
-  Layers,
   TrendingUp,
   KeyRound,
   RefreshCw,
   Sliders,
   Check,
-  ExternalLink,
   Save,
-  AlertCircle,
-  FileText,
   BadgeCheck,
   Zap
 } from 'lucide-react';
@@ -37,16 +28,28 @@ export const StudentProfilePage: React.FC = () => {
   // Active Profile Tab
   const [activeTab, setActiveTab] = useState<'courses' | 'ai_portfolio' | 'privacy_shield' | 'settings'>('courses');
 
-  // Anonymous Token State
-  const [anonToken, setAnonToken] = useState('anon_9f82d1c44a');
+  // Dynamic Token State (derived from current user, not hardcoded mock string)
+  const [anonToken, setAnonToken] = useState(() => {
+    if (currentUser?.id) {
+      return 'NSCET-' + currentUser.id.replace('usr_', '').substring(0, 10).toUpperCase();
+    }
+    return 'NSCET-STD-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+  });
   const [copiedToken, setCopiedToken] = useState(false);
 
   // Editable Profile Settings State - bound to authenticated Google / institutional account
-  const [fullName, setFullName] = useState(currentUser?.name || 'Student User');
+  const [fullName, setFullName] = useState(currentUser?.name || '');
   const [email, setEmail] = useState(currentUser?.email || '');
-  const [phone, setPhone] = useState('+91 98421 87654');
-  const [studentType, setStudentType] = useState<'Day Scholar' | 'Hostel'>('Day Scholar');
-  const [busRoute, setBusRoute] = useState('Route 4: Cumbum - Theni - NSCET');
+  const [phone, setPhone] = useState(currentUser?.phone || '');
+  const [studentId, setStudentId] = useState(currentUser?.studentId || '');
+  const [departmentName, setDepartmentName] = useState(currentUser?.departmentName || 'Computer Science & Engineering');
+  const [program, setProgram] = useState(currentUser?.program || 'B.E. Computer Science & Engineering');
+  const [semester, setSemester] = useState(currentUser?.semester || 5);
+  const [batch, setBatch] = useState(currentUser?.batch || '2022-2026');
+  const [studentType, setStudentType] = useState<'Day Scholar' | 'Hostel'>((currentUser?.studentType as any) || 'Day Scholar');
+  const [busRoute, setBusRoute] = useState(currentUser?.busRoute || '');
+  const [selectedAvatar, setSelectedAvatar] = useState(currentUser?.avatarUrl || '');
+
   const [preferredLang, setPreferredLang] = useState<'en' | 'ta'>('en');
   const [dailyGoal, setDailyGoal] = useState(45);
   const [notifyCertificates, setNotifyCertificates] = useState(true);
@@ -58,33 +61,32 @@ export const StudentProfilePage: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
 
-  // Avatar Presets - includes authenticated Google profile photo
-  const [selectedAvatar, setSelectedAvatar] = useState(
-    currentUser?.avatarUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80'
-  );
-
-  // Synchronize state when currentUser updates (e.g. on Google Sign-In)
+  // Synchronize state when currentUser updates (e.g. on Google Sign-In or DB reload)
   useEffect(() => {
     if (currentUser) {
-      if (currentUser.name) setFullName(currentUser.name);
-      if (currentUser.email) setEmail(currentUser.email);
-      if (currentUser.avatarUrl) setSelectedAvatar(currentUser.avatarUrl);
+      setFullName(currentUser.name || '');
+      setEmail(currentUser.email || '');
+      setPhone(currentUser.phone || '');
+      setStudentId(currentUser.studentId || '');
+      setDepartmentName(currentUser.departmentName || 'Computer Science & Engineering');
+      setProgram(currentUser.program || 'B.E. Computer Science & Engineering');
+      setSemester(currentUser.semester || 5);
+      setBatch(currentUser.batch || '2022-2026');
+      setStudentType((currentUser.studentType as any) || 'Day Scholar');
+      setBusRoute(currentUser.busRoute || '');
+      setSelectedAvatar(currentUser.avatarUrl || '');
+      if (currentUser.id) {
+        setAnonToken('NSCET-' + currentUser.id.replace('usr_', '').substring(0, 10).toUpperCase());
+      }
     }
   }, [currentUser]);
 
-  const avatarPresets = useMemo(() => {
-    const list: string[] = [];
-    if (currentUser?.avatarUrl) {
-      list.push(currentUser.avatarUrl);
-    }
-    list.push(
-      'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=400&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80',
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&auto=format&fit=crop&q=80'
-    );
-    return Array.from(new Set(list));
-  }, [currentUser?.avatarUrl]);
+  const getInitials = (nameStr: string) => {
+    if (!nameStr) return 'ST';
+    const parts = nameStr.trim().split(/\s+/);
+    if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+    return nameStr.substring(0, 2).toUpperCase();
+  };
 
   const handleCopyToken = () => {
     navigator.clipboard.writeText(anonToken);
@@ -93,7 +95,8 @@ export const StudentProfilePage: React.FC = () => {
   };
 
   const handleRegenerateToken = () => {
-    const newToken = 'anon_' + Math.random().toString(36).substring(2, 12);
+    const prefix = currentUser?.id ? currentUser.id.replace('usr_', '').substring(0, 6).toUpperCase() : 'NSCET';
+    const newToken = prefix + '-' + Math.random().toString(36).substring(2, 8).toUpperCase();
     setAnonToken(newToken);
   };
 
@@ -104,7 +107,15 @@ export const StudentProfilePage: React.FC = () => {
       if (updateUserProfile) {
         await updateUserProfile({
           name: fullName,
-          avatarUrl: selectedAvatar,
+          studentId: studentId.trim() || undefined,
+          phone: phone.trim() || undefined,
+          departmentName,
+          program,
+          semester: Number(semester) || 5,
+          batch,
+          studentType,
+          busRoute: studentType === 'Day Scholar' ? busRoute : undefined,
+          avatarUrl: selectedAvatar.trim() || undefined,
         });
       }
       setIsSaving(false);
@@ -184,32 +195,30 @@ export const StudentProfilePage: React.FC = () => {
           
           {/* Card Left: Institutional Details */}
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
-            {/* Student Photo & Preset Selector */}
-            <div className="space-y-3 shrink-0 flex flex-col items-center">
-              <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-[#C49A55] shadow-xl bg-black/40">
-                <img
-                  src={selectedAvatar}
-                  alt={fullName}
-                  className="w-full h-full object-cover"
-                />
-                <span className="absolute bottom-1 right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-[#101815]" />
+            {/* Student Photo or Monogram */}
+            <div className="space-y-2 shrink-0 flex flex-col items-center">
+              <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-[#C49A55] shadow-xl bg-black/40 flex items-center justify-center">
+                {selectedAvatar ? (
+                  <img
+                    src={selectedAvatar}
+                    alt={fullName || 'Student'}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLElement).style.display = 'none';
+                    }}
+                  />
+                ) : null}
+                {!selectedAvatar && (
+                  <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#173B2F] via-[#20493B] to-[#C49A55]/40 text-[#C49A55] font-black text-2xl">
+                    <span>{getInitials(fullName || currentUser?.email || 'Student')}</span>
+                    <span className="text-[9px] uppercase tracking-widest text-emerald-300 font-mono mt-0.5">NSCET</span>
+                  </div>
+                )}
+                <span className="absolute bottom-1 right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-[#101815]" title="Verified Active Student" />
               </div>
-
-              {/* Avatar Preset Switcher Pills */}
-              <div className="flex items-center gap-1.5 bg-black/40 p-1 rounded-xl border border-white/10">
-                {avatarPresets.map((av, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => setSelectedAvatar(av)}
-                    className={`w-4 h-4 rounded-full overflow-hidden border cursor-pointer transition-all ${
-                      selectedAvatar === av ? 'border-[#C49A55] scale-125' : 'border-white/30 opacity-60'
-                    }`}
-                  >
-                    <img src={av} alt="" className="w-full h-full object-cover" />
-                  </button>
-                ))}
-              </div>
+              <span className="text-[10px] text-gray-400 font-medium">
+                {selectedAvatar ? 'Verified Photo' : 'Institutional Badge'}
+              </span>
             </div>
 
             {/* Credential Attributes */}
@@ -225,7 +234,7 @@ export const StudentProfilePage: React.FC = () => {
 
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
                 <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                  {fullName}
+                  {fullName || currentUser?.name || 'Student User'}
                 </h2>
                 <span className="px-2.5 py-0.5 rounded-full bg-[#C49A55] text-black text-[10px] font-black uppercase tracking-wider">
                   {role}
@@ -239,21 +248,35 @@ export const StudentProfilePage: React.FC = () => {
               </div>
 
               <p className="text-xs text-gray-300 font-medium">
-                {currentUser?.program || 'B.E. Computer Science & Engineering (FIST)'}
+                {currentUser?.program || program || 'B.E. Computer Science & Engineering'} • {currentUser?.departmentName || departmentName || 'Computer Science & Engineering'}
               </p>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 text-[11px]">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-[11px]">
                 <div>
-                  <span className="text-gray-400 block text-[9px] uppercase font-bold">Register No.</span>
-                  <span className="font-mono font-bold text-white text-xs">{currentUser?.studentId || '921022104042'}</span>
+                  <span className="text-gray-400 block text-[9px] uppercase font-bold">Anna Univ Reg No.</span>
+                  <span className="font-mono font-bold text-white text-xs">
+                    {currentUser?.studentId || studentId || (
+                      <span className="text-amber-400 italic text-[10px]">Not Assigned</span>
+                    )}
+                  </span>
                 </div>
                 <div>
                   <span className="text-gray-400 block text-[9px] uppercase font-bold">Semester / Batch</span>
-                  <span className="font-bold text-white text-xs">Sem 5 • 2022 - 2026</span>
+                  <span className="font-bold text-white text-xs">
+                    Sem {currentUser?.semester || semester || 5} • {currentUser?.batch || batch || '2022 - 2026'}
+                  </span>
                 </div>
-                <div className="col-span-2 sm:col-span-1">
+                <div>
+                  <span className="text-gray-400 block text-[9px] uppercase font-bold">Mobile Phone</span>
+                  <span className="font-bold text-white text-xs">
+                    {currentUser?.phone || phone || <span className="text-gray-400 text-[10px]">Not Set</span>}
+                  </span>
+                </div>
+                <div>
                   <span className="text-gray-400 block text-[9px] uppercase font-bold">Residence Mode</span>
-                  <span className="font-bold text-emerald-300 text-xs">{studentType}</span>
+                  <span className="font-bold text-emerald-300 text-xs">
+                    {currentUser?.studentType || studentType}
+                  </span>
                 </div>
               </div>
             </div>
@@ -270,7 +293,9 @@ export const StudentProfilePage: React.FC = () => {
               </div>
               <div className="text-left">
                 <span className="text-[9px] uppercase font-mono text-gray-400 block font-bold">Smart NFC Pass</span>
-                <span className="text-[11px] font-mono text-[#C49A55] font-bold">NSCET-AUTH-ID</span>
+                <span className="text-[11px] font-mono text-[#C49A55] font-bold">
+                  {currentUser?.studentId ? `NSCET-${currentUser.studentId}` : 'NSCET-PASS'}
+                </span>
               </div>
             </div>
 
@@ -280,7 +305,7 @@ export const StudentProfilePage: React.FC = () => {
                 <QrCode className="w-14 h-14 text-black" />
               </div>
               <span className="text-[8px] font-mono text-gray-400 uppercase tracking-wider block">
-                Scan to Verify Exam Hall Ticket
+                Scan to Verify Exam Identity
               </span>
             </div>
           </div>
@@ -388,7 +413,7 @@ export const StudentProfilePage: React.FC = () => {
           }`}
         >
           <ShieldCheck className="w-4 h-4 text-emerald-400" />
-          <span>Privacy & Anonymous Token</span>
+          <span>Privacy & Security Token</span>
         </button>
 
         <button
@@ -400,7 +425,7 @@ export const StudentProfilePage: React.FC = () => {
           }`}
         >
           <Sliders className="w-4 h-4" />
-          <span>Profile & Sync Settings</span>
+          <span>Profile & Registry Settings</span>
         </button>
       </div>
 
@@ -410,7 +435,7 @@ export const StudentProfilePage: React.FC = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-100 pb-3">
             <div>
               <h3 className="text-base font-bold text-gray-900">
-                Semester 5 Continuous Internal Assessment (CIA) Records
+                Semester {currentUser?.semester || semester || 5} Continuous Internal Assessment (CIA) Records
               </h3>
               <p className="text-xs text-gray-500">
                 Anna University Regulation 2021 Clause 12.1: Internal Assessments contribute 40% towards overall course grading.
@@ -486,7 +511,7 @@ export const StudentProfilePage: React.FC = () => {
             <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200 space-y-2">
               <span className="text-[10px] font-bold uppercase text-emerald-800 block">Lecture Modules Studied</span>
               <div className="text-2xl font-black text-emerald-950">14 / 16</div>
-              <p className="text-[11px] text-emerald-700">7h 12m active learning time logged across 5 domains</p>
+              <p className="text-[11px] text-emerald-700">Active learning time logged across academic modules</p>
             </div>
 
             <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200 space-y-2">
@@ -498,7 +523,7 @@ export const StudentProfilePage: React.FC = () => {
             <div className="p-4 rounded-2xl bg-sky-50/60 border border-sky-200 space-y-2">
               <span className="text-[10px] font-bold uppercase text-sky-800 block">Distinction Badges Earned</span>
               <div className="text-2xl font-black text-sky-950">5 Badges</div>
-              <p className="text-[11px] text-sky-700">Scored 80%+ on DBMS, OS, Crypto, TOC and DSA Drills</p>
+              <p className="text-[11px] text-sky-700">Scored 80%+ on Core Anna University Syllabus Drills</p>
             </div>
           </div>
 
@@ -544,7 +569,7 @@ export const StudentProfilePage: React.FC = () => {
         </div>
       )}
 
-      {/* 7. TAB 3: Privacy & Anonymous Voice Shield */}
+      {/* 7. TAB 3: Privacy & Anonymous Security Shield */}
       {activeTab === 'privacy_shield' && (
         <div className="p-6 rounded-3xl bg-white border border-gray-200 shadow-sm space-y-6">
           <div className="flex items-center justify-between border-b border-gray-100 pb-3">
@@ -577,7 +602,7 @@ export const StudentProfilePage: React.FC = () => {
               <button
                 onClick={handleRegenerateToken}
                 className="px-4 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
-                title="Generates a new token for certificate verification"
+                title="Cycles token for this session"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 <span>Cycle Token</span>
@@ -596,7 +621,7 @@ export const StudentProfilePage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
               <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-900 space-y-1">
                 <span className="text-[10px] font-bold uppercase text-rose-600 block">Raw Input (Before Submission)</span>
-                <p className="text-[11px]">"{fullName} (Reg: {currentUser?.studentId || '921022104042'}): Lab 2 monitors frequently flicker."</p>
+                <p className="text-[11px]">"{fullName || 'Student'} (Reg: {currentUser?.studentId || studentId || 'Reg No.'}): Lab 2 monitors frequently flicker."</p>
               </div>
               <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-1">
                 <span className="text-[10px] font-bold uppercase text-emerald-600 block">Stored Record (After PII Scrubber)</span>
@@ -607,16 +632,16 @@ export const StudentProfilePage: React.FC = () => {
         </div>
       )}
 
-      {/* 8. TAB 4: Profile & Sync Settings Form */}
+      {/* 8. TAB 4: Profile & Registry Settings Form */}
       {activeTab === 'settings' && (
         <form onSubmit={handleSaveSettings} className="p-6 rounded-3xl bg-white border border-gray-200 shadow-sm space-y-6">
           <div className="flex items-center justify-between border-b border-gray-100 pb-3">
             <div>
               <h3 className="text-base font-bold text-gray-900">
-                Personal Information & Communication Preferences
+                Personal Information & Academic Registry
               </h3>
               <p className="text-xs text-gray-500">
-                Update your contact details, transportation mode, and notification channels.
+                Update your official credentials, contact details, academic department, and transit preferences.
               </p>
             </div>
           </div>
@@ -624,7 +649,7 @@ export const StudentProfilePage: React.FC = () => {
           {savedSuccess && (
             <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2">
               <CheckCircle className="w-4 h-4 text-emerald-600" />
-              <span>Profile settings successfully saved and synchronized with NSCET student registry!</span>
+              <span>Profile credentials successfully saved and synchronized with NSCET database!</span>
             </div>
           )}
 
@@ -635,18 +660,36 @@ export const StudentProfilePage: React.FC = () => {
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
+                placeholder="Student Name"
                 className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="font-bold text-gray-700">Official College Email:</label>
+              <label className="font-bold text-gray-700 flex items-center justify-between">
+                <span>Official Email:</span>
+                <span className="text-[10px] text-emerald-600 font-mono flex items-center gap-1">
+                  <BadgeCheck className="w-3 h-3" /> Verified Account
+                </span>
+              </label>
               <input
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
+                disabled
+                className="w-full p-2.5 rounded-xl bg-gray-100 border border-gray-200 font-semibold text-gray-600 cursor-not-allowed"
               />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="font-bold text-gray-700">Anna University Register Number:</label>
+              <input
+                type="text"
+                value={studentId}
+                onChange={(e) => setStudentId(e.target.value)}
+                placeholder="e.g. 921022104001"
+                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white font-mono"
+              />
+              <span className="text-[10px] text-gray-400">12-digit university examination registration number</span>
             </div>
 
             <div className="space-y-1.5">
@@ -655,6 +698,60 @@ export const StudentProfilePage: React.FC = () => {
                 type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
+                placeholder="e.g. +91 98765 43210"
+                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
+              />
+              <span className="text-[10px] text-gray-400">For SMS notices and exam alerts</span>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="font-bold text-gray-700">Department:</label>
+              <select
+                value={departmentName}
+                onChange={(e) => setDepartmentName(e.target.value)}
+                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
+              >
+                <option value="Computer Science & Engineering">Computer Science & Engineering (CSE)</option>
+                <option value="Information Technology">Information Technology (IT)</option>
+                <option value="Artificial Intelligence & Data Science">Artificial Intelligence & Data Science (AI&DS)</option>
+                <option value="Electronics & Communication Engineering">Electronics & Communication Engineering (ECE)</option>
+                <option value="Electrical & Electronics Engineering">Electrical & Electronics Engineering (EEE)</option>
+                <option value="Mechanical Engineering">Mechanical Engineering (MECH)</option>
+                <option value="Civil Engineering">Civil Engineering (CIVIL)</option>
+              </select>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="font-bold text-gray-700">Degree Program:</label>
+              <input
+                type="text"
+                value={program}
+                onChange={(e) => setProgram(e.target.value)}
+                placeholder="e.g. B.E. Computer Science & Engineering"
+                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="font-bold text-gray-700">Current Semester:</label>
+              <select
+                value={semester}
+                onChange={(e) => setSemester(Number(e.target.value))}
+                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
+              >
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((s) => (
+                  <option key={s} value={s}>Semester {s}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="font-bold text-gray-700">Academic Batch:</label>
+              <input
+                type="text"
+                value={batch}
+                onChange={(e) => setBatch(e.target.value)}
+                placeholder="e.g. 2022-2026"
                 className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
               />
             </div>
@@ -667,21 +764,47 @@ export const StudentProfilePage: React.FC = () => {
                 className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
               >
                 <option value="Day Scholar">Day Scholar (College Bus Transit)</option>
-                <option value="Hostel">Hostel Resident (Campus Block A)</option>
+                <option value="Hostel">Hostel Resident (Campus Resident)</option>
               </select>
             </div>
 
             {studentType === 'Day Scholar' && (
-              <div className="space-y-1.5 sm:col-span-2">
+              <div className="space-y-1.5">
                 <label className="font-bold text-gray-700">College Bus Transit Route:</label>
                 <input
                   type="text"
                   value={busRoute}
                   onChange={(e) => setBusRoute(e.target.value)}
+                  placeholder="e.g. Route 4: Cumbum - Theni - NSCET"
                   className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
                 />
               </div>
             )}
+
+            <div className="space-y-1.5 sm:col-span-2">
+              <label className="font-bold text-gray-700 flex items-center justify-between">
+                <span>Profile Avatar URL:</span>
+                {currentUser?.avatarUrl && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedAvatar(currentUser.avatarUrl || '')}
+                    className="text-[10px] text-[#C49A55] hover:underline font-semibold cursor-pointer"
+                  >
+                    Reset to Google Profile Photo
+                  </button>
+                )}
+              </label>
+              <input
+                type="text"
+                value={selectedAvatar}
+                onChange={(e) => setSelectedAvatar(e.target.value)}
+                placeholder="https://..."
+                className="w-full p-2.5 rounded-xl bg-gray-50 border border-gray-200 font-semibold text-gray-900 focus:outline-none focus:border-[#173B2F] focus:bg-white"
+              />
+              <span className="text-[10px] text-gray-400">
+                Automatically synced from your Google account. You can also paste an image URL or leave blank for official monogram.
+              </span>
+            </div>
 
             <div className="space-y-1.5">
               <label className="font-bold text-gray-700">Preferred Portal Language:</label>
@@ -769,7 +892,7 @@ export const StudentProfilePage: React.FC = () => {
               {isSaving ? (
                 <>
                   <RefreshCw className="w-4 h-4 animate-spin text-[#C49A55]" />
-                  <span>Saving...</span>
+                  <span>Saving to Database...</span>
                 </>
               ) : (
                 <>
@@ -785,5 +908,3 @@ export const StudentProfilePage: React.FC = () => {
     </div>
   );
 };
-
-

@@ -3,7 +3,21 @@ import { pool, isDbConnected } from '../config/db';
 
 export const syncUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id, email, name, avatarUrl, departmentName, departmentId, program, semester, studentId, batch } = req.body;
+    const {
+      id,
+      email,
+      name,
+      avatarUrl,
+      departmentName,
+      departmentId,
+      program,
+      semester,
+      studentId,
+      batch,
+      phone,
+      studentType,
+      busRoute,
+    } = req.body;
 
     if (!email) {
       res.status(400).json({ error: 'Email is required for user synchronization' });
@@ -22,8 +36,11 @@ export const syncUser = async (req: Request, res: Response): Promise<void> => {
     const deptId = departmentId || 'dept_cse';
     const prog = program || (role === 'ADMIN' ? 'Administration' : 'B.E. Computer Science & Engineering');
     const sem = semester !== undefined ? semester : (role === 'ADMIN' ? 0 : 5);
-    const studId = role === 'ADMIN' ? null : (studentId || '921022104042');
+    const studId = role === 'ADMIN' ? null : (studentId || null);
     const userBatch = batch || '2022-2026';
+    const userPhone = phone || null;
+    const userStudentType = studentType || 'Day Scholar';
+    const userBusRoute = busRoute || null;
 
     let savedUser = {
       id: userId,
@@ -37,13 +54,16 @@ export const syncUser = async (req: Request, res: Response): Promise<void> => {
       program: prog,
       semester: sem,
       batch: userBatch,
+      phone: userPhone,
+      studentType: userStudentType,
+      busRoute: userBusRoute,
     };
 
     if (isDbConnected) {
       await pool.query(
         `INSERT INTO users (
-          id, email, name, role, avatar_url, department_name, department_id, program, semester, student_id, batch
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          id, email, name, role, avatar_url, department_name, department_id, program, semester, student_id, batch, phone, student_type, bus_route
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE
           name = VALUES(name),
           role = VALUES(role),
@@ -53,8 +73,26 @@ export const syncUser = async (req: Request, res: Response): Promise<void> => {
           program = VALUES(program),
           semester = VALUES(semester),
           student_id = VALUES(student_id),
-          batch = VALUES(batch)`,
-        [userId, cleanEmail, cleanName, role, avatarUrl || null, dept, deptId, prog, sem, studId, userBatch]
+          batch = VALUES(batch),
+          phone = VALUES(phone),
+          student_type = VALUES(student_type),
+          bus_route = VALUES(bus_route)`,
+        [
+          userId,
+          cleanEmail,
+          cleanName,
+          role,
+          avatarUrl || null,
+          dept,
+          deptId,
+          prog,
+          sem,
+          studId,
+          userBatch,
+          userPhone,
+          userStudentType,
+          userBusRoute,
+        ]
       );
 
       console.log(`✅ [MySQL] User synchronized into database: ${cleanEmail} (${role})`);
@@ -101,6 +139,9 @@ export const getUserProfile = async (req: Request, res: Response): Promise<void>
             program: u.program,
             semester: u.semester,
             batch: u.batch,
+            phone: u.phone,
+            studentType: u.student_type,
+            busRoute: u.bus_route,
             createdAt: u.created_at,
           },
         });
@@ -120,10 +161,13 @@ export const getUserProfile = async (req: Request, res: Response): Promise<void>
         avatarUrl: null,
         departmentId: 'dept_cse',
         departmentName: 'Computer Science & Engineering',
-        studentId: role === 'ADMIN' ? null : '921022104042',
+        studentId: null,
         program: role === 'ADMIN' ? 'Administration' : 'B.E. Computer Science & Engineering',
         semester: role === 'ADMIN' ? 0 : 5,
         batch: '2022-2026',
+        phone: null,
+        studentType: 'Day Scholar',
+        busRoute: null,
       },
     });
   } catch (err: any) {
