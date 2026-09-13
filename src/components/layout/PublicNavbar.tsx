@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { useCopilot } from '../../context/CopilotContext';
 import {
   Menu,
   X,
   ArrowRight,
   UserCheck,
-  Globe,
-  ChevronDown,
   CheckCircle2,
   GraduationCap,
-  LogOut
+  LogOut,
+  ChevronDown
 } from 'lucide-react';
 import { Role } from '../../types';
 
 export const PublicNavbar: React.FC = () => {
   const { currentUser, role, logout } = useAuth();
-  const { selectedLanguage, setSelectedLanguage } = useCopilot();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
@@ -37,11 +33,6 @@ export const PublicNavbar: React.FC = () => {
     { label: 'Departments', path: '/departments' },
     { label: 'Academic Courses', path: '/courses' },
     { label: 'Open Learning', path: '/public-learning' },
-  ];
-
-  const languages = [
-    { code: 'en', label: 'English', native: 'English' },
-    { code: 'ta', label: 'Tamil', native: 'தமிழ்' },
   ];
 
   const getDashboardPath = () => {
@@ -116,42 +107,6 @@ export const PublicNavbar: React.FC = () => {
 
           {/* Actions & Persona Switcher */}
           <div className="hidden lg:flex items-center gap-2.5">
-            
-            {/* Multilingual Selector Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => setLangOpen(!langOpen)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-black/30 hover:bg-white/10 text-xs font-semibold text-white/90 border border-white/15 transition-all cursor-pointer shadow-inner"
-              >
-                <Globe className="w-3.5 h-3.5 text-[#6FA9C9]" />
-                <span>{languages.find((l) => l.code === selectedLanguage)?.native}</span>
-                <ChevronDown className="w-3 h-3 text-gray-400" />
-              </button>
-
-              {langOpen && (
-                <div className="absolute right-0 mt-2 w-36 py-1.5 bg-[#101815] border border-white/20 rounded-2xl shadow-2xl z-50 animate-fade-in">
-                  <div className="px-3 py-1 text-[10px] uppercase font-bold text-gray-400">
-                    Language / மொழி
-                  </div>
-                  {languages.map((l) => (
-                    <button
-                      key={l.code}
-                      onClick={() => {
-                        setSelectedLanguage(l.code as 'en' | 'ta');
-                        setLangOpen(false);
-                      }}
-                      className={`w-full text-left px-3 py-1.5 text-xs flex items-center justify-between hover:bg-white/10 cursor-pointer ${
-                        selectedLanguage === l.code ? 'text-[#6FA9C9] font-bold bg-white/5' : 'text-gray-300'
-                      }`}
-                    >
-                      <span>{l.label}</span>
-                      <span className="text-[11px] text-[#C49A55]">{l.native}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
             {/* Authenticated User Status or Sign In */}
             {currentUser ? (
               <div className="relative group">
@@ -239,23 +194,6 @@ export const PublicNavbar: React.FC = () => {
               >
                 {link.label}
               </Link>
-            ))}
-          </div>
-
-          {/* Language Selector in Mobile */}
-          <div className="flex items-center gap-1.5 p-1 bg-black/40 rounded-xl border border-white/10">
-            {languages.map((l) => (
-              <button
-                key={l.code}
-                onClick={() => setSelectedLanguage(l.code as 'en' | 'ta')}
-                className={`flex-1 py-1.5 rounded-lg text-xs font-semibold ${
-                  selectedLanguage === l.code
-                    ? 'bg-[#C49A55] text-white font-bold shadow'
-                    : 'text-gray-400'
-                }`}
-              >
-                {l.native}
-              </button>
             ))}
           </div>
 

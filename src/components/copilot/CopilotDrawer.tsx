@@ -11,7 +11,6 @@ import {
   RotateCcw,
   Mic,
   ShieldCheck,
-  Globe,
   Info,
   ThumbsUp,
   ThumbsDown,
@@ -42,9 +41,7 @@ export const CopilotDrawer: React.FC = () => {
     sendMessage,
     speakMessage,
     stopSpeaking,
-    clearHistory,
-    selectedLanguage,
-    setSelectedLanguage
+    clearHistory
   } = useCopilot();
   const { role } = useAuth();
 
@@ -227,25 +224,8 @@ export const CopilotDrawer: React.FC = () => {
               </div>
             </div>
 
-            {/* Window Controls: Language + Transcript + Minimize + Expand + Close */}
+            {/* Window Controls: Transcript + Minimize + Expand + Close */}
             <div className="flex items-center gap-1 sm:gap-1.5">
-              
-              {/* Language Selector */}
-              <div className="flex bg-black/40 rounded-lg p-0.5 border border-white/10">
-                {(['en', 'ta'] as const).map((l) => (
-                  <button
-                    key={l}
-                    onClick={() => setSelectedLanguage(l)}
-                    className={`px-1.5 py-0.5 rounded text-[10px] font-bold cursor-pointer transition-all ${
-                      selectedLanguage === l
-                        ? 'bg-[#6E7F45] text-white shadow'
-                        : 'text-gray-400 hover:text-white'
-                    }`}
-                  >
-                    {l === 'en' ? 'EN' : 'தமிழ்'}
-                  </button>
-                ))}
-              </div>
 
               {/* Download Transcript */}
               <button
@@ -480,8 +460,6 @@ export const CopilotDrawer: React.FC = () => {
                     ? 'Ask for 2-Mark or 16-Mark Anna Univ. question answers...'
                     : activeFocusMode === 'code'
                     ? 'Enter algorithm problem or code to trace & optimize...'
-                    : selectedLanguage === 'ta'
-                    ? 'பாடத்திட்டம் அல்லது வளாக விவரங்களை கேளுங்கள்...'
                     : 'Ask anything about lectures, exam syllabi, or campus...'
                 }
                 disabled={isStreaming}
@@ -522,8 +500,6 @@ export const CopilotDrawer: React.FC = () => {
         isOpen={voiceModalOpen}
         onClose={() => setVoiceModalOpen(false)}
         onSubmitQuery={(text) => sendMessage(text)}
-        selectedLanguage={selectedLanguage}
-        onSelectLanguage={setSelectedLanguage}
       />
     </>
   );

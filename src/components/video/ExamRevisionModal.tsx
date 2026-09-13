@@ -26,13 +26,11 @@ export const ExamRevisionModal: React.FC<ExamRevisionModalProps> = ({
   const [examKit, setExamKit] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [language, setLanguage] = useState<'en' | 'ta'>('en');
 
   if (!isOpen) return null;
 
-  const handleGenerateRevisionKit = async (selectedLang: 'en' | 'ta' = language) => {
+  const handleGenerateRevisionKit = async () => {
     setLoading(true);
-    setLanguage(selectedLang);
 
     const prompt = `Generate an official Anna University Regulation 2021 Exam Revision Kit for:
 Subject: ${video.subjectCode} - ${video.subjectTitle}
@@ -57,7 +55,7 @@ Tone: Rigorous, academic, strictly aligned with Anna University Chennai evaluati
       const response = await generateGroqAnswer({
         query: prompt,
         role: 'STUDENT',
-        language: selectedLang,
+        language: 'en',
         contextDocs: [
           {
             title: `${video.subjectTitle} Unit ${video.unitNumber}`,
@@ -121,27 +119,10 @@ Tone: Rigorous, academic, strictly aligned with Anna University Chennai evaluati
         {/* Action Controls Bar */}
         <div className="px-5 py-3 bg-gray-50 border-b border-gray-200 flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-gray-600">Language:</span>
-            <button
-              onClick={() => handleGenerateRevisionKit('en')}
-              className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
-                language === 'en'
-                  ? 'bg-[#173B2F] text-white'
-                  : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-100'
-              }`}
-            >
-              English
-            </button>
-            <button
-              onClick={() => handleGenerateRevisionKit('ta')}
-              className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
-                language === 'ta'
-                  ? 'bg-[#173B2F] text-white'
-                  : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-100'
-              }`}
-            >
-              தமிழ் (Tamil)
-            </button>
+            <span className="font-semibold text-gray-700">Curriculum Standard:</span>
+            <span className="px-2.5 py-1 rounded-lg bg-[#173B2F]/10 text-[#173B2F] font-bold border border-[#173B2F]/20">
+              Anna University Reg. 2021 (Part A & Part B)
+            </span>
           </div>
 
           {examKit && (

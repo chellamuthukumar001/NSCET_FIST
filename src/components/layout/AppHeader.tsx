@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { useCopilot } from '../../context/CopilotContext';
 import { useNotifications } from '../../context/NotificationContext';
 import {
   Bell,
-  Globe,
   ChevronDown,
   UserCheck,
   CheckCircle2,
@@ -17,17 +15,10 @@ import { Role } from '../../types';
 
 export const AppHeader: React.FC = () => {
   const { currentUser, role, logout } = useAuth();
-  const { selectedLanguage, setSelectedLanguage } = useCopilot();
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
 
   const [notifOpen, setNotifOpen] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
   const [personaOpen, setPersonaOpen] = useState(false);
-
-  const languages = [
-    { code: 'en', label: 'English', native: 'English' },
-    { code: 'ta', label: 'Tamil', native: 'தமிழ்' },
-  ];
 
   const getDashboardRoot = () => {
     switch (role) {
@@ -88,42 +79,9 @@ export const AppHeader: React.FC = () => {
           </div>
         </div>
 
-        {/* Right: Actions, Languages & Persona */}
+        {/* Right: Actions & Persona */}
         <div className="flex items-center gap-2 sm:gap-3">
-          
-          {/* Language Selector */}
-          <div className="relative">
-            <button
-              onClick={() => setLangOpen(!langOpen)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-black/25 hover:bg-white/10 text-xs font-medium border border-white/10 transition-colors cursor-pointer shadow-inner"
-            >
-              <Globe className="w-3.5 h-3.5 text-[#6FA9C9]" />
-              <span className="hidden sm:inline">
-                {languages.find((l) => l.code === selectedLanguage)?.native}
-              </span>
-              <ChevronDown className="w-3 h-3 text-gray-400" />
-            </button>
 
-            {langOpen && (
-              <div className="absolute right-0 mt-2 w-36 py-1 bg-[#101815] border border-white/20 rounded-2xl shadow-2xl z-50 animate-fade-in">
-                {languages.map((l) => (
-                  <button
-                    key={l.code}
-                    onClick={() => {
-                      setSelectedLanguage(l.code as 'en' | 'ta');
-                      setLangOpen(false);
-                    }}
-                    className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-white/10 cursor-pointer ${
-                      selectedLanguage === l.code ? 'text-[#6FA9C9] font-bold bg-white/5' : 'text-gray-300'
-                    }`}
-                  >
-                    <span>{l.label}</span>
-                    <span className="text-[11px] text-[#C49A55]">{l.native}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
 
           {/* Notifications Bell with Category Badges */}
           <div className="relative">

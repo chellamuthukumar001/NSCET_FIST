@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Mic, MicOff, Volume2, X, Globe, Sparkles } from 'lucide-react';
+import { Mic, MicOff, Volume2, X, Sparkles } from 'lucide-react';
 import { voiceService } from '../../lib/voiceAssistant';
 
 interface VoiceQueryModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmitQuery: (transcript: string) => void;
-  selectedLanguage: 'en' | 'ta';
-  onSelectLanguage: (lang: 'en' | 'ta') => void;
 }
 
 export const VoiceQueryModal: React.FC<VoiceQueryModalProps> = ({
   isOpen,
   onClose,
   onSubmitQuery,
-  selectedLanguage,
-  onSelectLanguage,
 }) => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
@@ -30,18 +26,14 @@ export const VoiceQueryModal: React.FC<VoiceQueryModalProps> = ({
       setTranscript('');
       setError(null);
     }
-  }, [isOpen, selectedLanguage]);
+  }, [isOpen]);
 
   const startListening = () => {
     setError(null);
     setTranscript('');
-    setStatus(
-      selectedLanguage === 'ta'
-        ? 'பேசுங்கள்... (Listening in Tamil)'
-        : 'Listening for your college question...'
-    );
+    setStatus('Listening for your college question...');
 
-    voiceService.startListening(selectedLanguage, {
+    voiceService.startListening('en', {
       onResult: (text) => {
         setTranscript(text);
       },
@@ -94,23 +86,6 @@ export const VoiceQueryModal: React.FC<VoiceQueryModalProps> = ({
           <p className="text-xs text-[#A2B6AC]">{status}</p>
         </div>
 
-        {/* Language Switcher */}
-        <div className="flex justify-center gap-2 mb-6">
-          {(['en', 'ta'] as const).map((lang) => (
-            <button
-              key={lang}
-              onClick={() => onSelectLanguage(lang)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-medium border transition-colors cursor-pointer ${
-                selectedLanguage === lang
-                  ? 'bg-[#173B2F] border-[#6FA9C9] text-white font-bold shadow-md'
-                  : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10'
-              }`}
-            >
-              {lang === 'en' ? 'English' : 'தமிழ்'}
-            </button>
-          ))}
-        </div>
-
         {/* Animated Mic Button & Soundwave Equalizer */}
         <div className="flex flex-col items-center justify-center mb-6 space-y-3">
           <button
@@ -152,9 +127,7 @@ export const VoiceQueryModal: React.FC<VoiceQueryModalProps> = ({
             `"${transcript}"`
           ) : (
             <span className="text-gray-500 text-xs">
-              {selectedLanguage === 'ta'
-                ? 'எடுத்துக்காட்டு: "எனக்கு DBMS Unit 3 lectures வேண்டும்"'
-                : 'Example: "Show me DBMS Unit 3 lectures or attendance rules"'}
+              Example: "Show me DBMS Unit 3 lectures or attendance rules"
             </span>
           )}
         </div>
