@@ -29,10 +29,9 @@ export const PublicNavbar: React.FC = () => {
 
   const navLinks = [
     { label: 'Campus Home', path: '/landing' },
-    { label: 'About College', path: '/about' },
-    { label: 'Departments', path: '/departments' },
-    { label: 'Academic Courses', path: '/courses' },
-    { label: 'Open Learning', path: '/public-learning' },
+    { label: 'Learning Videos', path: '/student/videos' },
+    { label: 'Student Dashboard', path: '/student' },
+    { label: 'My Profile', path: '/student/profile' },
   ];
 
   const getDashboardPath = () => {
@@ -43,7 +42,7 @@ export const PublicNavbar: React.FC = () => {
         return '/admin';
       case 'STUDENT':
       default:
-        return '/student';
+        return '/student/videos';
     }
   };
 
@@ -158,7 +157,7 @@ export const PublicNavbar: React.FC = () => {
               to={getDashboardPath()}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider bg-gradient-to-r from-[#C49A55] to-[#D97736] text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all"
             >
-              <span>{currentUser ? `${role} Portal` : 'Sign In'}</span>
+              <span>{currentUser ? (role === 'ADMIN' ? 'Admin Portal' : 'Learning Videos') : 'Sign In'}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -218,7 +217,7 @@ export const PublicNavbar: React.FC = () => {
               onClick={() => setMobileMenuOpen(false)}
               className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-[#C49A55] to-[#D97736] text-white font-black text-xs uppercase tracking-wider shadow-lg mt-2"
             >
-              <span>{currentUser ? `Launch ${role} Dashboard` : 'Sign In to Portal'}</span>
+              <span>{currentUser ? (role === 'ADMIN' ? 'Launch Admin Portal' : 'Go to Learning Videos') : 'Sign In to Portal'}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
 

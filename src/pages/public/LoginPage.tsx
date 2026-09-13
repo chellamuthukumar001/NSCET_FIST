@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
-  const { login, loginWithGoogle } = useAuth();
+  const { login, loginWithGoogle, currentUser, role } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -25,6 +25,16 @@ export const LoginPage: React.FC = () => {
   const [authError, setAuthError] = useState<string | null>(null);
   const [capsLockActive, setCapsLockActive] = useState(false);
 
+  useEffect(() => {
+    if (currentUser) {
+      if (role === 'ADMIN') {
+        navigate('/admin', { replace: true });
+      } else {
+        navigate('/landing', { replace: true });
+      }
+    }
+  }, [currentUser, role, navigate]);
+
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
     setAuthError(null);
@@ -33,7 +43,7 @@ export const LoginPage: React.FC = () => {
       if (user.role === 'ADMIN') {
         navigate('/admin');
       } else {
-        navigate('/student');
+        navigate('/landing');
       }
     } catch (err: any) {
       console.error('Google Sign-In Error:', err);
@@ -73,7 +83,7 @@ export const LoginPage: React.FC = () => {
       if (user.role === 'ADMIN') {
         navigate('/admin');
       } else {
-        navigate('/student');
+        navigate('/landing');
       }
     } catch {
       setAuthError('Authentication failed. Please verify your credentials.');

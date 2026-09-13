@@ -29,7 +29,9 @@ export const LandingPage: React.FC = () => {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate('/student/courses');
+      navigate(`/student/videos?search=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      navigate('/student/videos');
     }
   };
 
@@ -93,23 +95,23 @@ export const LandingPage: React.FC = () => {
             Learn from your college resources, discover knowledge, master accredited courses, and get trusted answers with <strong>CampusIQ</strong>.
           </p>
 
-          {/* Primary & Secondary Call to Actions with "Get Started" */}
+          {/* Primary & Secondary Call to Actions flowing into Learning Videos */}
           <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
             <Link
-              to="/student"
+              to="/student/videos"
               className="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#C49A55] to-[#D97736] hover:brightness-110 text-white font-black text-sm tracking-wide shadow-xl shadow-amber-950/40 flex items-center gap-2.5 transition-all cursor-pointer hover:scale-105 active:scale-95 border border-white/20"
             >
-              <Zap className="w-4 h-4 fill-white" />
-              <span>Get Started</span>
+              <Video className="w-4 h-4 fill-white" />
+              <span>Explore Learning Videos</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
 
             <Link
-              to="/student/courses"
+              to="/student"
               className="px-7 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm tracking-wide border border-white/30 backdrop-blur-md flex items-center gap-2 transition-all cursor-pointer"
             >
               <GraduationCap className="w-4 h-4 text-[#C49A55]" />
-              <span>Explore Courses</span>
+              <span>Student Dashboard</span>
             </Link>
           </div>
 
@@ -122,7 +124,7 @@ export const LandingPage: React.FC = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search accredited courses and curriculum tracks..."
+                  placeholder="Search learning videos, topics, or faculty..."
                   className="w-full py-2.5 bg-transparent text-white placeholder-white/60 text-sm focus:outline-none"
                 />
                 <button
@@ -141,8 +143,7 @@ export const LandingPage: React.FC = () => {
                 <button
                   key={idx}
                   onClick={() => {
-                    setSearchQuery(prompt);
-                    navigate('/student/courses');
+                    navigate(`/student/videos?search=${encodeURIComponent(prompt)}`);
                   }}
                   className="px-3 py-1 rounded-full text-[11px] bg-black/30 hover:bg-black/50 text-white/90 border border-white/15 backdrop-blur-sm transition-all cursor-pointer"
                 >
@@ -301,10 +302,10 @@ export const LandingPage: React.FC = () => {
                 <div className="pt-3 border-t border-gray-200 text-xs text-[#17201C] flex items-center justify-between">
                   <span className="text-[11px] text-[#66736C]">HOD: {dept.hodName}</span>
                   <Link
-                    to="/departments"
+                    to="/student/videos"
                     className="text-[#173B2F] font-bold text-[11px] hover:underline flex items-center gap-1"
                   >
-                    <span>View Hub</span>
+                    <span>View Videos</span>
                     <ArrowRight className="w-3 h-3" />
                   </Link>
                 </div>
@@ -331,21 +332,21 @@ export const LandingPage: React.FC = () => {
             Ready to experience CampusIQ?
           </h2>
           <p className="text-sm sm:text-base text-[#DCE7E1] leading-relaxed">
-            Access your personalized student learning dashboard, explore accredited courses, and get answers from our institutional AI.
+            Access your curated video hub, explore accredited courses, and get answers from our institutional AI.
           </p>
           <div className="pt-2 flex flex-wrap justify-center gap-4">
             <Link
-              to="/student"
+              to="/student/videos"
               className="px-8 py-3.5 rounded-xl bg-white text-[#173B2F] hover:bg-[#F5F4EF] font-bold text-xs uppercase tracking-wider shadow-lg transition-all flex items-center gap-2 hover:scale-105"
             >
-              <Zap className="w-4 h-4 text-[#C49A55] fill-[#C49A55]" />
-              <span>Get Started &bull; Student Dashboard</span>
+              <Video className="w-4 h-4 text-[#173B2F]" />
+              <span>Start Learning Videos</span>
             </Link>
             <Link
-              to="/login"
+              to="/student"
               className="px-7 py-3.5 rounded-xl bg-black/40 hover:bg-black/60 text-white font-semibold text-xs uppercase tracking-wider border border-white/20 transition-all"
             >
-              Staff & Admin Login
+              Student Dashboard
             </Link>
           </div>
         </div>

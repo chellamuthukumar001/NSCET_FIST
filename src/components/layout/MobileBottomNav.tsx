@@ -6,9 +6,7 @@ import {
   Video,
   User,
   GraduationCap,
-  TrendingUp,
-  Database,
-  Users
+  Sparkles
 } from 'lucide-react';
 
 export const MobileBottomNav: React.FC = () => {
@@ -26,8 +24,9 @@ export const MobileBottomNav: React.FC = () => {
         ];
       default:
         return [
+          { label: 'Campus', path: '/landing', icon: Sparkles },
+          { label: 'Videos', path: '/student/videos', icon: Video },
           { label: 'Dashboard', path: '/student', icon: LayoutDashboard },
-          { label: 'Video Hub', path: '/student/videos', icon: Video },
           { label: 'Profile', path: '/student/profile', icon: User },
         ];
     }

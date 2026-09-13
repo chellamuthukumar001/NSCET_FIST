@@ -63,8 +63,9 @@ export const AppSidebar: React.FC = () => {
           {
             groupTitle: 'Learning Core',
             items: [
-              { label: 'Video Dashboard', path: '/student', icon: LayoutDashboard },
-              { label: 'Curated Video Hub', path: '/student/videos', icon: Video, badge: 'Sync' },
+              { label: 'Learning Videos', path: '/student/videos', icon: Video, badge: 'Sync' },
+              { label: 'Campus Home', path: '/landing', icon: Sparkles },
+              { label: 'Student Dashboard', path: '/student', icon: LayoutDashboard },
             ]
           },
           {

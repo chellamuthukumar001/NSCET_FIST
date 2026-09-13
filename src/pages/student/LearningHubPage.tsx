@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { getLocalStoredVideos, fetchAllVideos } from '../../lib/videoStore';
 import { VideoCard } from '../../components/video/VideoCard';
 import { ExamRevisionModal } from '../../components/video/ExamRevisionModal';
@@ -7,9 +7,17 @@ import { Video } from '../../types';
 import { Search, GraduationCap, Video as VideoIcon } from 'lucide-react';
 
 export const LearningHubPage: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const [videos, setVideos] = useState<Video[]>(getLocalStoredVideos());
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(searchParams.get('search') || '');
   const [revisionModalVideo, setRevisionModalVideo] = useState<Video | null>(null);
+
+  useEffect(() => {
+    const q = searchParams.get('search');
+    if (q !== null) {
+      setSearch(q);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     fetchAllVideos().then((loaded) => {

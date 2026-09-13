@@ -41,13 +41,21 @@ const PublicLayout: React.FC = () => {
   );
 };
 
-// RootRedirect enforces initial entry flow
+// RootRedirect enforces initial entry flow: Login -> Landing -> Learning Videos
 const RootRedirect: React.FC = () => {
   const { currentUser, role } = useAuth();
   if (!currentUser) {
     return <Navigate to="/login" replace />;
   }
-  return <Navigate to={role === 'ADMIN' ? '/admin' : '/student'} replace />;
+  return <Navigate to={role === 'ADMIN' ? '/admin' : '/landing'} replace />;
+};
+
+const ProtectedLandingRoute: React.FC = () => {
+  const { currentUser } = useAuth();
+  if (!currentUser) {
+    return <Navigate to="/login" replace />;
+  }
+  return <LandingPage />;
 };
 
 const AuthenticatedLayout: React.FC = () => {
@@ -114,7 +122,7 @@ export function App() {
               {/* Public Portal Routes */}
               <Route element={<PublicLayout />}>
                 <Route path="/" element={<RootRedirect />} />
-                <Route path="/landing" element={<LandingPage />} />
+                <Route path="/landing" element={<ProtectedLandingRoute />} />
               </Route>
 
               {/* Authenticated Portal Routes */}
