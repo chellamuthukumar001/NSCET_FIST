@@ -7,9 +7,9 @@ export const DEFAULT_VIDEOS: Video[] = [
     id: 'vid-local-01',
     youtubeId: '',
     localVideoPath: '/assets/videos/campusiq-01.mp4',
-    title: 'federated learning',
-    topic: 'federated learning',
-    facultyName: 'asifa shereen CSE',
+    title: 'Federated Learning: Training AI Without Sharing Raw Data',
+    topic: 'Privacy-Preserving AI & Distributed Model Training',
+    facultyName: 'Asifa Shereen (CSE)',
     departmentCode: 'CSE',
     departmentId: 'dept_cse',
     program: 'B.E',
@@ -18,7 +18,7 @@ export const DEFAULT_VIDEOS: Video[] = [
     subjectCode: 'CS3551',
     subjectTitle: 'Distributed & Federated Systems',
     unitNumber: 3,
-    thumbnailUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop&q=60',
+    thumbnailUrl: '/assets/videos/thumbs/thumb-01.jpg',
     description: 'Lecture on Federated Learning concepts, distributed machine learning architecture, and privacy-preserving model aggregation.',
     durationSeconds: 240,
     tags: ['Machine Learning', 'Federated Learning', 'Distributed AI'],
@@ -30,9 +30,9 @@ export const DEFAULT_VIDEOS: Video[] = [
     id: 'vid-local-02',
     youtubeId: '',
     localVideoPath: '/assets/videos/campusiq-02.mp4',
-    title: 'web request',
-    topic: 'web request',
-    facultyName: 'asmath nabila CSE',
+    title: 'What Happens When You Type a URL? Behind the Scenes of a Web Request',
+    topic: 'Web Request Lifecycle & Client-Server Architecture',
+    facultyName: 'A. Asmath Nabila (CSE)',
     departmentCode: 'CSE',
     departmentId: 'dept_cse',
     program: 'B.E',
@@ -41,7 +41,7 @@ export const DEFAULT_VIDEOS: Video[] = [
     subjectCode: 'CS3452',
     subjectTitle: 'Web Technology & Networks',
     unitNumber: 2,
-    thumbnailUrl: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop&q=60',
+    thumbnailUrl: '/assets/videos/thumbs/thumb-02.jpg',
     description: 'Comprehensive walkthrough of HTTP/HTTPS web requests, client-server communication lifecycle, REST protocols, and response headers.',
     durationSeconds: 217,
     tags: ['Web Technology', 'HTTP', 'REST API', 'Computer Networks'],
@@ -255,15 +255,33 @@ export const getLocalStoredVideos = (): Video[] => {
         modified = true;
       }
 
-      // Auto-correct duration for local videos if outdated
+      // Auto-correct duration and thumbnails for local videos if outdated
       const corrected = parsed.map((v: Video) => {
-        if (v.id === 'vid-local-01' && v.durationSeconds === 1280) {
-          modified = true;
-          return { ...v, durationSeconds: 240 };
+        if (v.id === 'vid-local-01') {
+          if (v.thumbnailUrl !== '/assets/videos/thumbs/thumb-01.jpg' || v.durationSeconds === 1280 || v.title === 'federated learning') {
+            modified = true;
+            return {
+              ...v,
+              title: 'Federated Learning: Training AI Without Sharing Raw Data',
+              topic: 'Privacy-Preserving AI & Distributed Model Training',
+              facultyName: 'Asifa Shereen (CSE)',
+              thumbnailUrl: '/assets/videos/thumbs/thumb-01.jpg',
+              durationSeconds: 240
+            };
+          }
         }
-        if (v.id === 'vid-local-02' && v.durationSeconds === 1450) {
-          modified = true;
-          return { ...v, durationSeconds: 217 };
+        if (v.id === 'vid-local-02') {
+          if (v.thumbnailUrl !== '/assets/videos/thumbs/thumb-02.jpg' || v.durationSeconds === 1450 || v.title === 'web request') {
+            modified = true;
+            return {
+              ...v,
+              title: 'What Happens When You Type a URL? Behind the Scenes of a Web Request',
+              topic: 'Web Request Lifecycle & Client-Server Architecture',
+              facultyName: 'A. Asmath Nabila (CSE)',
+              thumbnailUrl: '/assets/videos/thumbs/thumb-02.jpg',
+              durationSeconds: 217
+            };
+          }
         }
         return v;
       });
