@@ -36,3 +36,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 tools/
+
+# Large media files (served locally)
+public/assets/videos/*.mp4
+backend/uploads/

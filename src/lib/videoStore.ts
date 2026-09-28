@@ -48,6 +48,121 @@ export const DEFAULT_VIDEOS: Video[] = [
     viewCount: 1890,
     publishedDate: '2026-09-02',
     category: 'Systems, Networks & Security'
+  },
+  {
+    id: 'vid-local-03',
+    youtubeId: '',
+    localVideoPath: '/assets/videos/campusiq-03.mp4',
+    title: 'Why Do We Fear Public Speaking',
+    topic: 'Public Speaking & Overcoming Stage Fear',
+    facultyName: 'Irfana S (II-CSE)',
+    departmentCode: 'CSE',
+    departmentId: 'dept_cse',
+    program: 'B.E',
+    semester: 3,
+    academicYear: '2024-25',
+    subjectCode: 'HS3152',
+    subjectTitle: 'Professional Communication & Public Speaking',
+    unitNumber: 1,
+    thumbnailUrl: '/assets/videos/thumbs/thumb-03.jpg',
+    description: 'Comprehensive student lecture exploring the psychological fears behind public speaking, crowd discomfort, fear of judgment, and practical techniques to build presentation confidence.',
+    durationSeconds: 343,
+    tags: ['Public Speaking', 'Communication Skills', 'Presentation', 'Confidence', 'CSE'],
+    viewCount: 1560,
+    publishedDate: '2026-09-27',
+    category: 'Humanities & Professional Communication'
+  },
+  {
+    id: 'vid-local-04',
+    youtubeId: '',
+    localVideoPath: '/assets/videos/campusiq-04.mp4',
+    title: 'Machine Learning: How Computers Learn from Data',
+    topic: 'Machine Learning Foundations & Paradigms',
+    facultyName: 'M. Priyadharshini (IV - CSE)',
+    departmentCode: 'CSE',
+    departmentId: 'dept_cse',
+    program: 'B.E',
+    semester: 7,
+    academicYear: '2024-25',
+    subjectCode: 'CS3551',
+    subjectTitle: 'Machine Learning & AI Architectures',
+    unitNumber: 1,
+    thumbnailUrl: '/assets/videos/thumbs/thumb-04.jpg',
+    description: 'In-depth presentation covering how machine learning algorithms discover patterns from data, traditional programming vs machine learning, supervised learning, and predictive modeling.',
+    durationSeconds: 736,
+    tags: ['Machine Learning', 'Artificial Intelligence', 'Data Science', 'CSE', 'FIST'],
+    viewCount: 2340,
+    publishedDate: '2026-09-23',
+    category: 'Artificial Intelligence & Data Science'
+  },
+  {
+    id: 'vid-local-05',
+    youtubeId: '',
+    localVideoPath: '/assets/videos/campusiq-05.mp4',
+    title: 'The Habits That Improved My English',
+    topic: 'Vocabulary Acquisition & Language Habits',
+    facultyName: 'Irfana S (II-CSE)',
+    departmentCode: 'CSE',
+    departmentId: 'dept_cse',
+    program: 'B.E',
+    semester: 3,
+    academicYear: '2024-25',
+    subjectCode: 'HS3151',
+    subjectTitle: 'Professional English & Language Habits',
+    unitNumber: 2,
+    thumbnailUrl: '/assets/videos/thumbs/thumb-05.jpg',
+    description: 'Practical strategies and daily habits for mastering English vocabulary, effective dictionary usage, pronunciation guides, and sentence construction.',
+    durationSeconds: 387,
+    tags: ['English Communication', 'Vocabulary', 'Language Habits', 'Pronunciation', 'CSE'],
+    viewCount: 1890,
+    publishedDate: '2026-09-27',
+    category: 'Humanities & Professional Communication'
+  },
+  {
+    id: 'vid-local-06',
+    youtubeId: '',
+    localVideoPath: '/assets/videos/campusiq-06.mp4',
+    title: 'Data Structures & Algorithms: Stack & LIFO Principle',
+    topic: 'Stack Data Structure & LIFO Implementation',
+    facultyName: 'Kanaga Durga M (B.E CSE)',
+    departmentCode: 'CSE',
+    departmentId: 'dept_cse',
+    program: 'B.E',
+    semester: 3,
+    academicYear: '2024-25',
+    subjectCode: 'CS3301',
+    subjectTitle: 'Data Structures & Algorithms',
+    unitNumber: 2,
+    thumbnailUrl: '/assets/videos/thumbs/thumb-06.jpg',
+    description: 'Lecture on the Stack linear data structure, Last-In-First-Out (LIFO) principle, push and pop operations, pointer management, and memory representation.',
+    durationSeconds: 411,
+    tags: ['Data Structures', 'Stack', 'LIFO', 'Algorithms', 'CSE'],
+    viewCount: 2100,
+    publishedDate: '2026-09-23',
+    category: 'Core Computer Science & Programming'
+  },
+  {
+    id: 'vid-local-07',
+    youtubeId: '',
+    localVideoPath: '/assets/videos/campusiq-07.mp4',
+    title: 'MCP (Model Context Protocol): Connecting AI with Tools & Data',
+    topic: 'Model Context Protocol Architecture & Tool Integration',
+    facultyName: 'Akshaya Shri K (IV CSE)',
+    departmentCode: 'CSE',
+    departmentId: 'dept_cse',
+    program: 'B.E',
+    semester: 7,
+    academicYear: '2024-25',
+    subjectCode: 'CS3591',
+    subjectTitle: 'Advanced AI Architectures & Protocols',
+    unitNumber: 4,
+    thumbnailUrl: '/assets/videos/thumbs/thumb-07.jpg',
+    description: 'Comprehensive overview of Anthropic Model Context Protocol (MCP) as a universal connector enabling AI models to interact with files, databases, APIs, and tools.',
+    durationSeconds: 361,
+    tags: ['MCP', 'Model Context Protocol', 'AI Agents', 'APIs', 'CSE'],
+    viewCount: 2870,
+    publishedDate: '2026-09-23',
+    category: 'Artificial Intelligence & Data Science'
   }
 ];
 
@@ -59,10 +174,19 @@ export const getLocalStoredVideos = (): Video[] => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_VIDEOS));
       return DEFAULT_VIDEOS;
     }
-    const parsed = JSON.parse(raw);
+    let parsed = JSON.parse(raw);
     if (Array.isArray(parsed) && parsed.length > 0) {
-      // Auto-correct duration for local videos if outdated
       let modified = false;
+
+      // Ensure all DEFAULT_VIDEOS are incorporated if missing in cached localStorage
+      const existingIds = new Set(parsed.map((v: Video) => v.id));
+      const missing = DEFAULT_VIDEOS.filter((v: Video) => !existingIds.has(v.id));
+      if (missing.length > 0) {
+        parsed = [...parsed, ...missing];
+        modified = true;
+      }
+
+      // Auto-correct duration for local videos if outdated
       const corrected = parsed.map((v: Video) => {
         if (v.id === 'vid-local-01' && v.durationSeconds === 1280) {
           modified = true;
